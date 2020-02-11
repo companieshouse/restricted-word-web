@@ -26,9 +26,9 @@
   },
   "homepage": "https://github.com/companieshouse/proof-of-concept#readme",
   "dependencies": {
-    "ch-logger": "file:../poc-js-logger",
-    "ch-sdk": "file:../poc-ch-sdk-node",
-    "ch-session": "file:../poc-node-session-handler",
+    "ch-logger": "file:../../poc-js-logger",
+    "ch-sdk": "file:../../poc-ch-sdk-node",
+    "ch-session": "file:../../poc-node-session-handler",
     "express": "~4.17.1",
     "helmet": "~3.21.2",
     "nunjucks": "~3.2.0",
