@@ -2,8 +2,7 @@ const path = require("path");
 
 module.exports = {
     entry: {
-        fancyFramework: "./client/fancyFramework.js",
-        wordList: "./client/wordList.js"
+        fancyFramework: "./client/fancyFramework.js"
     },
     output: {
         path: path.resolve(__dirname, "dist/js"),
