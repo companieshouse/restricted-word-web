@@ -64,7 +64,7 @@ class RestrictedWordController {
         });
     }
 
-    createNewWord = function (_request: Request, response: Response) {
+    createNewWord(_request: Request, response: Response) {
         return response.render("add-new-word");
     }
 
