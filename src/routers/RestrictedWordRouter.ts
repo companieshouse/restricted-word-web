@@ -5,7 +5,7 @@ import RestrictedWordController from "../controllers/RestrictedWordController";
 
 class RestrictedWordRouter {
 
-    static create() {
+    public static create() {
 
         const router = express.Router();
 

@@ -2,44 +2,44 @@
 
 class Pager {
 
-    private resultsPerPage: number;
-    private totalPages: number;
-    private currentPage: number;
-    private results: any[];
+    private _resultsPerPage: number;
+    private _totalPages: number;
+    private _currentPage: number;
+    private _results: any[];
 
-    constructor(requestedPage: string, results: any[]) {
+    public constructor(requestedPage: string, results: any[]) {
 
-        this.resultsPerPage = 30;
+        this._resultsPerPage = 30;
 
-        this.totalPages = Math.ceil(results.length / this.resultsPerPage);
-        this.currentPage = requestedPage ? parseInt(requestedPage) : 1;
+        this._totalPages = Math.ceil(results.length / this._resultsPerPage);
+        this._currentPage = requestedPage ? parseInt(requestedPage) : 1;
 
-        this.results = results;
+        this._results = results;
     }
 
-    getPaginationOptions() {
+    public getPaginationOptions() {
 
-        const startOfRangeOffset = (this.currentPage * this.resultsPerPage) - this.resultsPerPage;
+        const startOfRangeOffset = (this._currentPage * this._resultsPerPage) - this._resultsPerPage;
 
-        const endOfRange = startOfRangeOffset + this.resultsPerPage;
-        const endOfPage = endOfRange < this.results.length ?
+        const endOfRange = startOfRangeOffset + this._resultsPerPage;
+        const endOfPage = endOfRange < this._results.length ?
             endOfRange :
-            this.results.length;
+            this._results.length;
 
         return {
-            previousPage: this.currentPage - 1,
-            nextPage: this.currentPage + 1,
-            currentPage: this.currentPage,
-            totalPages: this.totalPages,
-            numResults: this.results.length,
+            previousPage: this._currentPage - 1,
+            nextPage: this._currentPage + 1,
+            currentPage: this._currentPage,
+            totalPages: this._totalPages,
+            numResults: this._results.length,
             startOfPage: startOfRangeOffset + 1,
             endOfPage: endOfPage
         };
     }
 
-    pageResults() {
+    public pageResults() {
 
-        const pagedResults = this.results.slice((this.currentPage - 1) * this.resultsPerPage, this.currentPage * this.resultsPerPage);
+        const pagedResults = this._results.slice((this._currentPage - 1) * this._resultsPerPage, this._currentPage * this._resultsPerPage);
 
         return pagedResults;
     }

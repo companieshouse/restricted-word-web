@@ -1,14 +1,13 @@
 "use strict";
 
-import chSdk from "ch-sdk";
-const restrictedWordApiClient = chSdk.restrictedWord;
+import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import Pager from "../Pager";
 import { Request, Response } from "express";
 import QueryOptions from "../QueryOptions";
 
 class RestrictedWordController {
 
-    async getAllWords(request: Request, response: Response) {
+    public async getAllWords(request: Request, response: Response) {
 
         const filterWord = request.query.filterWord;
 
@@ -25,13 +24,13 @@ class RestrictedWordController {
             queryOptions.deleted = true;
         }
 
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
+
         let results;
 
         try {
 
-            results = await restrictedWordApiClient.getAllRestrictedWords({
-                data: queryOptions
-            });
+            results = await restrictedWordApiClient.getAllRestrictedWords(queryOptions);
 
         } catch (error) {
 
@@ -64,22 +63,19 @@ class RestrictedWordController {
         });
     }
 
-    createNewWord(_request: Request, response: Response) {
+    public createNewWord(_request: Request, response: Response) {
         return response.render("add-new-word");
     }
 
-    async handleCreateNewWord(request: Request, response: Response) {
+    public async handleCreateNewWord(request: Request, response: Response) {
 
         request.logger.info(`Attempting to create new word "${request.body.word}".`);
 
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
+
         try {
 
-            await restrictedWordApiClient.createRestrictedWord({
-                data: {
-                    word: request.body.word,
-                    createdBy: "Word Creator"
-                }
-            });
+            await restrictedWordApiClient.createRestrictedWord(request.body.word);
 
         } catch (error) {
 
@@ -88,7 +84,7 @@ class RestrictedWordController {
                 request.logger.error(`Error creating new word "${request.body.word}": ${error.messages.join(", ")}`);
 
                 return response.render("add-new-word", {
-                    errors: error.messages.map(message => ({ text: message }))
+                    errors: error.messages.map((message: string) => ({ text: message }))
                 });
             }
         }
@@ -98,36 +94,33 @@ class RestrictedWordController {
         return response.redirect(`/?addedWord=${encodeURIComponent(request.body.word)}`);
     }
 
-    deleteWord(request: Request, response: Response) {
+    public deleteWord(request: Request, response: Response) {
         return response.render("delete-word", {
             id: request.query.id,
             word: request.query.word
         });
     }
 
-    async handleDeleteWord(request: Request, response: Response) {
+    public async handleDeleteWord(request: Request, response: Response) {
 
         request.logger.info(`Attempting to delete "${request.body.word}" with id "${request.body.id}"`);
 
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
+
         try {
 
-            await restrictedWordApiClient.deleteRestrictedWord({
-                id: request.body.id,
-                data: {
-                    deletedBy: "sorry for delete"
-                }
-            });
+            await restrictedWordApiClient.deleteRestrictedWord(request.body.id);
 
         } catch (error) {
 
-            if (error.messages.length) {
+            if (error.messages && error.messages.length) {
 
                 request.logger.error(`Error deleting "${request.body.word}" with id "${request.body.id}": ${error.messages.join(", ")}`);
 
                 return response.render("delete-word", {
                     id: request.body.id,
                     word: request.body.word,
-                    errors: error.messages.map(message => ({ text: message }))
+                    errors: error.messages.map((message: string) => ({ text: message }))
                 });
             }
         }
