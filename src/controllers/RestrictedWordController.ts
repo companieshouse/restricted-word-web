@@ -7,6 +7,10 @@ import QueryOptions from "../QueryOptions";
 
 class RestrictedWordController {
 
+    private mapErrors(error: any) {
+        return error.messages.map((message: string) => ({ text: message }));
+    }
+
     public async getAllWords(request: Request, response: Response) {
 
         const filterWord = request.query.filterWord;
@@ -27,7 +31,7 @@ class RestrictedWordController {
         /**
          * This will be session.signInData.userProfile.email - bit long winded perhaps.
          * Maybe the client should just take in the request.
-         */ 
+         */
         const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
 
         let results;
@@ -39,7 +43,7 @@ class RestrictedWordController {
         } catch (error) {
 
             return response.render("all", {
-                errors: error.messages.map(message => ({ text: message }))
+                errors: this.mapErrors(error)
             });
         }
 

@@ -42,7 +42,7 @@ class RestrictedWordApiClient {
         };
     }
 
-    getAllRestrictedWords(options: any) {
+    getAllRestrictedWords(options: any): Promise<any> {
 
         const that = this;
 
