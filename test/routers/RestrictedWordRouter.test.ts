@@ -1,8 +1,8 @@
 require("mocha");
 
-describe("restrictedWordRouter", function () {
+describe("RestrictedWordRouter", function () {
 
     describe("#getRouter", function () {
-        // maybe use jest
+
     });
 });
