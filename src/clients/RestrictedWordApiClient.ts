@@ -42,7 +42,7 @@ class RestrictedWordApiClient {
         };
     }
 
-    getAllRestrictedWords(options: any): Promise<any> {
+    public getAllRestrictedWords(options: any): Promise<any> {
 
         const that = this;
 
@@ -76,7 +76,7 @@ class RestrictedWordApiClient {
         })(options);
     }
 
-    createRestrictedWord(word: string) {
+    public createRestrictedWord(word: string) {
 
         const that = this;
 
@@ -97,7 +97,7 @@ class RestrictedWordApiClient {
         })(word);
     }
 
-    deleteRestrictedWord(id: string) {
+    public deleteRestrictedWord(id: string) {
 
         const that = this;
 
