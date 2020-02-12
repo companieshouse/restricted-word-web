@@ -24,6 +24,10 @@ class RestrictedWordController {
             queryOptions.deleted = true;
         }
 
+        /**
+         * This will be session.signInData.userProfile.email - bit long winded perhaps.
+         * Maybe the client should just take in the request.
+         */ 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
 
         let results;
