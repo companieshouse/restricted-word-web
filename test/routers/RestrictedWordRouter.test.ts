@@ -1,6 +1,4 @@
 describe("RestrictedWordRouter", function () {
 
-    describe("#getRouter", function () {
-
-    });
+    describe("#getRouter");
 });

@@ -1,11 +1,11 @@
-import { expect } from "chai";
 import Pager from "../../src/pagination/Pager";
+import { expect } from "chai";
 
 describe("pagerFactory", function () {
 
     const createResults = function (numResults: number): string[] {
 
-        let results = [];
+        const results = [];
 
         for (let i = 0; i < numResults; i++) {
             results.push(`Result ${i}`);
@@ -41,17 +41,26 @@ describe("pagerFactory", function () {
         it("returns the correct starting index of the current page");
 
         it("returns the correct ending index of the current page");
+
     });
 
     describe("#pageResults", function () {
 
         it("returns the correct items for a first full page");
+
         it("returns the correct items for a first partially full page");
+
         it("returns the correct items for a middle full page");
+
         it("returns the correct items for a middle partially full page");
+
         it("returns the correct items for a final full page");
+
         it("returns the correct items for a final partially full page");
+
         it("defaults to page 1 if the page is below 1");
+
         it("defaults to the last page if the page is below over the last page");
+
     });
 });

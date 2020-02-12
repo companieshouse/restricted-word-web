@@ -12,6 +12,11 @@
             "rules": {
                 "no-process-env": "off"
             }
+        }, {
+            "files": ["*.test.ts", "*.spec.ts"],
+            "rules": {
+                "no-magic-numbers": "off"
+            }
         }
     ],
     "rules": {
