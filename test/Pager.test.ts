@@ -1,10 +1,13 @@
-require("mocha");
+import { expect } from "chai";
 
 describe("pagerFactory", function () {
 
     describe("#getPaginationOptions", function () {
 
-        it("returns the correct previous page index");
+        it("returns the correct previous page index", function () {
+            expect(true).to.be.false;
+        });
+
         it("returns the correct next page index");
         it("returns the correct current page index");
         it("returns the correct number of pages");
