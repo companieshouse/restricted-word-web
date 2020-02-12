@@ -1,18 +1,45 @@
 import { expect } from "chai";
+import Pager from "../src/Pager";
 
 describe("pagerFactory", function () {
+
+    const createResults = function (numResults: number) {
+
+        let results = [];
+
+        for (let i = 0; i < numResults; i++) {
+            results.push(`Result ${i}`);
+        }
+
+        return results;
+    };
 
     describe("#getPaginationOptions", function () {
 
         it("returns the correct previous page index", function () {
-            expect(true).to.be.false;
+
+            const pager = new Pager("3", createResults(2000));
+            const paginationOptions = pager.getPaginationOptions();
+
+            expect(paginationOptions.previousPage).to.equal(2);
         });
 
-        it("returns the correct next page index");
+        it("returns the correct next page index", function () {
+
+            const pager = new Pager("3", createResults(2000));
+            const paginationOptions = pager.getPaginationOptions();
+
+            expect(paginationOptions.nextPage).to.equal(4);
+        });
+
         it("returns the correct current page index");
+
         it("returns the correct number of pages");
+
         it("returns the correct number of results");
+
         it("returns the correct starting index of the current page");
+
         it("returns the correct ending index of the current page");
     });
 

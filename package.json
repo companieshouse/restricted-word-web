@@ -11,7 +11,7 @@
     "start": "nodemon ./app/app",
     "debug": "nodemon --inspect ./app/app",
     "test": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts",
-    "test:watch": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts",
+    "test:watch": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts --watch",
     "lint": "eslint app.js app/**/* test/**/*"
   },
   "repository": {
