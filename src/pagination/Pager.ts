@@ -1,12 +1,13 @@
-"use strict";
-
 import PaginationOptions from "./PaginationOptions";
 
 class Pager<T> {
 
     private _resultsPerPage: number;
+
     private _totalPages: number;
+
     private _currentPage: number;
+
     private _results: T[];
 
     public constructor(requestedPage: string, results: T[]) {

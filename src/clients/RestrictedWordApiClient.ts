@@ -1,15 +1,16 @@
-import { promisify } from "util";
-import axiosInstance from "./axiosInstance";
 import ApplicationLogger from "ch-logger/lib/ApplicationLogger";
-import moment from "moment";
 import RestrictedWordDto from "./RestrictedWordDto";
-import RestrictedWordViewModel from "./RestrictedWordViewModel";
-import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
 import RestrictedWordFilterDto from "./RestrictedWordFilterDto";
+import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
+import RestrictedWordViewModel from "./RestrictedWordViewModel";
+import axiosInstance from "./axiosInstance";
+import moment from "moment";
+import { promisify } from "util";
 
 class RestrictedWordApiClient {
 
     private _logger: ApplicationLogger;
+
     private _username: string;
 
     public constructor(logger: ApplicationLogger, username: string) {
@@ -22,7 +23,9 @@ class RestrictedWordApiClient {
         const handledError: any = {};
 
         if (error.response && error.response.data && error.response.data.errors) {
+
             handledError.messages = error.response.data.errors;
+
             return done(handledError);
         }
 
@@ -32,7 +35,8 @@ class RestrictedWordApiClient {
         return done(handledError);
     }
 
-    private mapFromApi(serverObject: RestrictedWordDto): RestrictedWordViewModel {
+    private static mapFromApi(serverObject: RestrictedWordDto): RestrictedWordViewModel {
+
         return {
             id: serverObject.id,
             word: serverObject.full_word,
@@ -45,7 +49,7 @@ class RestrictedWordApiClient {
         };
     }
 
-    public getAllRestrictedWords(options: RestrictedWordQueryOptions) {
+    public getAllRestrictedWords(outerOptions: RestrictedWordQueryOptions) {
 
         const that = this;
 
@@ -54,7 +58,7 @@ class RestrictedWordApiClient {
             const queryString: RestrictedWordFilterDto = {};
 
             if (options.startsWith) {
-                queryString.starts_with = options.startsWith;
+                queryString["starts_with"] = options.startsWith;
             }
 
             if (options.contains) {
@@ -71,15 +75,15 @@ class RestrictedWordApiClient {
                     params: queryString
                 });
 
-                return done(undefined, response.data.map(that.mapFromApi));
+                return done(undefined, response.data.map(RestrictedWordApiClient.mapFromApi));
 
             } catch (error) {
                 return that.handleErrors.bind(that)(error, done);
             }
-        })(options);
+        })(outerOptions);
     }
 
-    public createRestrictedWord(word: string) {
+    public createRestrictedWord(outerWord: string) {
 
         const that = this;
 
@@ -97,10 +101,10 @@ class RestrictedWordApiClient {
             } catch (error) {
                 return that.handleErrors.bind(that)(error, done);
             }
-        })(word);
+        })(outerWord);
     }
 
-    public deleteRestrictedWord(id: string) {
+    public deleteRestrictedWord(outerId: string) {
 
         const that = this;
 
@@ -119,7 +123,7 @@ class RestrictedWordApiClient {
             } catch (error) {
                 return that.handleErrors.bind(that)(error, done);
             }
-        })(id);
+        })(outerId);
     }
 }
 

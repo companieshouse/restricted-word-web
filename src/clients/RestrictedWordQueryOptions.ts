@@ -4,4 +4,5 @@ interface RestrictedWordQueryOptions {
     deleted?: boolean;
 }
 
+// eslint-disable-next-line no-undef
 export = RestrictedWordQueryOptions;

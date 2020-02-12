@@ -1,5 +1,3 @@
-"use strict";
-
 const proxyUrl = new URL(process.env.HTTPS_PROXY as string);
 
 const config = {

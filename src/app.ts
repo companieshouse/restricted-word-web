@@ -1,11 +1,11 @@
-"use strict";
-
-import express from "express";
 import nunjucks, { ConfigureOptions } from "nunjucks";
+
+import ChLogger from "ch-logger";
+import RestrictedWordRouter from "./routers/RestrictedWordRouter";
+import config from "./config";
+import express from "express";
 import helmet from "helmet";
 import path from "path";
-import config from "./config";
-import ChLogger from "ch-logger";
 
 const chLogger = new ChLogger({
     namespace: "restricted-word-web"
@@ -40,8 +40,6 @@ app.use("/public", express.static(path.join(__dirname, "../dist")));
 app.use(chLogger.middleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
-
-import RestrictedWordRouter from "./routers/RestrictedWordRouter";
 
 app.use("/", RestrictedWordRouter.create());
 

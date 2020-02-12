@@ -1,18 +1,17 @@
-"use strict";
-
-import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import { Request, Response } from "express";
+
 import Pager from "../pagination/Pager";
+import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
 
 class RestrictedWordController {
 
-    private mapErrors(error: any) {
+    private static mapErrors(error: any) {
         return error.messages.map((message: string) => ({ text: message }));
     }
 
-    public async getAllWords(request: Request, response: Response) {
+    public static async getAllWords(request: Request, response: Response) {
 
         const filterWord = request.query.filterWord;
 
@@ -44,7 +43,7 @@ class RestrictedWordController {
         } catch (error) {
 
             return response.render("all", {
-                errors: this.mapErrors(error)
+                errors: RestrictedWordController.mapErrors(error)
             });
         }
 
@@ -72,11 +71,11 @@ class RestrictedWordController {
         });
     }
 
-    public createNewWord(_request: Request, response: Response) {
+    public static createNewWord(_request: Request, response: Response) {
         return response.render("add-new-word");
     }
 
-    public async handleCreateNewWord(request: Request, response: Response) {
+    public static async handleCreateNewWord(request: Request, response: Response) {
 
         request.logger.info(`Attempting to create new word "${request.body.word}".`);
 
@@ -103,14 +102,14 @@ class RestrictedWordController {
         return response.redirect(`/?addedWord=${encodeURIComponent(request.body.word)}`);
     }
 
-    public deleteWord(request: Request, response: Response) {
+    public static deleteWord(request: Request, response: Response) {
         return response.render("delete-word", {
             id: request.query.id,
             word: request.query.word
         });
     }
 
-    public async handleDeleteWord(request: Request, response: Response) {
+    public static async handleDeleteWord(request: Request, response: Response) {
 
         request.logger.info(`Attempting to delete "${request.body.word}" with id "${request.body.id}"`);
 

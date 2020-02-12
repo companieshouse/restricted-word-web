@@ -1,21 +1,18 @@
-"use strict";
-
-import express from "express";
 import RestrictedWordController from "../controllers/RestrictedWordController";
+import express from "express";
 
 class RestrictedWordRouter {
 
     public static create() {
 
+        // eslint-disable-next-line new-cap
         const router = express.Router();
 
-        const restrictedWordController = new RestrictedWordController();
-
-        router.get("/", restrictedWordController.getAllWords);
-        router.get("/add-new-word", restrictedWordController.createNewWord);
-        router.post("/add-new-word", restrictedWordController.handleCreateNewWord);
-        router.get("/delete", restrictedWordController.deleteWord);
-        router.post("/delete", restrictedWordController.handleDeleteWord);
+        router.get("/", RestrictedWordController.getAllWords);
+        router.get("/add-new-word", RestrictedWordController.createNewWord);
+        router.post("/add-new-word", RestrictedWordController.handleCreateNewWord);
+        router.get("/delete", RestrictedWordController.deleteWord);
+        router.post("/delete", RestrictedWordController.handleDeleteWord);
 
         return router;
     }

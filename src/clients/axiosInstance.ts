@@ -1,6 +1,6 @@
+import axios from "axios";
 import config from "../config";
 import tunnel = require("tunnel");
-import axios from "axios";
 
 const requiredHeaders = {
     "Authorization": config.internalApiKey,

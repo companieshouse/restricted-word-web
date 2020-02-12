@@ -8,4 +8,5 @@ interface PaginationOptions {
     endOfPage: number;
 }
 
+// eslint-disable-next-line no-undef
 export = PaginationOptions;

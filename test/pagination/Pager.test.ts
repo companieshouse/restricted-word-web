@@ -3,7 +3,7 @@ import Pager from "../../src/pagination/Pager";
 
 describe("pagerFactory", function () {
 
-    const createResults = function (numResults: number) {
+    const createResults = function (numResults: number): string[] {
 
         let results = [];
 
