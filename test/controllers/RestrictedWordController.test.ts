@@ -1,6 +1,4 @@
-require("mocha");
-
-describe("restrictedWordController", function () {
+describe("RestrictedWordController", function () {
 
     describe("#getAllWords", function () {
         //
