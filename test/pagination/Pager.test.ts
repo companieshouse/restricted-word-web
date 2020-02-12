@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import Pager from "../src/Pager";
+import Pager from "../../src/pagination/Pager";
 
 describe("pagerFactory", function () {
 
