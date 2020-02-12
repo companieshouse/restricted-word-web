@@ -2,6 +2,10 @@ import { promisify } from "util";
 import axiosInstance from "./axiosInstance";
 import ApplicationLogger from "ch-logger/lib/ApplicationLogger";
 import moment from "moment";
+import RestrictedWordDto from "./RestrictedWordDto";
+import RestrictedWordViewModel from "./RestrictedWordViewModel";
+import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
+import RestrictedWordFilterDto from "./RestrictedWordFilterDto";
 
 class RestrictedWordApiClient {
 
@@ -13,7 +17,7 @@ class RestrictedWordApiClient {
         this._username = username;
     }
 
-    private handleErrors(error: any, done: any) {
+    private handleErrors(error: any, done: Function) {
 
         const handledError: any = {};
 
@@ -28,13 +32,12 @@ class RestrictedWordApiClient {
         return done(handledError);
     }
 
-    private mapFromApi(serverObject: any) {
+    private mapFromApi(serverObject: RestrictedWordDto): RestrictedWordViewModel {
         return {
             id: serverObject.id,
             word: serverObject.full_word,
             createdBy: serverObject.created_by,
             deletedBy: serverObject.deleted_by,
-            deleted: serverObject.deleted,
             createdAt: moment(serverObject.created_at).format("DD MMM YY"),
             deletedAt: serverObject.deleted_at ?
                 moment(serverObject.deleted_at).format("DD MMM YY") :
@@ -42,16 +45,16 @@ class RestrictedWordApiClient {
         };
     }
 
-    public getAllRestrictedWords(options: any): Promise<any> {
+    public getAllRestrictedWords(options: RestrictedWordQueryOptions) {
 
         const that = this;
 
-        return promisify(async function (options: any, done: any) {
+        return promisify<RestrictedWordQueryOptions, RestrictedWordViewModel[]>(async function (options: RestrictedWordQueryOptions, done: Function) {
 
-            const queryString: any = {};
+            const queryString: RestrictedWordFilterDto = {};
 
             if (options.startsWith) {
-                queryString["starts_with"] = options.startsWith;
+                queryString.starts_with = options.startsWith;
             }
 
             if (options.contains) {
@@ -80,7 +83,7 @@ class RestrictedWordApiClient {
 
         const that = this;
 
-        return promisify(async function (word: string, done: any) {
+        return promisify<string, void>(async function (word: string, done: Function) {
 
             try {
 
@@ -101,7 +104,7 @@ class RestrictedWordApiClient {
 
         const that = this;
 
-        return promisify(async function (id: string, done: any) {
+        return promisify<string, void>(async function (id: string, done: Function) {
 
             try {
 

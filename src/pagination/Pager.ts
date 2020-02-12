@@ -1,13 +1,15 @@
 "use strict";
 
-class Pager {
+import PaginationOptions from "./PaginationOptions";
+
+class Pager<T> {
 
     private _resultsPerPage: number;
     private _totalPages: number;
     private _currentPage: number;
-    private _results: any[];
+    private _results: T[];
 
-    public constructor(requestedPage: string, results: any[]) {
+    public constructor(requestedPage: string, results: T[]) {
 
         this._resultsPerPage = 30;
 
@@ -17,7 +19,7 @@ class Pager {
         this._results = results;
     }
 
-    public getPaginationOptions() {
+    public getPaginationOptions(): PaginationOptions {
 
         const startOfRangeOffset = (this._currentPage * this._resultsPerPage) - this._resultsPerPage;
 
@@ -37,9 +39,10 @@ class Pager {
         };
     }
 
-    public pageResults() {
+    public pageResults(): T[] {
 
-        const pagedResults = this._results.slice((this._currentPage - 1) * this._resultsPerPage, this._currentPage * this._resultsPerPage);
+        const pagedResults = this._results
+            .slice((this._currentPage - 1) * this._resultsPerPage, this._currentPage * this._resultsPerPage);
 
         return pagedResults;
     }

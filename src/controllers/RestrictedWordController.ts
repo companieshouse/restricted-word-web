@@ -1,9 +1,10 @@
 "use strict";
 
 import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
-import Pager from "../Pager";
 import { Request, Response } from "express";
-import QueryOptions from "../QueryOptions";
+import Pager from "../pagination/Pager";
+import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
+import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
 
 class RestrictedWordController {
 
@@ -15,7 +16,7 @@ class RestrictedWordController {
 
         const filterWord = request.query.filterWord;
 
-        const queryOptions: QueryOptions = {
+        const queryOptions: RestrictedWordQueryOptions = {
             startsWith: undefined,
             contains: filterWord || undefined
         };
@@ -34,7 +35,7 @@ class RestrictedWordController {
          */
         const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
 
-        let results;
+        let results: RestrictedWordViewModel[];
 
         try {
 
@@ -48,7 +49,7 @@ class RestrictedWordController {
         }
 
         const pager = new Pager(request.query.page, results);
-        const urlParams = [];
+        const urlParams: string[] = [];
 
         if (filterStatus) {
             urlParams.push(`filterStatus=${filterStatus}`);
