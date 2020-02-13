@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "declaration": true,
+        "outDir": "./app",
+        "strict": true,
+        "esModuleInterop": true,
+        "pretty": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "strictNullChecks": true,
+        "sourceMap": true,
+        "typeRoots": ["./node_modules/@types"]
+    },
+    "include": [
+        "./src"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/__tests__/*"
+    ]
+}

@@ -1,0 +1,71 @@
+<nav role="navigation" aria-label="Pagination">
+  <div class="pagination__summary">Showing {{ pagination.startOfPage }} - {{ pagination.endOfPage }} of {{ pagination.numResults }} results</div>
+  {% if pagination.totalPages > 1 %}
+
+    <ul class="pagination">
+
+      {% if pagination.currentPage > 1 %}
+        <li class="pagination__item pagination__item--disabled">
+          <a href="{{ baseUrl }}&page={{ pagination.previousPage }}" aria-label="Previous page" class="pagination__link pagination__link--disabled"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a>
+        </li>
+      {% endif %}
+
+      {% set numberOfButtons = 5 %}
+
+      {% if numberOfButtons > pagination.totalPages %}
+        {% set numberOfButtons = pagination.totalPages %}
+      {% endif %}
+
+      {% set delta = (numberOfButtons / 2) | round(0, 'floor') %}
+      {% set visibleRangeStart = pagination.currentPage - delta %}
+      {% set visibleRangeEnd = pagination.currentPage + delta %}
+
+      {% if visibleRangeStart < 1 %}
+        {% set visibleRangeEnd = visibleRangeEnd - visibleRangeStart + 1 %}
+      {% endif %}
+
+      {% if visibleRangeEnd > pagination.totalPages %}
+        {% set visibleRangeStart = visibleRangeStart - visibleRangeEnd + pagination.totalPages %}
+      {% endif %}
+
+      {% if 1 > visibleRangeStart %}
+        {% set visibleRangeStart = 1 %}
+      {% endif %}
+
+      {% if pagination.totalPages < visibleRangeEnd %}
+        {% set visibleRangeEnd = pagination.totalPages %}
+      {% endif %}
+
+      {% if visibleRangeStart > 2 %}
+        {% set hasLess = true %}
+      {% endif %}
+
+      {% if visibleRangeEnd + 1 < pagination.totalPages %}
+        {% set hasMore = true %}
+      {% endif %}
+
+      {% for pageNumber in range(1, pagination.totalPages + 1) %}
+        {% if pageNumber >= visibleRangeStart and pageNumber <= visibleRangeEnd %}
+
+          {% if pageNumber === pagination.currentPage %}
+            <li class="pagination__item pagination__item--active">
+              <a href="{{ baseUrl }}&page={{ pageNumber }}" aria-label="Page {{ pageNumber }}" class="pagination__link pagination__link--active current">{{ pageNumber }}</a>
+            </li>
+          {% else %}
+            <li class="pagination__item">
+              <a href="{{ baseUrl }}&page={{ pageNumber }}" aria-label="Page {{ pageNumber }}, current page" class="pagination__link">{{ pageNumber }}</a>
+            </li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if pagination.currentPage < pagination.totalPages %}
+        <li class="pagination__item">
+          <a href="{{ baseUrl }}&page={{ pagination.nextPage}}" aria-label="Next page" class="pagination__link">Next <span aria-hidden="true" role="presentation">&raquo;</span></a>
+        </li>
+      {% endif %}
+
+    </ul>
+
+  {% endif %}
+</nav>
