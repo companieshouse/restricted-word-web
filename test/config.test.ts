@@ -1,14 +1,19 @@
+import ApplicationConfiguration from "../src/ApplicationConfiguration";
 import { expect } from "chai";
 
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("config", function () {
 
+    const getFreshConfig = function (): ApplicationConfiguration {
+        return proxyquire("../src/config", {});
+    };
+
     it("provides a proxy object if HTTPS_PROXY is defined", function () {
 
         process.env.HTTPS_PROXY = "https://myproxy:9001";
 
-        const config = proxyquire("../src/config", {});
+        const config = getFreshConfig();
 
         expect(config.proxy).to.exist;
         expect(config.proxy?.host).to.equal("myproxy");
@@ -18,13 +23,24 @@ describe("config", function () {
     it("doesn't provide a proxy if environment variable is undefined", function () {
 
         delete process.env.HTTPS_PROXY;
-        const config = proxyquire("../src/config", {});
+        const config = getFreshConfig();
 
         expect(config.proxy).to.not.exist;
     });
 
-    it("see what happens", function () {
+    it("defaults to development if NODE_ENV is undefined", function () {
 
-        process.env.RESTRICTED_WORD_ADMIN_WEB_PORT = "sdfsdf";
+        delete process.env.NODE_ENV;
+        const config = getFreshConfig();
+
+        expect(config.env).to.equal("development");
+    });
+
+    it("reads NODE_ENV if it exists", function () {
+
+        process.env.NODE_ENV = "production";
+        const config = getFreshConfig();
+
+        expect(config.env).to.equal("production");
     });
 });
