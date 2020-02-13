@@ -2,6 +2,8 @@ import PaginationOptions from "./PaginationOptions";
 
 class Pager<T> {
 
+    private static readonly _defaultResultsPerPage = 30;
+
     private _resultsPerPage: number;
 
     private _totalPages: number;
@@ -10,12 +12,16 @@ class Pager<T> {
 
     private _results: T[];
 
-    public constructor(requestedPage: string, results: T[]) {
+    public constructor(requestedPage: string | undefined, results: T[], resultsPerPage?: number) {
 
-        this._resultsPerPage = 30;
+        this._resultsPerPage = resultsPerPage || Pager._defaultResultsPerPage;
 
         this._totalPages = Math.ceil(results.length / this._resultsPerPage);
         this._currentPage = requestedPage ? parseInt(requestedPage) : 1;
+
+        if (this._currentPage < 1) {
+            this._currentPage = 1;
+        }
 
         this._results = results;
     }

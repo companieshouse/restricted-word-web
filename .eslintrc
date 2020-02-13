@@ -15,7 +15,8 @@
         }, {
             "files": ["*.test.ts", "*.spec.ts"],
             "rules": {
-                "no-magic-numbers": "off"
+                "no-magic-numbers": "off",
+                "@typescript-eslint/no-magic-numbers": "off"
             }
         }
     ],
@@ -147,7 +148,14 @@
         "no-lone-blocks": 2,
         "no-lonely-if": 2,
         "no-loop-func": 2,
-        "no-magic-numbers": ["error", { "ignore": [0, 1], "ignoreArrayIndexes": true }],
+        // "no-magic-numbers": ["error", { "ignore": [0, 1], "ignoreArrayIndexes": true }],
+        "no-magic-numbers": "off",
+        "@typescript-eslint/no-magic-numbers": ["error", {
+            "ignore": [0, 1],
+            "ignoreArrayIndexes": true,
+            "ignoreReadonlyClassProperties": true,
+            "ignoreEnums": true
+        }],
         "no-misleading-character-class": 2,
         "no-mixed-operators": 2,
         "no-mixed-requires": 2,
