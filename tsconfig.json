@@ -10,7 +10,8 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "strictNullChecks": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "typeRoots": ["./node_modules/@types"]
     },
     "include": [
         "./src"

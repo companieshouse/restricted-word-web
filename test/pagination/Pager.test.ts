@@ -1,7 +1,7 @@
 import Pager from "../../src/pagination/Pager";
 import { expect } from "chai";
 
-describe("pagerFactory", function () {
+describe("Pager", function () {
 
     const createResults = function (numResults: number): string[] {
 
@@ -22,17 +22,9 @@ describe("pagerFactory", function () {
             const paginationOptions = pager.getPaginationOptions();
 
             expect(paginationOptions.previousPage).to.equal(2);
-        });
-
-        it("returns the correct next page index", function () {
-
-            const pager = new Pager("3", createResults(2000));
-            const paginationOptions = pager.getPaginationOptions();
-
             expect(paginationOptions.nextPage).to.equal(4);
+            expect(paginationOptions.currentPage).to.equal(3);
         });
-
-        it("returns the correct current page index");
 
         it("returns the correct number of pages");
 
