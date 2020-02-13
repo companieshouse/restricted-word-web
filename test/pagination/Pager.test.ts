@@ -39,7 +39,7 @@ describe("Pager", function () {
                 const paginationOptions = getPaginationOptions(undefined, 2000);
 
                 expect(paginationOptions.numResults).to.equal(2000);
-                expect(paginationOptions.totalPages).to.equal(68); // Math.ceil(2000 / 30)
+                expect(paginationOptions.totalPages).to.equal(67); // Math.ceil(2000 / 30)
             });
 
             it("returns the correct number of results");
