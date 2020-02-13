@@ -28,7 +28,6 @@
   "dependencies": {
     "axios": "~0.19.2",
     "ch-logger": "file:../../poc-js-logger",
-    "ch-sdk": "file:../../poc-ch-sdk-node",
     "express": "~4.17.1",
     "helmet": "~3.21.2",
     "moment": "~2.24.0",
