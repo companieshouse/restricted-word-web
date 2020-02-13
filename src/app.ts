@@ -23,6 +23,7 @@ const nunjucksConfig: ConfigureOptions = {
 
 if (config.env === "development") {
     nunjucksConfig.watch = true;
+    nunjucksConfig.noCache = false;
 }
 
 nunjucks.configure(
