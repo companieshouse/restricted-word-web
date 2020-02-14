@@ -10,9 +10,11 @@ const requiredHeaders = {
     "Content-Type": "application/json"
 };
 
-const agent = tunnel.httpsOverHttp({
-    proxy: config.proxy
-});
+const agent = config.proxy === undefined ?
+    undefined :
+    tunnel.httpsOverHttp({
+        proxy: config.proxy
+    });
 
 const axiosInstance = axios.create({
     baseURL: config.apiAddress,
