@@ -1,27 +1,43 @@
-import { Arg, Substitute } from "@fluffy-spoon/substitute";
+import { Arg, SubstituteOf } from "@fluffy-spoon/substitute";
 import { Request, Response } from "express";
 
-// import RestrictedWordController from "../../src/controllers/RestrictedWordController";
-import { expect } from "chai";
+import Pager from "../../src/pagination/Pager";
+import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
+import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
+import SubstituteFactory from "../SubstituteFactory";
+
+const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordController", function () {
 
-    let mockRequest: Request;
-    let mockResponse: Response;
+    let mockRequest: SubstituteOf<Request>;
+    let mockResponse: SubstituteOf<Response>;
+    let mockApiClient: SubstituteOf<RestrictedWordApiClient>;
+    let mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>;
 
     beforeEach(function () {
-        mockRequest = Substitute.for<Request>();
-        mockResponse = Substitute.for<Response>();
+        mockRequest = SubstituteFactory.create<Request>();
+        mockResponse = SubstituteFactory.create<Response>();
+        mockApiClient = SubstituteFactory.create<RestrictedWordApiClient>();
+        mockPager = SubstituteFactory.create<Pager<RestrictedWordViewModel>>();
     });
 
     describe("#getAllWords", function () {
 
         it("returns the correct view", async function () {
 
-            // await RestrictedWordController.getAllWords(mockRequest, mockResponse);
+            const RestrictedWordController = proxyquire("../../src/controllers/RestrictedWordController", {
+                "../clients/RestrictedWordApiClient": mockApiClient,
+                "../pagination/Pager": mockPager
+            });
 
+            mockRequest.query.returns({});
 
-            // expect(mockResponse.render).to.exist;
+            await RestrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("all", Arg.any());
         });
     });
 

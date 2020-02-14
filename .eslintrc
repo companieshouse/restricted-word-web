@@ -5,7 +5,10 @@
         "ecmaFeatures": {}
     },
     "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint"],
+    "plugins": [
+        "@typescript-eslint",
+        "chai-friendly"
+    ],
     "overrides": [
         {
             "files": ["config.ts"],
@@ -16,7 +19,9 @@
             "files": ["*.test.ts", "*.spec.ts"],
             "rules": {
                 "no-magic-numbers": "off",
-                "@typescript-eslint/no-magic-numbers": "off"
+                "@typescript-eslint/no-magic-numbers": "off",
+                "global-require": "off",
+                "no-process-env": "off"
             }
         }
     ],
@@ -217,7 +222,8 @@
         "no-unreachable": 2,
         "no-unsafe-finally": 2,
         "no-unsafe-negation": 2,
-        "no-unused-expressions": 2,
+        "no-unused-expressions": "off",
+        "chai-friendly/no-unused-expressions": 2,
         "no-unused-labels": 2,
         "no-unused-vars": 2,
         "no-use-before-define": 2,
@@ -245,7 +251,7 @@
         "prefer-named-capture-group": 2,
         "prefer-numeric-literals": 2,
         "prefer-promise-reject-errors": 2,
-        "prefer-reflect": 2,
+        "prefer-reflect": "off",
         "prefer-regex-literals": 2,
         "prefer-rest-params": 2,
         "prefer-spread": 2,
@@ -292,6 +298,7 @@
     "env": {
         "node": true,
         "commonjs": true,
-        "mocha": true
+        "mocha": true,
+        "es6": true
     }
 }
