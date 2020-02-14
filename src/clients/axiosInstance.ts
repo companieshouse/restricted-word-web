@@ -15,7 +15,7 @@ const agent = tunnel.httpsOverHttp({
 });
 
 const axiosInstance = axios.create({
-    baseURL: config.apiAddress,
+    baseURL: `${config.apiAddress}/internal/restricted-word`,
     headers: requiredHeaders,
     timeout: 10000,
     proxy: false,
