@@ -27,7 +27,7 @@
   "homepage": "https://github.com/companieshouse/proof-of-concept#readme",
   "dependencies": {
     "axios": "~0.19.2",
-    "ch-logger": "file:../../poc-js-logger",
+    "ch-logger": "git+https://github.com/companieshouse/poc-js-logger.git",
     "express": "~4.17.1",
     "helmet": "~3.21.2",
     "moment": "~2.24.0",

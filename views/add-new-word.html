@@ -7,7 +7,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/"
+    href: "/restricted-word"
   }) }}
 {% endblock %}
 
@@ -23,7 +23,7 @@
       {% endif %}
 
       <h1 class="govuk-heading-xl">Add new word</h1>
-      <form method="POST" action="/add-new-word">
+      <form method="POST" action="/restricted-word/add-new-word">
         {{ govukInput({
         label: {
           text: "The word"
