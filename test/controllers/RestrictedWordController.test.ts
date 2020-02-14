@@ -31,10 +31,6 @@ describe("RestrictedWordController", function () {
                 "../pagination/Pager": mockPager
             });
 
-            mockApiClient
-                .getAllRestrictedWords(Arg.any())
-                .returns(Promise.resolve([]));
-
             mockRequest.query.returns({});
 
             await RestrictedWordController.getAllWords(mockRequest, mockResponse);
