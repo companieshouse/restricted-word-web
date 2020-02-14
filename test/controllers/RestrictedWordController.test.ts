@@ -8,7 +8,7 @@ import SubstituteFactory from "../SubstituteFactory";
 
 const proxyquire = require("proxyquire").noCallThru();
 
-describe.only("RestrictedWordController", function () {
+describe("RestrictedWordController", function () {
 
     let mockRequest: SubstituteOf<Request>;
     let mockResponse: SubstituteOf<Response>;
