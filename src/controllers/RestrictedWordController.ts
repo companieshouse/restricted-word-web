@@ -1,9 +1,18 @@
 import { Request, Response } from "express";
 
+import ApplicationLogger from "ch-logger/lib/ApplicationLogger";
 import Pager from "../pagination/Pager";
 import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
+
+declare global {
+    namespace Express {
+        interface Request {
+            logger: ApplicationLogger
+        }
+    }
+}
 
 class RestrictedWordController {
 
