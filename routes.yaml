@@ -1,0 +1,6 @@
+app_name: restricted-word-web
+group: web
+weight: 1001
+routes:
+  1: /restricted-word-web
+  2: /restricted-word-web/.*
