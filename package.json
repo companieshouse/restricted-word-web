@@ -9,6 +9,8 @@
     "build-js": "webpack --mode production",
     "watch-js": "webpack --mode development --watch",
     "start": "nodemon ./app/app",
+    "compile": "tsc && node ./app/app",
+    "watch": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run compile\"",
     "debug": "nodemon --inspect ./app/app",
     "test": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts",
     "test:watch": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts --watch",
@@ -27,7 +29,7 @@
   "homepage": "https://github.com/companieshouse/proof-of-concept#readme",
   "dependencies": {
     "axios": "~0.19.2",
-    "ch-logger": "file:../../poc-js-logger",
+    "ch-logger": "git+https://github.com/companieshouse/poc-js-logger.git",
     "express": "~4.17.1",
     "helmet": "~3.21.2",
     "moment": "~2.24.0",

@@ -5,6 +5,7 @@ import Pager from "../pagination/Pager";
 import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
+import config from "../config";
 
 declare global {
     namespace Express {
@@ -108,7 +109,7 @@ class RestrictedWordController {
 
         request.logger.info(`Successfully created new word "${request.body.word}".`);
 
-        return response.redirect(`/?addedWord=${encodeURIComponent(request.body.word)}`);
+        return response.redirect(`/${config.urlPrefix}/?addedWord=${encodeURIComponent(request.body.word)}`);
     }
 
     public static deleteWord(request: Request, response: Response) {
@@ -144,7 +145,7 @@ class RestrictedWordController {
 
         request.logger.info(`Successfully deleted "${request.body.word}" with id "${request.body.id}"`);
 
-        return response.redirect(`/?deletedWord=${encodeURIComponent(request.body.word)}`);
+        return response.redirect(`/${config.urlPrefix}/?deletedWord=${encodeURIComponent(request.body.word)}`);
     }
 }
 

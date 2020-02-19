@@ -7,7 +7,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/"
+    href: "/restricted-word"
   }) }}
 {% endblock %}
 
@@ -24,7 +24,7 @@
 
       <h1 class="govuk-heading-xl">Delete word</h1>
       <p class="govuk-body-l">You are about to delete <span>{{word}}</span></p>
-      <form method="POST" action="/delete">
+      <form method="POST" action="/restricted-word/delete">
         <input type="hidden" name="id" value="{{ id }}" />
         <input type="hidden" name="word" value="{{ word }}" />
         {{ govukButton({
