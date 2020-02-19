@@ -14,26 +14,27 @@ describe("RestrictedWordController", function () {
     let mockResponse: SubstituteOf<Response>;
     let mockApiClient: SubstituteOf<RestrictedWordApiClient>;
     let mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>;
+    let restrictedWordController: any;
 
     beforeEach(function () {
+
         mockRequest = SubstituteFactory.create<Request>();
         mockResponse = SubstituteFactory.create<Response>();
         mockApiClient = SubstituteFactory.create<RestrictedWordApiClient>();
         mockPager = SubstituteFactory.create<Pager<RestrictedWordViewModel>>();
+        restrictedWordController = proxyquire("../../src/controllers/RestrictedWordController", {
+            "../clients/RestrictedWordApiClient": mockApiClient,
+            "../pagination/Pager": mockPager
+        });
     });
 
     describe("#getAllWords", function () {
 
         it("returns the correct view", async function () {
 
-            const RestrictedWordController = proxyquire("../../src/controllers/RestrictedWordController", {
-                "../clients/RestrictedWordApiClient": mockApiClient,
-                "../pagination/Pager": mockPager
-            });
-
             mockRequest.query.returns({});
 
-            await RestrictedWordController.getAllWords(mockRequest, mockResponse);
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
             mockResponse
                 .received()
@@ -42,7 +43,15 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#createNewWord", function () {
-        //
+
+        it("returns the correct view", async function () {
+
+            await restrictedWordController.createNewWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("add-new-word");
+        });
     });
 
     describe("#handleCreateNewWord", function () {
@@ -50,7 +59,30 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#deleteWord", function () {
-        //
+
+        it("returns the correct view", async function () {
+
+            await restrictedWordController.deleteWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("delete-word", Arg.any());
+        });
+
+        it("logs and returns errors if word ID is not supplied", async function () {
+
+            await restrictedWordController.deleteWord(mockRequest, mockResponse);
+
+            mockRequest.logger
+                .received()
+                .error("Test");
+
+            mockResponse
+                .received()
+                .render("delete-word", Arg.any());
+        });
+
+        it("logs and returns errors if word is not supplied");
     });
 
     describe("#handleDeleteWord", function () {
