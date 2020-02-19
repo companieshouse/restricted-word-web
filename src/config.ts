@@ -20,4 +20,6 @@ if (httpsProxy) {
     };
 }
 
+console.dir(config);
+
 export = config;
