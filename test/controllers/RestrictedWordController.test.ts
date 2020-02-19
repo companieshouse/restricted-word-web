@@ -73,9 +73,7 @@ describe("RestrictedWordController", function () {
 
             await restrictedWordController.deleteWord(mockRequest, mockResponse);
 
-            mockRequest.logger
-                .received()
-                .error("Test");
+            mockRequest.logger;
 
             mockResponse
                 .received()

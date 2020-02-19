@@ -1,4 +1,4 @@
-import ApplicationLogger from "ch-logger/lib/ApplicationLogger";
+import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import RestrictedWordDto from "./RestrictedWordDto";
 import RestrictedWordFilterDto from "./RestrictedWordFilterDto";
 import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
