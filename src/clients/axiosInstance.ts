@@ -3,11 +3,7 @@ import config from "../config";
 import tunnel = require("tunnel");
 
 const requiredHeaders = {
-    "Authorization": config.internalApiKey,
-    "ERIC-Identity": "123",
-    "ERIC-Identity-Type": "key",
-    "ERIC-Authorised-Key-Roles": "*",
-    "Content-Type": "application/json"
+    "Authorization": config.internalApiKey
 };
 
 const agent = tunnel.httpsOverHttp({
