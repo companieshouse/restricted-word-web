@@ -8,8 +8,8 @@
     "build-scss": "gulp build",
     "build-js": "webpack --mode production",
     "start": "node ./app/app",
-    "test": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts",
-    "test:watch": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts --watch",
+    "test": "TS_NODE_FILES=true mocha -r ts-node/register --recursive --reporter nyan test --extension ts",
+    "test:watch": "TS_NODE_FILES=true mocha -r ts-node/register --recursive --reporter nyan test --extension ts --watch",
     "lint": "eslint src/**/* test/**/*"
   },
   "repository": {

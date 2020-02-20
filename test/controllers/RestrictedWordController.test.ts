@@ -1,6 +1,7 @@
 import { Arg, SubstituteOf } from "@fluffy-spoon/substitute";
 import { Request, Response } from "express";
 
+import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import Pager from "../../src/pagination/Pager";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
@@ -69,21 +70,30 @@ describe("RestrictedWordController", function () {
                 .render("delete-word", Arg.any());
         });
 
+        it("logs and returns errors if word is not supplied");
+    });
+
+    describe("#handleDeleteWord", function () {
+
         it("logs and returns errors if word ID is not supplied", async function () {
 
-            await restrictedWordController.deleteWord(mockRequest, mockResponse);
+            mockRequest.body.returns({});
 
-            mockRequest.logger;
+            const mockLogger: SubstituteOf<ApplicationLogger> = SubstituteFactory.create<ApplicationLogger>();
+
+            if (mockRequest.logger.returns !== undefined) {
+                mockRequest.logger.returns(mockLogger);
+            }
+
+            await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .error("Id required to delete word");
 
             mockResponse
                 .received()
                 .render("delete-word", Arg.any());
         });
-
-        it("logs and returns errors if word is not supplied");
-    });
-
-    describe("#handleDeleteWord", function () {
-        //
     });
 });

@@ -117,20 +117,31 @@ class RestrictedWordController {
 
         try {
 
+            if (request.body.id === undefined) {
+                throw new Error("Id required to delete word");
+            }
+
             await restrictedWordApiClient.deleteRestrictedWord(request.body.id);
 
         } catch (error) {
 
-            if (error.messages && error.messages.length) {
+            let errorMessages = error.messages;
 
-                request.logger.error(`Error deleting "${request.body.word}" with id "${request.body.id}": ${error.messages.join(", ")}`);
+            if (errorMessages === undefined) {
 
-                return response.render("delete-word", {
-                    id: request.body.id,
-                    word: request.body.word,
-                    errors: error.messages.map((message: string) => ({ text: message }))
-                });
+                errorMessages = [error.message];
+                request.logger.error(error.message);
+
+            } else {
+
+                request.logger.error(`Error deleting "${request.body.word}" with id "${request.body.id}": ${errorMessages.join(", ")}`);
             }
+
+            return response.render("delete-word", {
+                id: request.body.id,
+                word: request.body.word,
+                errors: errorMessages.map((message: string) => ({ text: message }))
+            });
         }
 
         request.logger.info(`Successfully deleted "${request.body.word}" with id "${request.body.id}"`);
