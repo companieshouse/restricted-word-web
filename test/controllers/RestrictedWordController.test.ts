@@ -15,7 +15,9 @@ const requireController = function (mockApiClient: SubstituteOf<RestrictedWordAp
         "../clients/RestrictedWordApiClient": function () {
             return mockApiClient;
         },
-        "../pagination/Pager": mockPager
+        "../pagination/Pager": function () {
+            return mockPager;
+        }
     });
 };
 
