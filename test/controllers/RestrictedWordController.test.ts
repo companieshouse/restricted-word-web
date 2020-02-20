@@ -68,7 +68,7 @@ describe("RestrictedWordController", function () {
                 ));
         });
 
-        it("returns filterWord and filterStatus as undefined if not supplied", async function () {
+        it("returns filterWord and filterStatus as undefined if not supplied, and filterUrl is correct", async function () {
 
             mockRequest.query.returns({
                 filterWord: ""
@@ -88,11 +88,12 @@ describe("RestrictedWordController", function () {
                 .received()
                 .render("all", Arg.is(options =>
                     options.filterParams.status === undefined &&
-                    !options.filterParams.word
+                    !options.filterParams.word &&
+                    options.filterUrl === "?"
                 ));
         });
 
-        it("returns supplied filterWord and filterStatus 'Active' if 'Active' supplied", async function () {
+        it("returns supplied filterWord and filterStatus 'Active' if 'Active' supplied, and filterUrl is correct", async function () {
 
             mockRequest.query.returns({
                 filterWord: exampleWord,
@@ -113,11 +114,12 @@ describe("RestrictedWordController", function () {
                 .received()
                 .render("all", Arg.is(options =>
                     options.filterParams.status === "Active" &&
-                    options.filterParams.word === exampleWord
+                    options.filterParams.word === exampleWord &&
+                    options.filterUrl === `?filterStatus=Active&filterWord=${encodeURIComponent(exampleWord)}`
                 ));
         });
 
-        it("returns filterStatus 'Deleted' if 'Deleted' supplied", async function () {
+        it("returns filterStatus 'Deleted' if 'Deleted' supplied, and filterUrl is correct", async function () {
 
             mockRequest.query.returns({
                 filterWord: "",
@@ -138,7 +140,8 @@ describe("RestrictedWordController", function () {
                 .received()
                 .render("all", Arg.is(options =>
                     options.filterParams.status === "Deleted" &&
-                    !options.filterParams.word
+                    !options.filterParams.word &&
+                    options.filterUrl === "?filterStatus=Deleted"
                 ));
         });
     });
