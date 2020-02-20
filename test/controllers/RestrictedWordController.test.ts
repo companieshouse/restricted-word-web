@@ -12,7 +12,9 @@ const proxyquire = require("proxyquire").noCallThru();
 const requireController = function (mockApiClient: SubstituteOf<RestrictedWordApiClient>, mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>) {
 
     return proxyquire("../../src/controllers/RestrictedWordController", {
-        "../clients/RestrictedWordApiClient": mockApiClient,
+        "../clients/RestrictedWordApiClient": function () {
+            return mockApiClient;
+        },
         "../pagination/Pager": mockPager
     });
 };
@@ -74,6 +76,14 @@ describe("RestrictedWordController", function () {
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
+            mockApiClient
+                .received()
+                .getAllRestrictedWords(Arg.is(options =>
+                    options.startsWith === undefined &&
+                    options.contains === undefined &&
+                    options.deleted === undefined
+                ));
+
             mockResponse
                 .received()
                 .render("all", Arg.is(options =>
@@ -85,17 +95,25 @@ describe("RestrictedWordController", function () {
         it("returns supplied filterWord and filterStatus 'Active' if 'Active' supplied", async function () {
 
             mockRequest.query.returns({
-                filterWord: "",
+                filterWord: exampleWord,
                 filterStatus: "Active"
             });
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
+            mockApiClient
+                .received()
+                .getAllRestrictedWords(Arg.is(options =>
+                    options.startsWith === undefined &&
+                    options.contains === exampleWord &&
+                    options.deleted === false
+                ));
+
             mockResponse
                 .received()
                 .render("all", Arg.is(options =>
                     options.filterParams.status === "Active" &&
-                    !options.filterParams.word
+                    options.filterParams.word === exampleWord
                 ));
         });
 
@@ -107,6 +125,14 @@ describe("RestrictedWordController", function () {
             });
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockApiClient
+                .received()
+                .getAllRestrictedWords(Arg.is(options =>
+                    options.startsWith === undefined &&
+                    options.contains === undefined &&
+                    options.deleted === true
+                ));
 
             mockResponse
                 .received()
