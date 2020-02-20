@@ -9,7 +9,17 @@ import SubstituteFactory from "../SubstituteFactory";
 
 const proxyquire = require("proxyquire").noCallThru();
 
+const requireController = function (mockApiClient: SubstituteOf<RestrictedWordApiClient>, mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>) {
+
+    return proxyquire("../../src/controllers/RestrictedWordController", {
+        "../clients/RestrictedWordApiClient": mockApiClient,
+        "../pagination/Pager": mockPager
+    });
+};
+
 describe("RestrictedWordController", function () {
+
+    const exampleWord = "Example word";
 
     let mockRequest: SubstituteOf<Request>;
     let mockResponse: SubstituteOf<Response>;
@@ -23,10 +33,7 @@ describe("RestrictedWordController", function () {
         mockResponse = SubstituteFactory.create<Response>();
         mockApiClient = SubstituteFactory.create<RestrictedWordApiClient>();
         mockPager = SubstituteFactory.create<Pager<RestrictedWordViewModel>>();
-        restrictedWordController = proxyquire("../../src/controllers/RestrictedWordController", {
-            "../clients/RestrictedWordApiClient": mockApiClient,
-            "../pagination/Pager": mockPager
-        });
+        restrictedWordController = requireController(mockApiClient, mockPager);
     });
 
     describe("#getAllWords", function () {
@@ -40,6 +47,73 @@ describe("RestrictedWordController", function () {
             mockResponse
                 .received()
                 .render("all", Arg.any());
+        });
+
+        it("returns deletedWord and addedWord if supplied", async function () {
+
+            mockRequest.query.returns({
+                deletedWord: exampleWord,
+                addedWord: exampleWord
+            });
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("all", Arg.is(options =>
+                    options.deletedWord === exampleWord &&
+                    options.addedWord === exampleWord
+                ));
+        });
+
+        it("returns filterWord and filterStatus as undefined if not supplied", async function () {
+
+            mockRequest.query.returns({
+                filterWord: ""
+            });
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("all", Arg.is(options =>
+                    options.filterParams.status === undefined &&
+                    !options.filterParams.word
+                ));
+        });
+
+        it("returns supplied filterWord and filterStatus 'Active' if 'Active' supplied", async function () {
+
+            mockRequest.query.returns({
+                filterWord: "",
+                filterStatus: "Active"
+            });
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("all", Arg.is(options =>
+                    options.filterParams.status === "Active" &&
+                    !options.filterParams.word
+                ));
+        });
+
+        it("returns filterStatus 'Deleted' if 'Deleted' supplied", async function () {
+
+            mockRequest.query.returns({
+                filterWord: "",
+                filterStatus: "Deleted"
+            });
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("all", Arg.is(options =>
+                    options.filterParams.status === "Deleted" &&
+                    !options.filterParams.word
+                ));
         });
     });
 
