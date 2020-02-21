@@ -394,9 +394,43 @@ describe("RestrictedWordController", function () {
 
         it("errors if no ID is supplied", async function () {
 
-            mockRequest.query.returns({});
+            mockRequest.query.returns({
+                word: exampleWord1
+            });
 
             const missingIdError = "Id required to delete word";
+
+            const expectedError = [{ text: missingIdError }];
+
+            const mockLogger: SubstituteOf<ApplicationLogger> = SubstituteFactory.create<ApplicationLogger>();
+
+            if (mockRequest.logger.returns !== undefined) {
+                mockRequest.logger.returns(mockLogger);
+            }
+
+            await restrictedWordController.deleteWord(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .error(missingIdError);
+
+            mockResponse
+                .received()
+                .render(deleteWordViewName, Arg.is(options => {
+
+                    expect(options.errors).to.deep.equal(expectedError);
+
+                    return true;
+                }));
+        });
+
+        it("errors if no word is supplied", async function () {
+
+            mockRequest.query.returns({
+                id: exampleId
+            });
+
+            const missingIdError = "Word required to delete word";
 
             const expectedError = [{ text: missingIdError }];
 
@@ -429,9 +463,43 @@ describe("RestrictedWordController", function () {
 
         it("logs and returns errors if word ID is not supplied", async function () {
 
-            mockRequest.body.returns({});
+            mockRequest.body.returns({
+                word: exampleWord1
+            });
 
             const missingIdError = "Id required to delete word";
+
+            const expectedError = [{ text: missingIdError }];
+
+            const mockLogger: SubstituteOf<ApplicationLogger> = SubstituteFactory.create<ApplicationLogger>();
+
+            if (mockRequest.logger.returns !== undefined) {
+                mockRequest.logger.returns(mockLogger);
+            }
+
+            await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .error(missingIdError);
+
+            mockResponse
+                .received()
+                .render(deleteWordViewName, Arg.is(options => {
+
+                    expect(options.errors).to.deep.equal(expectedError);
+
+                    return true;
+                }));
+        });
+
+        it("logs and returns errors if word is not supplied", async function () {
+
+            mockRequest.body.returns({
+                id: exampleId
+            });
+
+            const missingIdError = "Word required to delete word";
 
             const expectedError = [{ text: missingIdError }];
 

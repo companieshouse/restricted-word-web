@@ -131,14 +131,21 @@ class RestrictedWordController {
         const wordId = request.query.id;
         const word = request.query.word;
 
-        const errorMessages = wordId === undefined ?
-            RestrictedWordController.mapErrors(RestrictedWordController.getAndLogErrorList(request, "", new Error("Id required to delete word"))) :
-            undefined;
+        let errorMessages: any[] = [];
+
+        if (wordId === undefined) {
+            errorMessages = errorMessages
+                .concat(RestrictedWordController.getAndLogErrorList(request, "", new Error("Id required to delete word")));
+        }
+
+        if (word === undefined) {
+            errorMessages = errorMessages.concat(RestrictedWordController.getAndLogErrorList(request, "", new Error("Word required to delete word")));
+        }
 
         return response.render("delete-word", {
             id: wordId,
             word: word,
-            errors: errorMessages
+            errors: RestrictedWordController.mapErrors(errorMessages)
         });
     }
 
@@ -153,8 +160,12 @@ class RestrictedWordController {
 
         try {
 
-            if (wordId === undefined) {
+            if (!wordId) {
                 throw new Error("Id required to delete word");
+            }
+
+            if (!word) {
+                throw new Error("Word required to delete word");
             }
 
             await restrictedWordApiClient.deleteRestrictedWord(wordId);
