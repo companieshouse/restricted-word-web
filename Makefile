@@ -1,7 +1,7 @@
 artifact_name       := restricted-word-web
 
 .PHONY: build
-build: clean
+build: clean init
 	npm run build-scss
 	npm run build-js
 	npm run build
