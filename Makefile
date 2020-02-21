@@ -13,7 +13,7 @@ clean:
 .PHONY: clean
 
 .PHONY: package
-package: init build
+package: 
 ifndef version
 	$(error No version given. Aborting)
 endif
