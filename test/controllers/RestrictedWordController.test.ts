@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import Pager from "../../src/pagination/Pager";
 import PaginationOptions from "../../src/pagination/PaginationOptions";
+import PromiseRejector from "../PromiseRejector";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import SubstituteFactory from "../SubstituteFactory";
@@ -243,9 +244,9 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .getAllRestrictedWords(Arg.any())
-                .returns(new Promise((_resolve, reject) => reject({
+                .returns(PromiseRejector.rejectWith({
                     messages: [exampleError]
-                })));
+                }));
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
