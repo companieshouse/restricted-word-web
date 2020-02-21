@@ -8,6 +8,7 @@ import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import SubstituteFactory from "../SubstituteFactory";
 import { expect } from "chai";
+import { rejects } from "assert";
 
 const deepEql = require("deep-eql");
 const proxyquire = require("proxyquire").noCallThru();
@@ -201,11 +202,9 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("gives the pager class the page number supplied", async function () {
+        it("puts the results of 'pageResults' in 'words', and results of 'getPaginationOptions' in 'pagination' on the render options", async function () {
 
-            mockRequest.query.returns({
-                page: "4"
-            });
+            mockRequest.query.returns({});
 
             const expectedResults = [createRestrictedWordViewModel()];
             const expectedPaginationOptions = createPaginationOptions();
@@ -229,6 +228,7 @@ describe("RestrictedWordController", function () {
 
                     expect(options.words).to.equal(expectedResults);
                     expect(options.words).to.deep.equal(originalResultValues);
+
                     expect(options.pagination).to.equal(expectedPaginationOptions);
                     expect(options.pagination).to.deep.equal(originalPaginationOptionsValues);
 
@@ -236,9 +236,22 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("puts the results of 'pageResults' in 'words', and results of 'getPaginationOptions' in 'pagination' on the render options");
+        it("calls render with 'errors' defined in the options", async function () {
 
-        it("calls render with 'errors' defined in the options");
+            mockRequest.query.returns({});
+
+            mockApiClient
+                .getAllRestrictedWords(Arg.any())
+                .returns(new Promise((_resolve, reject) => reject({
+                    messages: ["Test message"]
+                })));
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("all", Arg.any());
+        });
     });
 
     describe("#createNewWord", function () {
