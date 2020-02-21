@@ -61,6 +61,7 @@ describe("RestrictedWordController", function () {
 
     let mockRequest: SubstituteOf<Request>;
     let mockResponse: SubstituteOf<Response>;
+    let mockLogger: SubstituteOf<ApplicationLogger>;
     let mockApiClient: SubstituteOf<RestrictedWordApiClient>;
     let mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>;
     let restrictedWordController: any;
@@ -69,9 +70,14 @@ describe("RestrictedWordController", function () {
 
         mockRequest = SubstituteFactory.create<Request>();
         mockResponse = SubstituteFactory.create<Response>();
+        mockLogger = SubstituteFactory.create<ApplicationLogger>();
         mockApiClient = SubstituteFactory.create<RestrictedWordApiClient>();
         mockPager = SubstituteFactory.create<Pager<RestrictedWordViewModel>>();
         restrictedWordController = requireController(mockApiClient, mockPager);
+
+        if (mockRequest.logger.returns !== undefined) {
+            mockRequest.logger.returns(mockLogger);
+        }
     });
 
     describe("#getAllWords", function () {
@@ -246,7 +252,7 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("calls render with 'errors' defined in the options", async function () {
+        it("calls render with 'errors' defined in the options if the api rejects the promise, and logs error", async function () {
 
             mockRequest.query.returns({});
 
@@ -259,6 +265,15 @@ describe("RestrictedWordController", function () {
                 }));
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .error(Arg.is(options => {
+
+                    expect(options).to.include(exampleError);
+
+                    return true;
+                }));
 
             mockResponse
                 .received()
@@ -303,19 +318,14 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .createRestrictedWord(Arg.is(word => {
-
-                    expect(word).to.equal(exampleWord1);
-
-                    return true;
-                }));
+                .createRestrictedWord(exampleWord1);
 
             mockResponse
                 .received()
                 .redirect(expectedRedirectUrl, Arg.any());
         });
 
-        it("renders the create view with errors and the word if the api errors", async function () {
+        it("renders the create view with errors and the word, if the api raises errors, and logs error", async function () {
 
             mockRequest.body.returns({
                 word: exampleWord1
@@ -331,6 +341,17 @@ describe("RestrictedWordController", function () {
 
             await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
 
+            mockLogger
+                .received()
+                .error(Arg.is(error => {
+
+                    expect(error)
+                        .to.include(exampleError)
+                        .to.include(exampleWord1);
+
+                    return true;
+                }));
+
             mockResponse
                 .received()
                 .render(createNewWordViewName, Arg.is(options => {
@@ -345,15 +366,20 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("sends back an error if word is not provided", async function () {
+        it("sends back and logs error if word is not provided", async function () {
 
             mockRequest.body.returns({
                 word: ""
             });
 
-            const expectedError = [{ text: "A word is required to create a new word" }];
+            const wordRequiredError = "A word is required to create a new word";
+            const expectedError = [{ text: wordRequiredError }];
 
             await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .error(wordRequiredError);
 
             mockResponse
                 .received()
@@ -392,7 +418,7 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("errors if no ID is supplied", async function () {
+        it("returns and logs errors if no ID is supplied", async function () {
 
             mockRequest.query.returns({
                 word: exampleWord1
@@ -401,12 +427,6 @@ describe("RestrictedWordController", function () {
             const missingIdError = "Id required to delete word";
 
             const expectedError = [{ text: missingIdError }];
-
-            const mockLogger: SubstituteOf<ApplicationLogger> = SubstituteFactory.create<ApplicationLogger>();
-
-            if (mockRequest.logger.returns !== undefined) {
-                mockRequest.logger.returns(mockLogger);
-            }
 
             await restrictedWordController.deleteWord(mockRequest, mockResponse);
 
@@ -424,7 +444,7 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("errors if no word is supplied", async function () {
+        it("returns and logs errors if no word is supplied", async function () {
 
             mockRequest.query.returns({
                 id: exampleId
@@ -433,12 +453,6 @@ describe("RestrictedWordController", function () {
             const missingIdError = "Word required to delete word";
 
             const expectedError = [{ text: missingIdError }];
-
-            const mockLogger: SubstituteOf<ApplicationLogger> = SubstituteFactory.create<ApplicationLogger>();
-
-            if (mockRequest.logger.returns !== undefined) {
-                mockRequest.logger.returns(mockLogger);
-            }
 
             await restrictedWordController.deleteWord(mockRequest, mockResponse);
 
@@ -468,14 +482,7 @@ describe("RestrictedWordController", function () {
             });
 
             const missingIdError = "Id required to delete word";
-
             const expectedError = [{ text: missingIdError }];
-
-            const mockLogger: SubstituteOf<ApplicationLogger> = SubstituteFactory.create<ApplicationLogger>();
-
-            if (mockRequest.logger.returns !== undefined) {
-                mockRequest.logger.returns(mockLogger);
-            }
 
             await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
 
@@ -500,14 +507,7 @@ describe("RestrictedWordController", function () {
             });
 
             const missingIdError = "Word required to delete word";
-
             const expectedError = [{ text: missingIdError }];
-
-            const mockLogger: SubstituteOf<ApplicationLogger> = SubstituteFactory.create<ApplicationLogger>();
-
-            if (mockRequest.logger.returns !== undefined) {
-                mockRequest.logger.returns(mockLogger);
-            }
 
             await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
 
@@ -543,7 +543,7 @@ describe("RestrictedWordController", function () {
                 .redirect(`/${mockConfig.urlPrefix}/?deletedWord=${encodeURIComponent(exampleWord1)}`, Arg.any());
         });
 
-        it("returns an error and the word/ID if the api throws an error", async function () {
+        it("returns and logs an error and the word/ID if the api throws an error", async function () {
 
             mockRequest.body.returns({
                 id: exampleId,
@@ -559,6 +559,18 @@ describe("RestrictedWordController", function () {
                 }));
 
             await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .error(Arg.is(message => {
+
+                    expect(message)
+                        .to.include(exampleError)
+                        .to.include(exampleId)
+                        .to.include(exampleWord1);
+
+                    return true;
+                }));
 
             mockResponse
                 .received()
