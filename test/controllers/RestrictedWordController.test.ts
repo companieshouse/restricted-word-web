@@ -14,6 +14,10 @@ const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordController", function () {
 
+    const mockConfig = {
+        urlPrefix: "restricted-word"
+    };
+
     const requireController = function (mockApiClient: SubstituteOf<RestrictedWordApiClient>, mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>) {
 
         return proxyquire("../../src/controllers/RestrictedWordController", {
@@ -22,7 +26,8 @@ describe("RestrictedWordController", function () {
             },
             "../pagination/Pager": function () {
                 return mockPager;
-            }
+            },
+            "../config": mockConfig
         });
     };
 
@@ -70,6 +75,8 @@ describe("RestrictedWordController", function () {
 
     describe("#getAllWords", function () {
 
+        const getAllWordsViewName = "all";
+
         it("returns the correct view", async function () {
 
             mockRequest.query.returns({});
@@ -78,7 +85,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("all", Arg.any());
+                .render(getAllWordsViewName, Arg.any());
         });
 
         it("returns deletedWord and addedWord if supplied", async function () {
@@ -92,7 +99,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options => {
+                .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.deletedWord).to.equal(exampleWord1);
                     expect(options.addedWord).to.equal(exampleWord2);
@@ -124,7 +131,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options => {
+                .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.filterParams.status).to.not.exist;
                     expect(options.filterParams.word).to.be.empty;
@@ -158,7 +165,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options => {
+                .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.filterParams.status).to.equal("Active");
                     expect(options.filterParams.word).to.equal(exampleWord1);
@@ -192,7 +199,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options => {
+                .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.filterParams.status).to.equal("Deleted");
                     expect(options.filterParams.word).to.be.empty;
@@ -224,7 +231,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options => {
+                .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.words).to.equal(expectedResults);
                     expect(options.words).to.deep.equal(originalResultValues);
@@ -252,7 +259,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options => {
+                .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.errors)
                         .to.exist
@@ -266,23 +273,71 @@ describe("RestrictedWordController", function () {
 
     describe("#createNewWord", function () {
 
+        const createNewWordViewName = "add-new-word";
+
         it("returns the correct view", async function () {
 
             await restrictedWordController.createNewWord(mockRequest, mockResponse);
 
             mockResponse
                 .received()
-                .render("add-new-word");
+                .render(createNewWordViewName);
         });
     });
 
     describe("#handleCreateNewWord", function () {
 
-        it("calls the api with the word from the body", async function () {
+        const createNewWordViewName = "add-new-word";
+
+        it("calls the api with the word from the body with no errors, and redirects successfully", async function () {
 
             mockRequest.body.returns({
                 word: exampleWord1
             });
+
+            const expectedRedirectUrl = `/${mockConfig.urlPrefix}/?addedWord=${encodeURIComponent(exampleWord1)}`;
+
+            await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
+
+            mockApiClient
+                .received()
+                .createRestrictedWord(Arg.is(word => {
+
+                    expect(word).to.equal(exampleWord1);
+
+                    return true;
+                }));
+
+            mockResponse
+                .received()
+                .redirect(expectedRedirectUrl, Arg.any());
+        });
+
+        it("renders the create view with erros if the api errors", async function () {
+
+            mockRequest.body.returns({});
+
+            const expectedError = [{ text: exampleError }];
+
+            mockApiClient
+                .createRestrictedWord(Arg.any())
+                .returns(PromiseRejector.rejectWith({
+                    messages: [exampleError]
+                }));
+
+            await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render(createNewWordViewName, Arg.is(options => {
+
+                    expect(options.errors)
+                        .to.exist
+                        .to.have.length(1)
+                        .to.deep.equal(expectedError);
+
+                    return true;
+                }));
         });
     });
 

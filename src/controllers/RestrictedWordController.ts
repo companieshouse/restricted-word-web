@@ -80,19 +80,21 @@ class RestrictedWordController {
 
     public static async handleCreateNewWord(request: Request, response: Response) {
 
-        request.logger.info(`Attempting to create new word "${request.body.word}".`);
+        const newWord = request.body.word;
+
+        request.logger.info(`Attempting to create new word "${newWord}".`);
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
 
         try {
 
-            await restrictedWordApiClient.createRestrictedWord(request.body.word);
+            await restrictedWordApiClient.createRestrictedWord(newWord);
 
         } catch (error) {
 
             if (error && error.messages.length) {
 
-                request.logger.error(`Error creating new word "${request.body.word}": ${error.messages.join(", ")}`);
+                request.logger.error(`Error creating new word "${newWord}": ${error.messages.join(", ")}`);
 
                 return response.render("add-new-word", {
                     errors: RestrictedWordController.mapErrors(error.messages)
@@ -100,9 +102,9 @@ class RestrictedWordController {
             }
         }
 
-        request.logger.info(`Successfully created new word "${request.body.word}".`);
+        request.logger.info(`Successfully created new word "${newWord}".`);
 
-        return response.redirect(`/${config.urlPrefix}/?addedWord=${encodeURIComponent(request.body.word)}`);
+        return response.redirect(`/${config.urlPrefix}/?addedWord=${encodeURIComponent(newWord)}`);
     }
 
     public static deleteWord(request: Request, response: Response) {
