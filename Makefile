@@ -10,9 +10,10 @@ build: clean
 clean:
 	rm -rf dist/*
 
+.PHONY: clean
 
 .PHONY: package
-package: build
+package: init build
 ifndef version
 	$(error No version given. Aborting)
 endif
