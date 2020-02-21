@@ -394,7 +394,7 @@ describe("RestrictedWordController", function () {
 
         it("errors if no ID is supplied", async function () {
 
-            mockRequest.body.returns({});
+            mockRequest.query.returns({});
 
             const missingIdError = "Id required to delete word";
 

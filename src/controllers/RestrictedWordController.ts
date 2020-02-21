@@ -132,13 +132,13 @@ class RestrictedWordController {
         const word = request.query.word;
 
         const errorMessages = wordId === undefined ?
-            undefined :
-            RestrictedWordController.getAndLogErrorList(request, "", new Error("Id required to delete word"));
+            RestrictedWordController.mapErrors(RestrictedWordController.getAndLogErrorList(request, "", new Error("Id required to delete word"))) :
+            undefined;
 
         return response.render("delete-word", {
             id: wordId,
             word: word,
-            errors: RestrictedWordController.mapErrors(errorMessages)
+            errors: errorMessages
         });
     }
 
