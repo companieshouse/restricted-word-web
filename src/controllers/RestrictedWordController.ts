@@ -97,6 +97,7 @@ class RestrictedWordController {
                 request.logger.error(`Error creating new word "${newWord}": ${error.messages.join(", ")}`);
 
                 return response.render("add-new-word", {
+                    word: newWord,
                     errors: RestrictedWordController.mapErrors(error.messages)
                 });
             }

@@ -262,7 +262,6 @@ describe("RestrictedWordController", function () {
                 .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.errors)
-                        .to.exist
                         .to.have.length(1)
                         .to.deep.equal(expectedError);
 
@@ -313,9 +312,11 @@ describe("RestrictedWordController", function () {
                 .redirect(expectedRedirectUrl, Arg.any());
         });
 
-        it("renders the create view with erros if the api errors", async function () {
+        it("renders the create view with errors and the word if the api errors", async function () {
 
-            mockRequest.body.returns({});
+            mockRequest.body.returns({
+                word: exampleWord1
+            });
 
             const expectedError = [{ text: exampleError }];
 
@@ -332,12 +333,25 @@ describe("RestrictedWordController", function () {
                 .render(createNewWordViewName, Arg.is(options => {
 
                     expect(options.errors)
-                        .to.exist
                         .to.have.length(1)
                         .to.deep.equal(expectedError);
 
+                    expect(options.word).to.equal(exampleWord1);
+
                     return true;
                 }));
+        });
+
+        it("sends back an error if word is not provided", async function () {
+
+            mockRequest.body.returns({
+                word: ""
+            });
+
+            await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received();
         });
     });
 
