@@ -9,7 +9,6 @@ import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import SubstituteFactory from "../SubstituteFactory";
 import { expect } from "chai";
-import { request } from "http";
 
 const proxyquire = require("proxyquire").noCallThru();
 
