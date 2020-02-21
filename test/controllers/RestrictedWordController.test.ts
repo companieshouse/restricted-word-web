@@ -233,11 +233,13 @@ describe("RestrictedWordController", function () {
                 .received()
                 .render(getAllWordsViewName, Arg.is(options => {
 
-                    expect(options.words).to.equal(expectedResults);
-                    expect(options.words).to.deep.equal(originalResultValues);
+                    expect(options.words)
+                        .to.equal(expectedResults)
+                        .to.deep.equal(originalResultValues);
 
-                    expect(options.pagination).to.equal(expectedPaginationOptions);
-                    expect(options.pagination).to.deep.equal(originalPaginationOptionsValues);
+                    expect(options.pagination)
+                        .to.equal(expectedPaginationOptions)
+                        .to.deep.equal(originalPaginationOptionsValues);
 
                     return true;
                 }));
@@ -348,10 +350,20 @@ describe("RestrictedWordController", function () {
                 word: ""
             });
 
+            const expectedError = [{ text: "A word is required to create a new word" }];
+
             await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
 
             mockResponse
-                .received();
+                .received()
+                .render(createNewWordViewName, Arg.is(options => {
+
+                    expect(options.errors)
+                        .to.have.length(1)
+                        .to.deep.equal(expectedError);
+
+                    return true;
+                }));
         });
     });
 

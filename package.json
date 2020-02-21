@@ -20,9 +20,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/companieshouse/proof-of-concept/issues"
+    "url": "https://github.com/companieshouse/restricted-word-web/issues"
   },
-  "homepage": "https://github.com/companieshouse/proof-of-concept#readme",
+  "homepage": "https://github.com/companieshouse/restricted-word-web#readme",
   "dependencies": {
     "axios": "~0.19.2",
     "ch-structured-logging": "git+https://github.com/companieshouse/ch-structured-logging-node.git",

@@ -4,3 +4,4 @@ weight: 1000
 routes:
   1: /restricted-word
   2: /restricted-word/.*%
+  

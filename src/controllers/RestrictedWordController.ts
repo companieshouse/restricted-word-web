@@ -8,6 +8,23 @@ import config from "../config";
 
 class RestrictedWordController {
 
+    private static getAndLogErrorList(request: Request, message: any, error: any) {
+
+        let errorMessages = error.messages;
+
+        if (errorMessages === undefined) {
+
+            errorMessages = [error.message];
+            request.logger.error(error.message);
+
+        } else {
+
+            request.logger.error(`${message}: ${errorMessages.join(", ")}`);
+        }
+
+        return errorMessages;
+    }
+
     private static mapErrors(errorMessages: any) {
         return errorMessages.map((message: string) => ({ text: message }));
     }
@@ -41,10 +58,12 @@ class RestrictedWordController {
 
             results = await restrictedWordApiClient.getAllRestrictedWords(queryOptions);
 
-        } catch (error) {
+        } catch (unknownError) {
+
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
 
             return response.render("all", {
-                errors: RestrictedWordController.mapErrors(error.messages)
+                errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
 
@@ -88,19 +107,20 @@ class RestrictedWordController {
 
         try {
 
+            if (!request.body.word) {
+                throw new Error("A word is required to create a new word");
+            }
+
             await restrictedWordApiClient.createRestrictedWord(newWord);
 
-        } catch (error) {
+        } catch (unknownError) {
 
-            if (error && error.messages.length) {
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, `Error creating new word "${newWord}"`, unknownError);
 
-                request.logger.error(`Error creating new word "${newWord}": ${error.messages.join(", ")}`);
-
-                return response.render("add-new-word", {
-                    word: newWord,
-                    errors: RestrictedWordController.mapErrors(error.messages)
-                });
-            }
+            return response.render("add-new-word", {
+                word: newWord,
+                errors: RestrictedWordController.mapErrors(errorMessages)
+            });
         }
 
         request.logger.info(`Successfully created new word "${newWord}".`);
@@ -129,19 +149,9 @@ class RestrictedWordController {
 
             await restrictedWordApiClient.deleteRestrictedWord(request.body.id);
 
-        } catch (error) {
+        } catch (unknownError) {
 
-            let errorMessages = error.messages;
-
-            if (errorMessages === undefined) {
-
-                errorMessages = [error.message];
-                request.logger.error(error.message);
-
-            } else {
-
-                request.logger.error(`Error deleting "${request.body.word}" with id "${request.body.id}": ${errorMessages.join(", ")}`);
-            }
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, `Error deleting "${request.body.word}" with id "${request.body.id}"`, unknownError);
 
             return response.render("delete-word", {
                 id: request.body.id,
