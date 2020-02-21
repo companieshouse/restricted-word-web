@@ -277,7 +277,13 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#handleCreateNewWord", function () {
-        //
+
+        it("calls the api with the word from the body", async function () {
+
+            mockRequest.body.returns({
+                word: exampleWord1
+            });
+        });
     });
 
     describe("#deleteWord", function () {
