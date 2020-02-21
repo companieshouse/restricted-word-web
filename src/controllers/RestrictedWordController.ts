@@ -78,7 +78,7 @@ class RestrictedWordController {
             urlParams.push(`filterWord=${encodeURIComponent(filterWord)}`);
         }
 
-        const renderOptions = {
+        return response.render("all", {
             filterUrl: `?${urlParams.join("&")}`,
             words: pager.pageResults(),
             deletedWord: request.query.deletedWord,
@@ -88,9 +88,7 @@ class RestrictedWordController {
                 status: filterStatus
             },
             pagination: pager.getPaginationOptions()
-        };
-
-        return response.render("all", renderOptions);
+        });
     }
 
     public static createNewWord(_request: Request, response: Response) {
