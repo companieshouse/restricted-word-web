@@ -82,7 +82,7 @@
         "lines-between-class-members": 2,
         "max-classes-per-file": 2,
         "max-depth": 2,
-        "max-lines": 2,
+        "max-lines": "off",
         "max-nested-callbacks": 2,
         "max-params": ["error", 5],
         "max-statements-per-line": 2,

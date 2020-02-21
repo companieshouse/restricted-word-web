@@ -8,9 +8,7 @@ import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import SubstituteFactory from "../SubstituteFactory";
 import { expect } from "chai";
-import { rejects } from "assert";
 
-const deepEql = require("deep-eql");
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordController", function () {
@@ -52,6 +50,7 @@ describe("RestrictedWordController", function () {
 
     const exampleWord1 = "Example word 1";
     const exampleWord2 = "Example word 2";
+    const exampleError = "Test message";
 
     let mockRequest: SubstituteOf<Request>;
     let mockResponse: SubstituteOf<Response>;
@@ -240,17 +239,27 @@ describe("RestrictedWordController", function () {
 
             mockRequest.query.returns({});
 
+            const expectedError = [{ text: exampleError }];
+
             mockApiClient
                 .getAllRestrictedWords(Arg.any())
                 .returns(new Promise((_resolve, reject) => reject({
-                    messages: ["Test message"]
+                    messages: [exampleError]
                 })));
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
             mockResponse
                 .received()
-                .render("all", Arg.any());
+                .render("all", Arg.is(options => {
+
+                    expect(options.errors)
+                        .to.exist
+                        .to.have.length(1)
+                        .to.deep.equal(expectedError);
+
+                    return true;
+                }));
         });
     });
 
