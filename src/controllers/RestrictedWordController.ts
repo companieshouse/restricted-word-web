@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import ApplicationLogger from "ch-logger/lib/ApplicationLogger";
+import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import Pager from "../pagination/Pager";
 import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";

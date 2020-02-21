@@ -1,13 +1,13 @@
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
-import ChLogger from "ch-logger";
+import ChStructuredLogging from "ch-structured-logging";
 import RestrictedWordRouter from "./routers/RestrictedWordRouter";
 import config from "./config";
 import express from "express";
 import helmet from "helmet";
 import path from "path";
 
-const chLogger = new ChLogger({
+const chLogger = new ChStructuredLogging({
     namespace: "restricted-word-web"
 });
 
