@@ -36,13 +36,13 @@ nunjucks.configure(
 );
 
 app.set("view engine", "html");
-app.use("/public", express.static(path.join(__dirname, "../dist")));
+app.use(`/${config.urlPrefix}/public`, express.static(path.join(__dirname, "../dist")));
 
 app.use(structuredLogging.middleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", RestrictedWordRouter.create());
+app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
 
 app.listen(config.port, function () {
     logger.info(`Server started on port ${config.port}`);
