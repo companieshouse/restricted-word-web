@@ -1,24 +1,32 @@
 import { Request, Response } from "express";
 
-import ApplicationLogger from "ch-logger/lib/ApplicationLogger";
 import Pager from "../pagination/Pager";
 import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
 import config from "../config";
 
-declare global {
-    namespace Express {
-        interface Request {
-            logger: ApplicationLogger
-        }
-    }
-}
-
 class RestrictedWordController {
 
-    private static mapErrors(error: any) {
-        return error.messages.map((message: string) => ({ text: message }));
+    private static getAndLogErrorList(request: Request, message: any, error: any) {
+
+        let errorMessages = error.messages;
+
+        if (errorMessages === undefined) {
+
+            errorMessages = [error.message];
+            request.logger.error(error.message);
+
+        } else {
+
+            request.logger.error(`${message}: ${errorMessages.join(", ")}`);
+        }
+
+        return errorMessages;
+    }
+
+    private static mapErrors(errorMessages: any) {
+        return errorMessages.map((message: string) => ({ text: message }));
     }
 
     public static async getAllWords(request: Request, response: Response) {
@@ -50,10 +58,12 @@ class RestrictedWordController {
 
             results = await restrictedWordApiClient.getAllRestrictedWords(queryOptions);
 
-        } catch (error) {
+        } catch (unknownError) {
+
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
 
             return response.render("all", {
-                errors: RestrictedWordController.mapErrors(error)
+                errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
 
@@ -87,65 +97,93 @@ class RestrictedWordController {
 
     public static async handleCreateNewWord(request: Request, response: Response) {
 
-        request.logger.info(`Attempting to create new word "${request.body.word}".`);
+        const newWord = request.body.word;
+
+        request.logger.info(`Attempting to create new word "${newWord}".`);
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
 
         try {
 
-            await restrictedWordApiClient.createRestrictedWord(request.body.word);
-
-        } catch (error) {
-
-            if (error && error.messages.length) {
-
-                request.logger.error(`Error creating new word "${request.body.word}": ${error.messages.join(", ")}`);
-
-                return response.render("add-new-word", {
-                    errors: error.messages.map((message: string) => ({ text: message }))
-                });
+            if (!newWord) {
+                throw new Error("A word is required to create a new word");
             }
+
+            await restrictedWordApiClient.createRestrictedWord(newWord);
+
+        } catch (unknownError) {
+
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, `Error creating new word "${newWord}"`, unknownError);
+
+            return response.render("add-new-word", {
+                word: newWord,
+                errors: RestrictedWordController.mapErrors(errorMessages)
+            });
         }
 
-        request.logger.info(`Successfully created new word "${request.body.word}".`);
+        request.logger.info(`Successfully created new word "${newWord}".`);
 
-        return response.redirect(`/${config.urlPrefix}/?addedWord=${encodeURIComponent(request.body.word)}`);
+        return response.redirect(`/${config.urlPrefix}/?addedWord=${encodeURIComponent(newWord)}`);
     }
 
     public static deleteWord(request: Request, response: Response) {
+
+        const wordId = request.query.id;
+        const word = request.query.word;
+
+        let errorMessages: any[] = [];
+
+        if (wordId === undefined) {
+            errorMessages = errorMessages
+                .concat(RestrictedWordController.getAndLogErrorList(request, "", new Error("Id required to delete word")));
+        }
+
+        if (word === undefined) {
+            errorMessages = errorMessages.concat(RestrictedWordController.getAndLogErrorList(request, "", new Error("Word required to delete word")));
+        }
+
         return response.render("delete-word", {
-            id: request.query.id,
-            word: request.query.word
+            id: wordId,
+            word: word,
+            errors: RestrictedWordController.mapErrors(errorMessages)
         });
     }
 
     public static async handleDeleteWord(request: Request, response: Response) {
 
-        request.logger.info(`Attempting to delete "${request.body.word}" with id "${request.body.id}"`);
+        const wordId = request.body.id;
+        const word = request.body.word;
+
+        request.logger.info(`Attempting to delete "${word}" with id "${wordId}"`);
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
 
         try {
 
-            await restrictedWordApiClient.deleteRestrictedWord(request.body.id);
-
-        } catch (error) {
-
-            if (error.messages && error.messages.length) {
-
-                request.logger.error(`Error deleting "${request.body.word}" with id "${request.body.id}": ${error.messages.join(", ")}`);
-
-                return response.render("delete-word", {
-                    id: request.body.id,
-                    word: request.body.word,
-                    errors: error.messages.map((message: string) => ({ text: message }))
-                });
+            if (!wordId) {
+                throw new Error("Id required to delete word");
             }
+
+            if (!word) {
+                throw new Error("Word required to delete word");
+            }
+
+            await restrictedWordApiClient.deleteRestrictedWord(wordId);
+
+        } catch (unknownError) {
+
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, `Error deleting "${word}" with id "${wordId}"`, unknownError);
+
+            return response.render("delete-word", {
+                id: wordId,
+                word: word,
+                errors: RestrictedWordController.mapErrors(errorMessages)
+            });
         }
 
-        request.logger.info(`Successfully deleted "${request.body.word}" with id "${request.body.id}"`);
+        request.logger.info(`Successfully deleted "${word}" with id "${wordId}"`);
 
-        return response.redirect(`/${config.urlPrefix}/?deletedWord=${encodeURIComponent(request.body.word)}`);
+        return response.redirect(`/${config.urlPrefix}/?deletedWord=${encodeURIComponent(word)}`);
     }
 }
 

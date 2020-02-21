@@ -1,4 +1,4 @@
-import ApplicationLogger from "ch-logger/lib/ApplicationLogger";
+import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import RestrictedWordDto from "./RestrictedWordDto";
 import RestrictedWordFilterDto from "./RestrictedWordFilterDto";
 import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
@@ -83,7 +83,7 @@ class RestrictedWordApiClient {
         })(outerOptions);
     }
 
-    public createRestrictedWord(outerWord: string) {
+    public createRestrictedWord(newWord: string) {
 
         const that = this;
 
@@ -101,10 +101,10 @@ class RestrictedWordApiClient {
             } catch (error) {
                 return that.handleErrors.bind(that)(error, done);
             }
-        })(outerWord);
+        })(newWord);
     }
 
-    public deleteRestrictedWord(outerId: string) {
+    public deleteRestrictedWord(wordId: string) {
 
         const that = this;
 
@@ -123,7 +123,7 @@ class RestrictedWordApiClient {
             } catch (error) {
                 return that.handleErrors.bind(that)(error, done);
             }
-        })(outerId);
+        })(wordId);
     }
 }
 
