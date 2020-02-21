@@ -7,8 +7,8 @@ import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
 
 class RestrictedWordController {
 
-    private static mapErrors(error: any) {
-        return error.messages.map((message: string) => ({ text: message }));
+    private static mapErrors(errorMessages: any) {
+        return errorMessages.map((message: string) => ({ text: message }));
     }
 
     public static async getAllWords(request: Request, response: Response) {
@@ -43,7 +43,7 @@ class RestrictedWordController {
         } catch (error) {
 
             return response.render("all", {
-                errors: RestrictedWordController.mapErrors(error)
+                errors: RestrictedWordController.mapErrors(error.messages)
             });
         }
 
@@ -94,7 +94,7 @@ class RestrictedWordController {
                 request.logger.error(`Error creating new word "${request.body.word}": ${error.messages.join(", ")}`);
 
                 return response.render("add-new-word", {
-                    errors: error.messages.map((message: string) => ({ text: message }))
+                    errors: RestrictedWordController.mapErrors(error.messages)
                 });
             }
         }
@@ -142,7 +142,7 @@ class RestrictedWordController {
             return response.render("delete-word", {
                 id: request.body.id,
                 word: request.body.word,
-                errors: errorMessages.map((message: string) => ({ text: message }))
+                errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
 

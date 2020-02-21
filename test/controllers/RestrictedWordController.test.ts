@@ -3,27 +3,54 @@ import { Request, Response } from "express";
 
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import Pager from "../../src/pagination/Pager";
+import PaginationOptions from "../../src/pagination/PaginationOptions";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import SubstituteFactory from "../SubstituteFactory";
+import { expect } from "chai";
 
+const deepEql = require("deep-eql");
 const proxyquire = require("proxyquire").noCallThru();
-
-const requireController = function (mockApiClient: SubstituteOf<RestrictedWordApiClient>, mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>) {
-
-    return proxyquire("../../src/controllers/RestrictedWordController", {
-        "../clients/RestrictedWordApiClient": function () {
-            return mockApiClient;
-        },
-        "../pagination/Pager": function () {
-            return mockPager;
-        }
-    });
-};
 
 describe("RestrictedWordController", function () {
 
-    const exampleWord = "Example word";
+    const requireController = function (mockApiClient: SubstituteOf<RestrictedWordApiClient>, mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>) {
+
+        return proxyquire("../../src/controllers/RestrictedWordController", {
+            "../clients/RestrictedWordApiClient": function () {
+                return mockApiClient;
+            },
+            "../pagination/Pager": function () {
+                return mockPager;
+            }
+        });
+    };
+
+    const createRestrictedWordViewModel = function (): RestrictedWordViewModel {
+        return {
+            id: "id",
+            word: "word",
+            createdBy: "createdBy",
+            deletedBy: "deletedBy",
+            createdAt: "createdAt",
+            deletedAt: "deletedAt"
+        };
+    };
+
+    const createPaginationOptions = function (): PaginationOptions {
+        return {
+            previousPage: 1,
+            nextPage: 2,
+            currentPage: 3,
+            totalPages: 4,
+            numResults: 5,
+            startOfPage: 6,
+            endOfPage: 7
+        };
+    };
+
+    const exampleWord1 = "Example word 1";
+    const exampleWord2 = "Example word 2";
 
     let mockRequest: SubstituteOf<Request>;
     let mockResponse: SubstituteOf<Response>;
@@ -56,8 +83,8 @@ describe("RestrictedWordController", function () {
         it("returns deletedWord and addedWord if supplied", async function () {
 
             mockRequest.query.returns({
-                deletedWord: exampleWord,
-                addedWord: exampleWord
+                deletedWord: exampleWord1,
+                addedWord: exampleWord2
             });
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
@@ -65,16 +92,18 @@ describe("RestrictedWordController", function () {
             mockResponse
                 .received()
                 .render("all", Arg.is(options =>
-                    options.deletedWord === exampleWord &&
-                    options.addedWord === exampleWord
+                    options.deletedWord === exampleWord1 &&
+                    options.addedWord === exampleWord2
                 ));
         });
 
-        it("returns filterWord and filterStatus as undefined if not supplied, and filterUrl is correct", async function () {
+        it("returns the filterWord, filterStatus as undefined if not supplied, and filterUrl is correct", async function () {
 
             mockRequest.query.returns({
                 filterWord: ""
             });
+
+            const expectedFilterUrl = "?";
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
@@ -91,14 +120,14 @@ describe("RestrictedWordController", function () {
                 .render("all", Arg.is(options =>
                     options.filterParams.status === undefined &&
                     !options.filterParams.word &&
-                    options.filterUrl === "?"
+                    options.filterUrl === expectedFilterUrl
                 ));
         });
 
-        it("returns supplied filterWord and filterStatus 'Active' if 'Active' supplied, and filterUrl is correct", async function () {
+        it("returns the supplied filterWord, filterStatus 'Active' if 'Active' supplied, and filterUrl is correct", async function () {
 
             mockRequest.query.returns({
-                filterWord: exampleWord,
+                filterWord: exampleWord1,
                 filterStatus: "Active"
             });
 
@@ -108,7 +137,7 @@ describe("RestrictedWordController", function () {
                 .received()
                 .getAllRestrictedWords(Arg.is(options =>
                     options.startsWith === undefined &&
-                    options.contains === exampleWord &&
+                    options.contains === exampleWord1 &&
                     options.deleted === false
                 ));
 
@@ -116,8 +145,8 @@ describe("RestrictedWordController", function () {
                 .received()
                 .render("all", Arg.is(options =>
                     options.filterParams.status === "Active" &&
-                    options.filterParams.word === exampleWord &&
-                    options.filterUrl === `?filterStatus=Active&filterWord=${encodeURIComponent(exampleWord)}`
+                    options.filterParams.word === exampleWord1 &&
+                    options.filterUrl === `?filterStatus=Active&filterWord=${encodeURIComponent(exampleWord1)}`
                 ));
         });
 
@@ -146,6 +175,45 @@ describe("RestrictedWordController", function () {
                     options.filterUrl === "?filterStatus=Deleted"
                 ));
         });
+
+        it("gives the pager class the page number supplied", async function () {
+
+            mockRequest.query.returns({
+                page: "4"
+            });
+
+            const expectedResults = [createRestrictedWordViewModel()];
+            const expectedPaginationOptions = createPaginationOptions();
+
+            const originalResultValues = [Object.assign({}, expectedResults[0])];
+            const originalPaginationOptionsValues = Object.assign({}, expectedPaginationOptions);
+
+            mockPager
+                .pageResults()
+                .returns(expectedResults);
+
+            mockPager
+                .getPaginationOptions()
+                .returns(expectedPaginationOptions);
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("all", Arg.is(options => {
+
+                    expect(options.words).to.equal(expectedResults);
+                    expect(options.words).to.deep.equal(originalResultValues);
+                    expect(options.pagination).to.equal(expectedPaginationOptions);
+                    expect(options.pagination).to.deep.equal(originalPaginationOptionsValues);
+
+                    return true;
+                }));
+        });
+
+        it("puts the results of 'pageResults' in 'words', and results of 'getPaginationOptions' in 'pagination' on the render options");
+
+        it("calls render with 'errors' defined in the options");
     });
 
     describe("#createNewWord", function () {
