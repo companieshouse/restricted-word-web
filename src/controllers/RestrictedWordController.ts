@@ -105,7 +105,7 @@ class RestrictedWordController {
 
         try {
 
-            if (!request.body.word) {
+            if (!newWord) {
                 throw new Error("A word is required to create a new word");
             }
 
