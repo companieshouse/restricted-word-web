@@ -91,10 +91,13 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options =>
-                    options.deletedWord === exampleWord1 &&
-                    options.addedWord === exampleWord2
-                ));
+                .render("all", Arg.is(options => {
+
+                    expect(options.deletedWord).to.equal(exampleWord1);
+                    expect(options.addedWord).to.equal(exampleWord2);
+
+                    return true;
+                }));
         });
 
         it("returns the filterWord, filterStatus as undefined if not supplied, and filterUrl is correct", async function () {
@@ -109,19 +112,25 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .getAllRestrictedWords(Arg.is(options =>
-                    options.startsWith === undefined &&
-                    options.contains === undefined &&
-                    options.deleted === undefined
-                ));
+                .getAllRestrictedWords(Arg.is(options => {
+
+                    expect(options.startsWith).to.not.exist;
+                    expect(options.contains).to.not.exist;
+                    expect(options.deleted).to.not.exist;
+
+                    return true;
+                }));
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options =>
-                    options.filterParams.status === undefined &&
-                    !options.filterParams.word &&
-                    options.filterUrl === expectedFilterUrl
-                ));
+                .render("all", Arg.is(options => {
+
+                    expect(options.filterParams.status).to.not.exist;
+                    expect(options.filterParams.word).to.be.empty;
+                    expect(options.filterUrl).to.equal(expectedFilterUrl);
+
+                    return true;
+                }));
         });
 
         it("returns the supplied filterWord, filterStatus 'Active' if 'Active' supplied, and filterUrl is correct", async function () {
@@ -131,23 +140,31 @@ describe("RestrictedWordController", function () {
                 filterStatus: "Active"
             });
 
+            const expectedFilterUrl = `?filterStatus=Active&filterWord=${encodeURIComponent(exampleWord1)}`;
+
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
             mockApiClient
                 .received()
-                .getAllRestrictedWords(Arg.is(options =>
-                    options.startsWith === undefined &&
-                    options.contains === exampleWord1 &&
-                    options.deleted === false
-                ));
+                .getAllRestrictedWords(Arg.is(options => {
+
+                    expect(options.startsWith).to.not.exist;
+                    expect(options.contains).to.equal(exampleWord1);
+                    expect(options.deleted).to.be.false;
+
+                    return true;
+                }));
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options =>
-                    options.filterParams.status === "Active" &&
-                    options.filterParams.word === exampleWord1 &&
-                    options.filterUrl === `?filterStatus=Active&filterWord=${encodeURIComponent(exampleWord1)}`
-                ));
+                .render("all", Arg.is(options => {
+
+                    expect(options.filterParams.status).to.equal("Active");
+                    expect(options.filterParams.word).to.equal(exampleWord1);
+                    expect(options.filterUrl).to.equal(expectedFilterUrl);
+
+                    return true;
+                }));
         });
 
         it("returns filterStatus 'Deleted' if 'Deleted' supplied, and filterUrl is correct", async function () {
@@ -157,23 +174,31 @@ describe("RestrictedWordController", function () {
                 filterStatus: "Deleted"
             });
 
+            const expectedFilterUrl = "?filterStatus=Deleted";
+
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
             mockApiClient
                 .received()
-                .getAllRestrictedWords(Arg.is(options =>
-                    options.startsWith === undefined &&
-                    options.contains === undefined &&
-                    options.deleted === true
-                ));
+                .getAllRestrictedWords(Arg.is(options => {
+
+                    expect(options.startsWith).to.not.exist;
+                    expect(options.contains).to.not.exist;
+                    expect(options.deleted).to.be.true;
+
+                    return true;
+                }));
 
             mockResponse
                 .received()
-                .render("all", Arg.is(options =>
-                    options.filterParams.status === "Deleted" &&
-                    !options.filterParams.word &&
-                    options.filterUrl === "?filterStatus=Deleted"
-                ));
+                .render("all", Arg.is(options => {
+
+                    expect(options.filterParams.status).to.equal("Deleted");
+                    expect(options.filterParams.word).to.be.empty;
+                    expect(options.filterUrl).to.equal(expectedFilterUrl);
+
+                    return true;
+                }));
         });
 
         it("gives the pager class the page number supplied", async function () {
