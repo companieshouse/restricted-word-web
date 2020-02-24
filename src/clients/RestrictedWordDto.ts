@@ -8,5 +8,4 @@ interface RestrictedWordDto {
     deleted_at: string;
 }
 
-// eslint-disable-next-line no-undef
 export = RestrictedWordDto;
