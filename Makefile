@@ -1,7 +1,7 @@
 artifact_name       := restricted-word-web
 
 .PHONY: build
-build: clean
+build: clean init
 	npm run build-scss
 	npm run build-js
 	npm run build
@@ -10,9 +10,10 @@ build: clean
 clean:
 	rm -rf dist/*
 
+.PHONY: clean
 
 .PHONY: package
-package: build
+package: init build 
 ifndef version
 	$(error No version given. Aborting)
 endif
