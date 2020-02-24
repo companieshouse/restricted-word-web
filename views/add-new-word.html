@@ -25,11 +25,12 @@
       <h1 class="govuk-heading-xl">Add new word</h1>
       <form method="POST" action="/restricted-word/add-new-word">
         {{ govukInput({
-        label: {
-          text: "The word"
+          label: {
+            text: "The word"
           },
           id: "event-name",
-          name: "word"
+          name: "word",
+          value: word
         }) }}
         {{ govukButton({
           text: "Add word",

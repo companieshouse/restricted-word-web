@@ -7,11 +7,11 @@ import express from "express";
 import helmet from "helmet";
 import path from "path";
 
-const chLogger = new ChStructuredLogging({
+const structuredLogging = new ChStructuredLogging({
     namespace: "restricted-word-web"
 });
 
-const logger = chLogger.logger;
+const logger = structuredLogging.logger;
 
 const app = express();
 
@@ -38,7 +38,7 @@ nunjucks.configure(
 app.set("view engine", "html");
 app.use(`/${config.urlPrefix}/public`, express.static(path.join(__dirname, "../dist")));
 
-app.use(chLogger.middleware);
+app.use(structuredLogging.middleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 
