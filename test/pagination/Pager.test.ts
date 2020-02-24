@@ -44,6 +44,28 @@ describe("Pager", function () {
 
             it("returns the correct number of results");
 
+            it("returns the correct starting result index of the current page");
+
+            it("returns the correct ending result index of the current page");
+
+            it("defaults to page 1 if the page is below 1", function () {
+
+                const pager = new Pager("-50", createResults(2000));
+                const paginationOptions = pager.getPaginationOptions();
+
+                expect(paginationOptions.currentPage).to.equal(1);
+            });
+
+            it("defaults to page 1 if the page is undefined", function () {
+
+                const pager = new Pager(undefined, createResults(2000));
+                const paginationOptions = pager.getPaginationOptions();
+
+                expect(paginationOptions.currentPage).to.equal(1);
+            });
+
+            it("defaults to the last page if the page is over the last page");
+
         });
 
         context("with custom results per page", function () {
@@ -57,29 +79,6 @@ describe("Pager", function () {
             });
 
         });
-
-
-        it("returns the correct starting result index of the current page");
-
-        it("returns the correct ending result index of the current page");
-
-        it("defaults to page 1 if the page is below 1", function () {
-
-            const pager = new Pager("-50", createResults(2000));
-            const paginationOptions = pager.getPaginationOptions();
-
-            expect(paginationOptions.currentPage).to.equal(1);
-        });
-
-        it("defaults to page 1 if the page is undefined", function () {
-
-            const pager = new Pager(undefined, createResults(2000));
-            const paginationOptions = pager.getPaginationOptions();
-
-            expect(paginationOptions.currentPage).to.equal(1);
-        });
-
-        it("defaults to the last page if the page is over the last page");
 
     });
 
