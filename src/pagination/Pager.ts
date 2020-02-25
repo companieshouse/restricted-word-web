@@ -21,6 +21,8 @@ class Pager<T> {
 
         if (this._currentPage < 1) {
             this._currentPage = 1;
+        } else if (this._currentPage > this._totalPages) {
+            this._currentPage = this._totalPages;
         }
 
         this._results = results;
