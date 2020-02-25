@@ -120,16 +120,6 @@ describe("Pager", function () {
             expect(pageResults).to.deep.equal(results.slice(60, 90));
         });
 
-        it("returns the correct items for a middle partially full page", function () {
-
-            const numResults = 75;
-            const results = createResults(numResults);
-            const pager = new Pager("3", results);
-            const pageResults = pager.pageResults();
-
-            expect(pageResults).to.deep.equal(results.slice(60, numResults));
-        });
-
         it("returns the correct items for a final full page", function () {
 
             const results = createResults(300);
