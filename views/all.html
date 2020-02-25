@@ -23,7 +23,7 @@
       </div>
     </div>
   {% endif %}
-  {%if errors && errors.length %}
+  {%if errors.length %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors
