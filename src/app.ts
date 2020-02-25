@@ -1,3 +1,4 @@
+import { SessionMiddleware, SessionStore } from "ch-node-session-handler";
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
 import ChStructuredLogging from "ch-structured-logging";
@@ -6,12 +7,18 @@ import config from "./config";
 import express from "express";
 import helmet from "helmet";
 import path from "path";
+import redis from "redis";
 
 const structuredLogging = new ChStructuredLogging({
     namespace: "restricted-word-web"
 });
 
 const logger = structuredLogging.logger;
+const sessionStore = new SessionStore(redis.createClient(`redis://${config.session.cacheServer}`));
+const sessionMiddleware = SessionMiddleware({ // eslint-disable-line new-cap
+    cookieName: config.session.cookieName,
+    cookieSecret: config.session.cookieSecret
+}, sessionStore);
 
 const app = express();
 
@@ -40,6 +47,8 @@ app.set("view engine", "html");
 app.use(`/${config.urlPrefix}/public`, express.static(path.join(__dirname, "../dist")));
 
 app.use(structuredLogging.middleware);
+
+app.use(sessionMiddleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 

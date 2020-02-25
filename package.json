@@ -26,12 +26,14 @@
   "homepage": "https://github.com/companieshouse/restricted-word-web#readme",
   "dependencies": {
     "axios": "~0.19.2",
-    "ch-structured-logging": "git+https://github.com/companieshouse/ch-structured-logging-node.git",
+    "ch-node-session-handler": "git+https://github.com/companieshouse/node-session-handler.git#master",
+    "ch-structured-logging": "git+https://github.com/companieshouse/ch-structured-logging-node.git#master",
     "express": "~4.17.1",
     "govuk-frontend": "~3.5.0",
     "helmet": "~3.21.2",
     "moment": "~2.24.0",
     "nunjucks": "~3.2.0",
+    "redis": "~3.0.2",
     "tunnel": "0.0.6",
     "winston": "~3.2.1"
   },
@@ -46,6 +48,7 @@
     "@types/node": "~13.7.1",
     "@types/nunjucks": "~3.1.3",
     "@types/proxyquire": "~1.3.28",
+    "@types/redis": "~2.8.16",
     "@types/tunnel": "0.0.1",
     "@typescript-eslint/eslint-plugin": "~2.21.0",
     "@typescript-eslint/parser": "~2.21.0",
