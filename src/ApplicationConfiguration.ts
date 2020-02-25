@@ -4,11 +4,11 @@ interface ApplicationConfiguration {
     internalApiKey: string;
     env: string;
     urlPrefix: string;
+    applicationNamespace: string;
     proxy?: {
         host: string;
         port: number;
     };
 }
 
-// eslint-disable-next-line no-undef
 export = ApplicationConfiguration;

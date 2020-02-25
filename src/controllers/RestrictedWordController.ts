@@ -5,6 +5,9 @@ import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
 import config from "../config";
+import { createLogger } from "ch-structured-logging";
+
+const logger = createLogger(config.applicationNamespace);
 
 class RestrictedWordController {
 
@@ -15,11 +18,11 @@ class RestrictedWordController {
         if (errorMessages === undefined) {
 
             errorMessages = [error.message];
-            request.logger.error(error.message);
+            logger.errorRequest(request, error.message);
 
         } else {
 
-            request.logger.error(`${message}: ${errorMessages.join(", ")}`);
+            logger.errorRequest(request, `${message}: ${errorMessages.join(", ")}`);
         }
 
         return errorMessages;
@@ -50,7 +53,7 @@ class RestrictedWordController {
          * This will be session.signInData.userProfile.email - bit long winded perhaps.
          * Maybe the client should just take in the request.
          */
-        const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
 
         let results: RestrictedWordViewModel[];
 
@@ -99,9 +102,9 @@ class RestrictedWordController {
 
         const newWord = request.body.word;
 
-        request.logger.info(`Attempting to create new word "${newWord}".`);
+        logger.infoRequest(request, `Attempting to create new word "${newWord}".`);
 
-        const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
 
         try {
 
@@ -121,7 +124,7 @@ class RestrictedWordController {
             });
         }
 
-        request.logger.info(`Successfully created new word "${newWord}".`);
+        logger.infoRequest(request, `Successfully created new word "${newWord}".`);
 
         return response.redirect(`/${config.urlPrefix}/?addedWord=${encodeURIComponent(newWord)}`);
     }
@@ -154,9 +157,9 @@ class RestrictedWordController {
         const wordId = request.body.id;
         const word = request.body.word;
 
-        request.logger.info(`Attempting to delete "${word}" with id "${wordId}"`);
+        logger.infoRequest(request, `Attempting to delete "${word}" with id "${wordId}"`);
 
-        const restrictedWordApiClient = new RestrictedWordApiClient(request.logger, "change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
 
         try {
 
@@ -181,7 +184,7 @@ class RestrictedWordController {
             });
         }
 
-        request.logger.info(`Successfully deleted "${word}" with id "${wordId}"`);
+        logger.infoRequest(request, `Successfully deleted "${word}" with id "${wordId}"`);
 
         return response.redirect(`/${config.urlPrefix}/?deletedWord=${encodeURIComponent(word)}`);
     }
