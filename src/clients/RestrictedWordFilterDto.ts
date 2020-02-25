@@ -5,5 +5,4 @@ interface RestrictedWordFilterDto {
     deleted?: boolean;
 }
 
-// eslint-disable-next-line no-undef
 export = RestrictedWordFilterDto;
