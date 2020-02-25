@@ -7,7 +7,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/restricted-word"
+    href: "/" + urlPrefix
   }) }}
 {% endblock %}
 
@@ -15,7 +15,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
 
-      {%if errors %}
+      {%if errors.length %}
         {{ govukErrorSummary({
           titleText: "There is a problem",
           errorList: errors
@@ -23,7 +23,7 @@
       {% endif %}
 
       <h1 class="govuk-heading-xl">Add new word</h1>
-      <form method="POST" action="/restricted-word/add-new-word">
+      <form method="POST" action="/{{urlPrefix}}/add-new-word">
         {{ govukInput({
           label: {
             text: "The word"
@@ -40,7 +40,7 @@
         {{ govukButton({
           text: "Cancel",
           classes: "govuk-button--secondary",
-          href: "/"
+          href: "/" + urlPrefix
         }) }}
       </form>
     </div>

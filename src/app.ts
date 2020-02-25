@@ -17,23 +17,24 @@ const app = express();
 
 const nunjucksConfig: ConfigureOptions = {
     autoescape: true,
-    noCache: true,
+    noCache: false,
     express: app
 };
 
 if (config.env === "development") {
+
+    logger.info("Configuring nunjucks for development mode");
     nunjucksConfig.watch = true;
-    nunjucksConfig.noCache = false;
+    nunjucksConfig.noCache = true;
 }
 
-nunjucks.configure(
-    [
+nunjucks
+    .configure([
         "views",
         "node_modules/govuk-frontend/",
         "node_modules/govuk-frontend/components/"
-    ],
-    nunjucksConfig
-);
+    ], nunjucksConfig)
+    .addGlobal("urlPrefix", config.urlPrefix);
 
 app.set("view engine", "html");
 app.use(`/${config.urlPrefix}/public`, express.static(path.join(__dirname, "../dist")));

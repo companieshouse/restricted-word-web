@@ -7,7 +7,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/restricted-word"
+    href: "/" + urlPrefix
   }) }}
 {% endblock %}
 
@@ -15,7 +15,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
 
-      {%if errors %}
+      {%if errors.length %}
         {{ govukErrorSummary({
           titleText: "There is a problem",
           errorList: errors
@@ -24,7 +24,7 @@
 
       <h1 class="govuk-heading-xl">Delete word</h1>
       <p class="govuk-body-l">You are about to delete <span>{{word}}</span></p>
-      <form method="POST" action="/restricted-word/delete">
+      <form method="POST" action="/{{urlPrefix}}/delete">
         <input type="hidden" name="id" value="{{ id }}" />
         <input type="hidden" name="word" value="{{ word }}" />
         {{ govukButton({
@@ -35,7 +35,7 @@
         {{ govukButton({
           text: "Cancel",
           classes: "govuk-button--secondary",
-          href: "/"
+          href: "/" + urlPrefix
         }) }}
       </form>
     </div>
