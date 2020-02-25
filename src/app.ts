@@ -1,17 +1,13 @@
+import { createLogger, createLoggerMiddleware } from "ch-structured-logging";
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
-import ChStructuredLogging from "ch-structured-logging";
 import RestrictedWordRouter from "./routers/RestrictedWordRouter";
 import config from "./config";
 import express from "express";
 import helmet from "helmet";
 import path from "path";
 
-const structuredLogging = new ChStructuredLogging({
-    namespace: "restricted-word-web"
-});
-
-const logger = structuredLogging.logger;
+const logger = createLogger(config.applicationNamespace);
 
 const app = express();
 
@@ -39,7 +35,7 @@ nunjucks
 app.set("view engine", "html");
 app.use(`/${config.urlPrefix}/public`, express.static(path.join(__dirname, "../dist")));
 
-app.use(structuredLogging.middleware);
+app.use(createLoggerMiddleware(config.applicationNamespace));
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 

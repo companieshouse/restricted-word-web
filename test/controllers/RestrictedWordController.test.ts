@@ -14,11 +14,21 @@ const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordController", function () {
 
+    const testNamespace = "test-namespace";
+
     const mockConfig = {
-        urlPrefix: "restricted-word"
+        urlPrefix: "restricted-word",
+        namespace: testNamespace
     };
 
-    const requireController = function (mockApiClient: SubstituteOf<RestrictedWordApiClient>, mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>) {
+    let mockRequest: SubstituteOf<Request>;
+    let mockResponse: SubstituteOf<Response>;
+    let mockLogger: SubstituteOf<ApplicationLogger>;
+    let mockApiClient: SubstituteOf<RestrictedWordApiClient>;
+    let mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>;
+    let restrictedWordController: any;
+
+    const requireController = function () {
 
         return proxyquire("../../src/controllers/RestrictedWordController", {
             "../clients/RestrictedWordApiClient": function () {
@@ -27,7 +37,12 @@ describe("RestrictedWordController", function () {
             "../pagination/Pager": function () {
                 return mockPager;
             },
-            "../config": mockConfig
+            "../config": mockConfig,
+            "ch-structured-logging": {
+                createLogger: function () {
+                    return mockLogger;
+                }
+            }
         });
     };
 
@@ -59,13 +74,6 @@ describe("RestrictedWordController", function () {
     const exampleError = "Test message";
     const exampleId = "abc123";
 
-    let mockRequest: SubstituteOf<Request>;
-    let mockResponse: SubstituteOf<Response>;
-    let mockLogger: SubstituteOf<ApplicationLogger>;
-    let mockApiClient: SubstituteOf<RestrictedWordApiClient>;
-    let mockPager: SubstituteOf<Pager<RestrictedWordViewModel>>;
-    let restrictedWordController: any;
-
     beforeEach(function () {
 
         mockRequest = SubstituteFactory.create<Request>();
@@ -73,11 +81,7 @@ describe("RestrictedWordController", function () {
         mockLogger = SubstituteFactory.create<ApplicationLogger>();
         mockApiClient = SubstituteFactory.create<RestrictedWordApiClient>();
         mockPager = SubstituteFactory.create<Pager<RestrictedWordViewModel>>();
-        restrictedWordController = requireController(mockApiClient, mockPager);
-
-        if (mockRequest.logger.returns !== undefined) {
-            mockRequest.logger.returns(mockLogger);
-        }
+        restrictedWordController = requireController();
     });
 
     describe("#getAllWords", function () {
@@ -268,9 +272,9 @@ describe("RestrictedWordController", function () {
 
             mockLogger
                 .received()
-                .error(Arg.is(options => {
+                .errorRequest(mockRequest, Arg.is(message => {
 
-                    expect(options).to.include(exampleError);
+                    expect(message).to.include(exampleError);
 
                     return true;
                 }));
@@ -343,9 +347,9 @@ describe("RestrictedWordController", function () {
 
             mockLogger
                 .received()
-                .error(Arg.is(error => {
+                .errorRequest(mockRequest, Arg.is(message => {
 
-                    expect(error)
+                    expect(message)
                         .to.include(exampleError)
                         .to.include(exampleWord1);
 
@@ -379,7 +383,7 @@ describe("RestrictedWordController", function () {
 
             mockLogger
                 .received()
-                .error(wordRequiredError);
+                .errorRequest(mockRequest, wordRequiredError);
 
             mockResponse
                 .received()
@@ -432,7 +436,7 @@ describe("RestrictedWordController", function () {
 
             mockLogger
                 .received()
-                .error(missingIdError);
+                .errorRequest(mockRequest, missingIdError);
 
             mockResponse
                 .received()
@@ -458,7 +462,7 @@ describe("RestrictedWordController", function () {
 
             mockLogger
                 .received()
-                .error(missingIdError);
+                .errorRequest(mockRequest, missingIdError);
 
             mockResponse
                 .received()
@@ -488,7 +492,7 @@ describe("RestrictedWordController", function () {
 
             mockLogger
                 .received()
-                .error(missingIdError);
+                .errorRequest(mockRequest, missingIdError);
 
             mockResponse
                 .received()
@@ -513,7 +517,7 @@ describe("RestrictedWordController", function () {
 
             mockLogger
                 .received()
-                .error(missingIdError);
+                .errorRequest(mockRequest, missingIdError);
 
             mockResponse
                 .received()
@@ -562,7 +566,7 @@ describe("RestrictedWordController", function () {
 
             mockLogger
                 .received()
-                .error(Arg.is(message => {
+                .errorRequest(mockRequest, Arg.is(message => {
 
                     expect(message)
                         .to.include(exampleError)

@@ -5,7 +5,8 @@ const config: ApplicationConfiguration = {
     apiAddress: process.env.INTERNAL_API_URL as string,
     internalApiKey: process.env.CHS_INTERNAL_API_KEY as string,
     env: (process.env.NODE_ENV || "development").toLowerCase(),
-    urlPrefix: "restricted-word"
+    urlPrefix: "restricted-word",
+    applicationNamespace: "restricted-word-web"
 };
 
 const httpsProxy = process.env.HTTPS_PROXY;

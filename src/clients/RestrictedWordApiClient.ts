@@ -4,17 +4,18 @@ import RestrictedWordFilterDto from "./RestrictedWordFilterDto";
 import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "./RestrictedWordViewModel";
 import axiosInstance from "./axiosInstance";
+import config from "../config";
+import { createLogger } from "ch-structured-logging";
 import moment from "moment";
 import { promisify } from "util";
 
 class RestrictedWordApiClient {
 
-    private _logger: ApplicationLogger;
+    private _logger: ApplicationLogger = createLogger(config.applicationNamespace);
 
     private _username: string;
 
-    public constructor(logger: ApplicationLogger, username: string) {
-        this._logger = logger;
+    public constructor(username: string) {
         this._username = username;
     }
 
