@@ -12,7 +12,6 @@ describe("RestrictedWordApiClient", function () {
 
     let mockAxiosInstance: SubstituteOf<AxiosInstance>;
     let mockApplicationLogger: SubstituteOf<ApplicationLogger>;
-    let MockApiClient: RestrictedWordApiClient;
     let mockApiClient: RestrictedWordApiClient;
 
     const requireApiClient = function () {
@@ -22,8 +21,10 @@ describe("RestrictedWordApiClient", function () {
             "../config": {
                 applicationNamespace: "testNamespace"
             },
-            "ch-structured-logging": function () {
-                return mockApplicationLogger;
+            "ch-structured-logging": {
+                createLogger: function () {
+                    return mockApplicationLogger;
+                }
             }
         });
 
@@ -37,8 +38,7 @@ describe("RestrictedWordApiClient", function () {
         mockAxiosInstance = SubstituteFactory.create<AxiosInstance>();
         mockApplicationLogger = SubstituteFactory.create<ApplicationLogger>();
 
-        MockApiClient = requireApiClient();
-        mockApiClient = Object.create(MockApiClient);
+        mockApiClient = new (requireApiClient())(testUser);
     });
 
     describe("#getAllRestrictedWords", function () {
