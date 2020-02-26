@@ -17,7 +17,11 @@ describe("RestrictedWordApiClient", function () {
     const requireApiClient = function () {
 
         const client = proxyquire("../../src/clients/RestrictedWordApiClient", {
-            "./axiosInstance": mockAxiosInstance,
+            "./axiosInstance": {
+                get: mockAxiosInstance.get,
+                post: mockAxiosInstance.post,
+                delete: mockAxiosInstance.delete
+            },
             "../config": {
                 applicationNamespace: "testNamespace"
             },
@@ -59,9 +63,13 @@ describe("RestrictedWordApiClient", function () {
 
     describe("#createRestrictedWord", function () {
 
-        it("creates a word successfully", function () {
+        it("creates a word successfully", async function () {
 
-            mockApiClient.createRestrictedWord("naughty");
+            await mockApiClient.createRestrictedWord("naughty");
+
+            mockAxiosInstance
+                .received()
+                .post(Arg.any(), Arg.any());
         });
 
         it("returns an error when we can NOT create a word");
