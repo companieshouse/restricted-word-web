@@ -31,7 +31,7 @@ class RestrictedWordApiClient {
         }
 
         this._logger.error(error.message);
-        handledError.messages = ["An unknown error has occured."];
+        handledError.messages = ["An unknown error has occurred."];
 
         return done(handledError);
     }
