@@ -1,16 +1,21 @@
 import { Arg, SubstituteOf } from "@fluffy-spoon/substitute";
+import chai, { expect } from "chai";
+import sinon, { SinonStubbedInstance } from "sinon";
 
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import { AxiosInstance } from "axios";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import SubstituteFactory from "../SubstituteFactory";
-import { expect } from "chai";
+import axiosInstance from "../../src/clients/axiosInstance";
+import sinonChai from "sinon-chai";
+
+chai.use(sinonChai);
 
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordApiClient", function () {
 
-    let mockAxiosInstance: SubstituteOf<AxiosInstance>;
+    let mockAxiosInstance: SinonStubbedInstance<AxiosInstance>;
     let mockApplicationLogger: SubstituteOf<ApplicationLogger>;
 
     let apiClient: RestrictedWordApiClient;
@@ -36,7 +41,7 @@ describe("RestrictedWordApiClient", function () {
 
     beforeEach(function () {
 
-        mockAxiosInstance = SubstituteFactory.create<AxiosInstance>();
+        mockAxiosInstance = sinon.stub(axiosInstance);
         mockApplicationLogger = SubstituteFactory.create<ApplicationLogger>();
 
         apiClient = new (requireApiClient())(testUser);
@@ -66,9 +71,10 @@ describe("RestrictedWordApiClient", function () {
 
             await apiClient.createRestrictedWord(restrictedWord);
 
-            mockAxiosInstance
-                .received()
-                .post("pie", Arg.any());
+            expect(mockAxiosInstance.post).to.have.been.calledWithExactly("/word", {
+                "created_by": "test@user.com",
+                "full_word": "naughty"
+            });
         });
 
         it("returns an error when we can NOT create a word");
