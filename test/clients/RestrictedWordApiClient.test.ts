@@ -12,16 +12,13 @@ describe("RestrictedWordApiClient", function () {
 
     let mockAxiosInstance: SubstituteOf<AxiosInstance>;
     let mockApplicationLogger: SubstituteOf<ApplicationLogger>;
-    let mockApiClient: RestrictedWordApiClient;
+
+    let apiClient: RestrictedWordApiClient;
 
     const requireApiClient = function () {
 
         const client = proxyquire("../../src/clients/RestrictedWordApiClient", {
-            "./axiosInstance": {
-                get: mockAxiosInstance.get,
-                post: mockAxiosInstance.post,
-                delete: mockAxiosInstance.delete
-            },
+            "./axiosInstance": mockAxiosInstance,
             "../config": {
                 applicationNamespace: "testNamespace"
             },
@@ -42,7 +39,7 @@ describe("RestrictedWordApiClient", function () {
         mockAxiosInstance = SubstituteFactory.create<AxiosInstance>();
         mockApplicationLogger = SubstituteFactory.create<ApplicationLogger>();
 
-        mockApiClient = new (requireApiClient())(testUser);
+        apiClient = new (requireApiClient())(testUser);
     });
 
     describe("#getAllRestrictedWords", function () {
@@ -67,7 +64,7 @@ describe("RestrictedWordApiClient", function () {
 
             const restrictedWord = "naughty";
 
-            await mockApiClient.createRestrictedWord(restrictedWord);
+            await apiClient.createRestrictedWord(restrictedWord);
 
             mockAxiosInstance
                 .received()
