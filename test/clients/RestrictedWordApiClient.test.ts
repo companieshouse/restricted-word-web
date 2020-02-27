@@ -1,22 +1,24 @@
-import { Arg, SubstituteOf } from "@fluffy-spoon/substitute";
 import chai, { expect } from "chai";
-import sinon, { SinonStubbedInstance } from "sinon";
+import sinon, { SinonSandbox, SinonStubbedInstance } from "sinon";
 
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import { AxiosInstance } from "axios";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
-import SubstituteFactory from "../SubstituteFactory";
 import axiosInstance from "../../src/clients/axiosInstance";
+import chaiAsPromised from "chai-as-promised";
 import sinonChai from "sinon-chai";
 
 chai.use(sinonChai);
+chai.use(chaiAsPromised);
 
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordApiClient", function () {
 
-    let mockAxiosInstance: SinonStubbedInstance<AxiosInstance>;
-    let mockApplicationLogger: SubstituteOf<ApplicationLogger>;
+    let sandbox: SinonSandbox;
+
+    const mockAxiosInstance: SinonStubbedInstance<AxiosInstance> = sinon.stub(axiosInstance);
+    const mockApplicationLogger: SinonStubbedInstance<ApplicationLogger> = sinon.createStubInstance(ApplicationLogger);
 
     let apiClient: RestrictedWordApiClient;
 
@@ -41,10 +43,15 @@ describe("RestrictedWordApiClient", function () {
 
     beforeEach(function () {
 
-        mockAxiosInstance = sinon.stub(axiosInstance);
-        mockApplicationLogger = SubstituteFactory.create<ApplicationLogger>();
+        sandbox = sinon.createSandbox();
+
+        mockAxiosInstance.post = sinon.stub();
 
         apiClient = new (requireApiClient())(testUser);
+    });
+
+    afterEach(function () {
+        sandbox.restore();
     });
 
     describe("#getAllRestrictedWords", function () {
@@ -77,7 +84,23 @@ describe("RestrictedWordApiClient", function () {
             });
         });
 
-        it("returns an error when we can NOT create a word");
+        it("returns an error when we can NOT create a word", async function () {
+
+            const word = "test";
+
+            mockAxiosInstance.post.rejects({
+                response: {
+                    data: {
+                        errors: ["Test error"]
+                    }
+                }
+            });
+
+            await expect(apiClient.createRestrictedWord(word))
+                .to.eventually.rejectedWith()
+                .and.have.property("messages")
+                .with.lengthOf(1);
+        });
 
     });
 });
