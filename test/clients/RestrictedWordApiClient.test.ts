@@ -65,11 +65,13 @@ describe("RestrictedWordApiClient", function () {
 
         it("creates a word successfully", async function () {
 
-            await mockApiClient.createRestrictedWord("naughty");
+            const restrictedWord = "naughty";
+
+            await mockApiClient.createRestrictedWord(restrictedWord);
 
             mockAxiosInstance
                 .received()
-                .post(Arg.any(), Arg.any());
+                .post("pie", Arg.any());
         });
 
         it("returns an error when we can NOT create a word");
