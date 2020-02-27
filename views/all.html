@@ -55,7 +55,7 @@
           </thead>
           <tbody class="govuk-table__body">
             {% for word in words %}
-              <tr class="govuk-table__row">
+              <tr id="word-{{word.id}}" class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">
                   {{ word.word }}
                 </th>
