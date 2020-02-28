@@ -41,7 +41,17 @@ describe("RestrictedWordApiClient", function () {
         return client;
     };
 
+    const testErrorResponse = {
+        response: {
+            data: {
+                errors: ["Test error"]
+            }
+        }
+    };
+
     const testUser = "test@user.com";
+    const testWord = "Test word";
+    const testId = "abc123";
 
     beforeEach(function () {
 
@@ -60,30 +70,30 @@ describe("RestrictedWordApiClient", function () {
 
     describe("#getAllRestrictedWords", function () {
 
+        const testResults = {
+            data: [
+                {
+                    id: "1",
+                    word: "FIRST",
+                    createdBy: "Fred Jones",
+                    createdAt: "2020-01-23T12:05:08.096"
+                },
+                {
+                    id: "2",
+                    word: "Second",
+                    createdBy: "Jill Jones",
+                    createdAt: "2020-01-24T12:05:08.096"
+                }
+            ]
+        };
+
         it("successfully maps results with words");
 
         it("successfully maps results with NO words");
 
         it("passes filter options starts_with", async function () {
 
-            const results = {
-                data: [
-                    {
-                        id: "1",
-                        word: "FIRST",
-                        createdBy: "Fred Jones",
-                        createdAt: "2020-01-23T12:05:08.096"
-                    },
-                    {
-                        id: "2",
-                        word: "Second",
-                        createdBy: "Jill Jones",
-                        createdAt: "2020-01-24T12:05:08.096"
-                    }
-                ]
-            };
-
-            mockAxiosInstance.get.resolves(results);
+            mockAxiosInstance.get.resolves(testResults);
 
             const options: RestrictedWordQueryOptions = {
                 startsWith: "PA"
@@ -113,29 +123,19 @@ describe("RestrictedWordApiClient", function () {
 
         it("creates a word successfully", async function () {
 
-            const restrictedWord = "naughty";
-
-            await apiClient.createRestrictedWord(restrictedWord);
+            await apiClient.createRestrictedWord(testWord);
 
             expect(mockAxiosInstance.post).to.have.been.calledWithExactly("/word", {
-                "created_by": "test@user.com",
-                "full_word": "naughty"
+                "created_by": testUser,
+                "full_word": testWord
             });
         });
 
         it("returns an error when we can NOT create a word", async function () {
 
-            const word = "test";
+            mockAxiosInstance.post.rejects(testErrorResponse);
 
-            mockAxiosInstance.post.rejects({
-                response: {
-                    data: {
-                        errors: ["Test error"]
-                    }
-                }
-            });
-
-            await expect(apiClient.createRestrictedWord(word))
+            await expect(apiClient.createRestrictedWord(testWord))
                 .to.eventually.rejectedWith()
                 .and.have.property("messages")
                 .with.lengthOf(1);
@@ -147,11 +147,9 @@ describe("RestrictedWordApiClient", function () {
 
         it("deletes a word successfully", async function () {
 
-            const id = "123456";
+            await apiClient.deleteRestrictedWord(testId);
 
-            await apiClient.deleteRestrictedWord(id);
-
-            expect(mockAxiosInstance.delete).to.have.been.calledWithExactly("/word/".concat(id), {
+            expect(mockAxiosInstance.delete).to.have.been.calledWithExactly(`/word/${testId}`, {
                 data: {
                     "deleted_by": "test@user.com"
                 }
@@ -160,17 +158,9 @@ describe("RestrictedWordApiClient", function () {
 
         it("returns an error when we can NOT delete a word", async function () {
 
-            const id = "123456";
+            mockAxiosInstance.delete.rejects(testErrorResponse);
 
-            mockAxiosInstance.delete.rejects({
-                response: {
-                    data: {
-                        errors: ["Test error"]
-                    }
-                }
-            });
-
-            await expect(apiClient.deleteRestrictedWord(id))
+            await expect(apiClient.deleteRestrictedWord(testId))
                 .to.eventually.rejectedWith()
                 .and.have.property("messages")
                 .with.lengthOf(1);
