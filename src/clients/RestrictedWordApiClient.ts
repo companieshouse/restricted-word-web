@@ -19,7 +19,7 @@ class RestrictedWordApiClient {
         this._username = username;
     }
 
-    private handleErrors(error: any, done: Function) {
+    private handleErrors(error: any) {
 
         const handledError: any = {};
 
@@ -27,13 +27,13 @@ class RestrictedWordApiClient {
 
             handledError.messages = error.response.data.errors;
 
-            return done(handledError);
+            throw handledError;
         }
 
         this._logger.error(error.message);
         handledError.messages = ["An unknown error has occurred."];
 
-        return done(handledError);
+        throw handledError;
     }
 
     private static mapFromApi(serverObject: RestrictedWordDto): RestrictedWordViewModel {
@@ -51,81 +51,62 @@ class RestrictedWordApiClient {
         };
     }
 
-    public getAllRestrictedWords(options: RestrictedWordQueryOptions) {
+    public async getAllRestrictedWords(options: RestrictedWordQueryOptions) {
 
-        const that = this;
+        const queryString: RestrictedWordFilterDto = {};
 
-        return promisify<RestrictedWordQueryOptions, RestrictedWordViewModel[]>(async function (innerOptions: RestrictedWordQueryOptions, done: Function) {
+        if (options.startsWith) {
+            queryString["starts_with"] = options.startsWith;
+        }
 
-            const queryString: RestrictedWordFilterDto = {};
+        if (options.contains) {
+            queryString.contains = options.contains;
+        }
 
-            if (innerOptions.startsWith) {
-                queryString["starts_with"] = innerOptions.startsWith;
-            }
+        if (options.deleted !== undefined) {
+            queryString.deleted = options.deleted;
+        }
 
-            if (innerOptions.contains) {
-                queryString.contains = innerOptions.contains;
-            }
+        try {
 
-            if (innerOptions.deleted !== undefined) {
-                queryString.deleted = innerOptions.deleted;
-            }
+            const response = await axiosInstance.get("/word", {
+                params: queryString
+            });
 
-            try {
+            return response.data.map(RestrictedWordApiClient.mapFromApi);
 
-                const response = await axiosInstance.get("/word", {
-                    params: queryString
-                });
-
-                return done(undefined, response.data.map(RestrictedWordApiClient.mapFromApi));
-
-            } catch (error) {
-                return that.handleErrors.bind(that)(error, done);
-            }
-        })(options);
+        } catch (error) {
+            this.handleErrors(error);
+        }
     }
 
-    public createRestrictedWord(newWord: string) {
+    public async createRestrictedWord(newWord: string) {
 
-        const that = this;
+        try {
 
-        return promisify<string, void>(async function (word: string, done: Function) {
+            await axiosInstance.post("/word", {
+                "full_word": newWord,
+                "created_by": this._username
+            });
 
-            try {
-
-                await axiosInstance.post("/word", {
-                    "full_word": word,
-                    "created_by": that._username
-                });
-
-                return done();
-
-            } catch (error) {
-                return that.handleErrors.bind(that)(error, done);
-            }
-        })(newWord);
+        } catch (error) {
+            this.handleErrors(error);
+        }
     }
 
-    public deleteRestrictedWord(wordId: string) {
+    public async deleteRestrictedWord(wordId: string) {
 
-        const that = this;
+        try {
 
-        return promisify<string, void>(async function (id: string, done: Function) {
+            await axiosInstance.delete(`/word/${wordId}`, {
+                data: {
+                    "deleted_by": this._username
+                }
+            });
 
-            try {
-
-                await axiosInstance.delete(`/word/${id}`, {
-                    data: {
-                        "deleted_by": that._username
-                    }
-                });
-
-                return done();
-
-            } catch (error) {
-                return that.handleErrors.bind(that)(error, done);
-            }
-        })(wordId);
+        } catch (error) {
+            this.handleErrors(error);
+        }
     }
 }
 
