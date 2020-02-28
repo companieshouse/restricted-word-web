@@ -55,12 +55,14 @@
     </div>
     {{ govukButton({
       text: "Filter",
-      classes: "govuk-!-margin-right-1"
+      classes: "govuk-!-margin-right-1",
+      attributes: { id: "filter-button" }
     }) }}
     {{ govukButton({
       text: "Clear",
       classes: "govuk-button--secondary link filter-reset",
-      href: "/" + urlPrefix
+      href: "/" + urlPrefix,
+      attributes: { id: "clear-filter-button" }
     }) }}
   </form>
 </section>

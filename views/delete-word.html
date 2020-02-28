@@ -30,12 +30,14 @@
         {{ govukButton({
           text: "Delete word",
           classes: "govuk-!-margin-right-1",
-          preventDoubleClick: true
+          preventDoubleClick: true,
+          attributes: { id: "delete-word-button" }
         }) }}
         {{ govukButton({
           text: "Cancel",
           classes: "govuk-button--secondary",
-          href: "/" + urlPrefix
+          href: "/" + urlPrefix,
+          attributes: { id: "cancel-delete-word-button" }
         }) }}
       </form>
     </div>
