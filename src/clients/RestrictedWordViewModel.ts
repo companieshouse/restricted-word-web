@@ -5,6 +5,7 @@ interface RestrictedWordViewModel {
     deletedBy: string;
     createdAt: string;
     deletedAt: string;
+    deleted: boolean;
 }
 
 export = RestrictedWordViewModel;

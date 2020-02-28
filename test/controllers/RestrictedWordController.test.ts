@@ -53,7 +53,8 @@ describe("RestrictedWordController", function () {
             createdBy: "createdBy",
             deletedBy: "deletedBy",
             createdAt: "createdAt",
-            deletedAt: "deletedAt"
+            deletedAt: "deletedAt",
+            deleted: false
         };
     };
 

@@ -6,6 +6,7 @@ interface RestrictedWordDto {
     deleted_by: string;
     created_at: string;
     deleted_at: string;
+    deleted: boolean;
 }
 
 export = RestrictedWordDto;
