@@ -79,12 +79,12 @@ class RestrictedWordApiClient {
         }
     }
 
-    public async createRestrictedWord(newWord: string) {
+    public async createRestrictedWord(word: string) {
 
         try {
 
             await axiosInstance.post("/word", {
-                "full_word": newWord,
+                "full_word": word,
                 "created_by": this._username
             });
 
@@ -93,11 +93,11 @@ class RestrictedWordApiClient {
         }
     }
 
-    public async deleteRestrictedWord(wordId: string) {
+    public async deleteRestrictedWord(id: string) {
 
         try {
 
-            await axiosInstance.delete(`/word/${wordId}`, {
+            await axiosInstance.delete(`/word/${id}`, {
                 data: {
                     "deleted_by": this._username
                 }
