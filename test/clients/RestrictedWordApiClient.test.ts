@@ -4,6 +4,8 @@ import sinon, { SinonSandbox, SinonStubbedInstance } from "sinon";
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import { AxiosInstance } from "axios";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
+import RestrictedWordFilterDto from "../../src/clients/RestrictedWordFilterDto";
+import RestrictedWordQueryOptions from "../../src/clients/RestrictedWordQueryOptions";
 import axiosInstance from "../../src/clients/axiosInstance";
 import chaiAsPromised from "chai-as-promised";
 import sinonChai from "sinon-chai";
@@ -47,6 +49,10 @@ describe("RestrictedWordApiClient", function () {
 
         mockAxiosInstance.post = sinon.stub();
 
+        mockAxiosInstance.delete = sinon.stub();
+
+        mockAxiosInstance.get = sinon.stub();
+
         apiClient = new (requireApiClient())(testUser);
     });
 
@@ -60,7 +66,41 @@ describe("RestrictedWordApiClient", function () {
 
         it("successfully maps results with NO words");
 
-        it("passes filter options starts_with");
+        it("passes filter options starts_with", async function () {
+
+            const results = [
+                {
+                    id: "1",
+                    word: "FIRST",
+                    createdBy: "Fred Jones",
+                    createdAt: "2020-01-23T12:05:08.096"
+                },
+                {
+                    id: "2",
+                    word: "Second",
+                    createdBy: "Jill Jones",
+                    createdAt: "2020-01-24T12:05:08.096"
+                }
+            ];
+
+            mockAxiosInstance.get.returnValues = Promise.resolve(results);
+
+            const outerOptions: RestrictedWordQueryOptions = {
+                startsWith: "PA"
+            };
+
+            const queryString: RestrictedWordFilterDto = {
+                // eslint-disable-next-line camelcase
+                starts_with: "PA"
+            };
+
+            await apiClient.getAllRestrictedWords(outerOptions);
+
+            expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
+                params: queryString
+            });
+
+        });
 
         it("passes filter options contains");
 
