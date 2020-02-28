@@ -74,15 +74,15 @@ describe("RestrictedWordApiClient", function () {
             data: [
                 {
                     id: "1",
-                    word: "FIRST",
-                    createdBy: "Fred Jones",
-                    createdAt: "2020-01-23T12:05:08.096"
+                    "full_word": "FIRST",
+                    "created_by": "Fred Jones",
+                    "created_at": "2020-01-23T12:05:08.096"
                 },
                 {
                     id: "2",
-                    word: "Second",
-                    createdBy: "Jill Jones",
-                    createdAt: "2020-01-24T12:05:08.096"
+                    "full_word": "Second",
+                    "created_by": "Jill Jones",
+                    "created_at": "2020-01-24T12:05:08.096"
                 }
             ]
         };
