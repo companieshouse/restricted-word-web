@@ -7,7 +7,6 @@ import axiosInstance from "./axiosInstance";
 import config from "../config";
 import { createLogger } from "ch-structured-logging";
 import moment from "moment";
-import { promisify } from "util";
 
 class RestrictedWordApiClient {
 
@@ -27,13 +26,13 @@ class RestrictedWordApiClient {
 
             handledError.messages = error.response.data.errors;
 
-            throw handledError;
+            return handledError;
         }
 
         this._logger.error(error.message);
         handledError.messages = ["An unknown error has occurred."];
 
-        throw handledError;
+        return handledError;
     }
 
     private static mapFromApi(serverObject: RestrictedWordDto): RestrictedWordViewModel {
@@ -76,7 +75,7 @@ class RestrictedWordApiClient {
             return response.data.map(RestrictedWordApiClient.mapFromApi);
 
         } catch (error) {
-            this.handleErrors(error);
+            throw this.handleErrors(error);
         }
     }
 
@@ -90,7 +89,7 @@ class RestrictedWordApiClient {
             });
 
         } catch (error) {
-            this.handleErrors(error);
+            throw this.handleErrors(error);
         }
     }
 
@@ -105,7 +104,7 @@ class RestrictedWordApiClient {
             });
 
         } catch (error) {
-            this.handleErrors(error);
+            throw this.handleErrors(error);
         }
     }
 }
