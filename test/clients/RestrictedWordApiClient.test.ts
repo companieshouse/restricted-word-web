@@ -103,4 +103,40 @@ describe("RestrictedWordApiClient", function () {
         });
 
     });
+
+    describe("#deleteRestrictedWord", function () {
+
+        it("deletes a word successfully", async function () {
+
+            const id = "123456";
+
+            await apiClient.deleteRestrictedWord(id);
+
+            expect(mockAxiosInstance.delete).to.have.been.calledWithExactly("/word/".concat(id), {
+                data: {
+                    "deleted_by": "test@user.com"
+                }
+            });
+        });
+
+        it("returns an error when we can NOT delete a word", async function () {
+
+            const id = "123456";
+
+            mockAxiosInstance.delete.rejects({
+                response: {
+                    data: {
+                        errors: ["Test error"]
+                    }
+                }
+            });
+
+            await expect(apiClient.deleteRestrictedWord(id))
+                .to.eventually.rejectedWith()
+                .and.have.property("messages")
+                .with.lengthOf(1);
+        });
+
+    });
+
 });
