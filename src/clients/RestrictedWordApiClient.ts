@@ -50,24 +50,24 @@ class RestrictedWordApiClient {
         };
     }
 
-    public getAllRestrictedWords(outerOptions: RestrictedWordQueryOptions) {
+    public getAllRestrictedWords(options: RestrictedWordQueryOptions) {
 
         const that = this;
 
-        return promisify<RestrictedWordQueryOptions, RestrictedWordViewModel[]>(async function (options: RestrictedWordQueryOptions, done: Function) {
+        return promisify<RestrictedWordQueryOptions, RestrictedWordViewModel[]>(async function (innerOptions: RestrictedWordQueryOptions, done: Function) {
 
             const queryString: RestrictedWordFilterDto = {};
 
-            if (options.startsWith) {
-                queryString["starts_with"] = options.startsWith;
+            if (innerOptions.startsWith) {
+                queryString["starts_with"] = innerOptions.startsWith;
             }
 
-            if (options.contains) {
-                queryString.contains = options.contains;
+            if (innerOptions.contains) {
+                queryString.contains = innerOptions.contains;
             }
 
-            if (options.deleted !== undefined) {
-                queryString.deleted = options.deleted;
+            if (innerOptions.deleted !== undefined) {
+                queryString.deleted = innerOptions.deleted;
             }
 
             try {
@@ -81,7 +81,7 @@ class RestrictedWordApiClient {
             } catch (error) {
                 return that.handleErrors.bind(that)(error, done);
             }
-        })(outerOptions);
+        })(options);
     }
 
     public createRestrictedWord(newWord: string) {

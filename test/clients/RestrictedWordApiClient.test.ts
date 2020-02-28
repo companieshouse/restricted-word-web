@@ -48,9 +48,7 @@ describe("RestrictedWordApiClient", function () {
         sandbox = sinon.createSandbox();
 
         mockAxiosInstance.post = sinon.stub();
-
         mockAxiosInstance.delete = sinon.stub();
-
         mockAxiosInstance.get = sinon.stub();
 
         apiClient = new (requireApiClient())(testUser);
@@ -68,33 +66,34 @@ describe("RestrictedWordApiClient", function () {
 
         it("passes filter options starts_with", async function () {
 
-            const results = [
-                {
-                    id: "1",
-                    word: "FIRST",
-                    createdBy: "Fred Jones",
-                    createdAt: "2020-01-23T12:05:08.096"
-                },
-                {
-                    id: "2",
-                    word: "Second",
-                    createdBy: "Jill Jones",
-                    createdAt: "2020-01-24T12:05:08.096"
-                }
-            ];
+            const results = {
+                data: [
+                    {
+                        id: "1",
+                        word: "FIRST",
+                        createdBy: "Fred Jones",
+                        createdAt: "2020-01-23T12:05:08.096"
+                    },
+                    {
+                        id: "2",
+                        word: "Second",
+                        createdBy: "Jill Jones",
+                        createdAt: "2020-01-24T12:05:08.096"
+                    }
+                ]
+            };
 
-            mockAxiosInstance.get.returnValues = Promise.resolve(results);
+            mockAxiosInstance.get.resolves(results);
 
-            const outerOptions: RestrictedWordQueryOptions = {
+            const options: RestrictedWordQueryOptions = {
                 startsWith: "PA"
             };
 
             const queryString: RestrictedWordFilterDto = {
-                // eslint-disable-next-line camelcase
-                starts_with: "PA"
+                "starts_with": "PA"
             };
 
-            await apiClient.getAllRestrictedWords(outerOptions);
+            await apiClient.getAllRestrictedWords(options);
 
             expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
                 params: queryString
