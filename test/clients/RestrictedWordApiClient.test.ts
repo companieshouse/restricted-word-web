@@ -111,9 +111,45 @@ describe("RestrictedWordApiClient", function () {
 
         });
 
-        it("passes filter options contains");
+        it("passes filter options contains", async function () {
 
-        it("passes filter options deleted words");
+            mockAxiosInstance.get.resolves(testResults);
+
+            const options: RestrictedWordQueryOptions = {
+                contains: "Flower"
+            };
+
+            const queryString: RestrictedWordFilterDto = {
+                "contains": "Flower"
+            };
+
+            await apiClient.getAllRestrictedWords(options);
+
+            expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
+                params: queryString
+            });
+
+        });
+
+        it("passes filter options deleted words", async function () {
+
+            mockAxiosInstance.get.resolves(testResults);
+
+            const options: RestrictedWordQueryOptions = {
+                deleted: true
+            };
+
+            const queryString: RestrictedWordFilterDto = {
+                deleted: true
+            };
+
+            await apiClient.getAllRestrictedWords(options);
+
+            expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
+                params: queryString
+            });
+
+        });
 
         it("handles errors from the API");
 
