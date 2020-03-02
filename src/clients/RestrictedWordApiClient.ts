@@ -4,21 +4,21 @@ import RestrictedWordFilterDto from "./RestrictedWordFilterDto";
 import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "./RestrictedWordViewModel";
 import axiosInstance from "./axiosInstance";
+import config from "../config";
+import { createLogger } from "ch-structured-logging";
 import moment from "moment";
-import { promisify } from "util";
 
 class RestrictedWordApiClient {
 
-    private _logger: ApplicationLogger;
+    private _logger: ApplicationLogger = createLogger(config.applicationNamespace);
 
     private _username: string;
 
-    public constructor(logger: ApplicationLogger, username: string) {
-        this._logger = logger;
+    public constructor(username: string) {
         this._username = username;
     }
 
-    private handleErrors(error: any, done: Function) {
+    private handleErrors(error: any) {
 
         const handledError: any = {};
 
@@ -26,13 +26,13 @@ class RestrictedWordApiClient {
 
             handledError.messages = error.response.data.errors;
 
-            return done(handledError);
+            return handledError;
         }
 
         this._logger.error(error.message);
-        handledError.messages = ["An unknown error has occured."];
+        handledError.messages = ["An unknown error has occurred."];
 
-        return done(handledError);
+        return handledError;
     }
 
     private static mapFromApi(serverObject: RestrictedWordDto): RestrictedWordViewModel {
@@ -45,85 +45,67 @@ class RestrictedWordApiClient {
             createdAt: moment(serverObject.created_at).format("DD MMM YY"),
             deletedAt: serverObject.deleted_at ?
                 moment(serverObject.deleted_at).format("DD MMM YY") :
-                "-"
+                "-",
+            deleted: serverObject.deleted ? serverObject.deleted : false
         };
     }
 
-    public getAllRestrictedWords(outerOptions: RestrictedWordQueryOptions) {
+    public async getAllRestrictedWords(options: RestrictedWordQueryOptions) {
 
-        const that = this;
+        const queryString: RestrictedWordFilterDto = {};
 
-        return promisify<RestrictedWordQueryOptions, RestrictedWordViewModel[]>(async function (options: RestrictedWordQueryOptions, done: Function) {
+        if (options.startsWith) {
+            queryString["starts_with"] = options.startsWith;
+        }
 
-            const queryString: RestrictedWordFilterDto = {};
+        if (options.contains) {
+            queryString.contains = options.contains;
+        }
 
-            if (options.startsWith) {
-                queryString["starts_with"] = options.startsWith;
-            }
+        if (options.deleted !== undefined) {
+            queryString.deleted = options.deleted;
+        }
 
-            if (options.contains) {
-                queryString.contains = options.contains;
-            }
+        try {
 
-            if (options.deleted !== undefined) {
-                queryString.deleted = options.deleted;
-            }
+            const response = await axiosInstance.get("/word", {
+                params: queryString
+            });
 
-            try {
+            return response.data.map(RestrictedWordApiClient.mapFromApi);
 
-                const response = await axiosInstance.get("/word", {
-                    params: queryString
-                });
-
-                return done(undefined, response.data.map(RestrictedWordApiClient.mapFromApi));
-
-            } catch (error) {
-                return that.handleErrors.bind(that)(error, done);
-            }
-        })(outerOptions);
+        } catch (error) {
+            throw this.handleErrors(error);
+        }
     }
 
-    public createRestrictedWord(newWord: string) {
+    public async createRestrictedWord(word: string) {
 
-        const that = this;
+        try {
 
-        return promisify<string, void>(async function (word: string, done: Function) {
+            await axiosInstance.post("/word", {
+                "full_word": word,
+                "created_by": this._username
+            });
 
-            try {
-
-                await axiosInstance.post("/word", {
-                    "full_word": word,
-                    "created_by": that._username
-                });
-
-                return done();
-
-            } catch (error) {
-                return that.handleErrors.bind(that)(error, done);
-            }
-        })(newWord);
+        } catch (error) {
+            throw this.handleErrors(error);
+        }
     }
 
-    public deleteRestrictedWord(wordId: string) {
+    public async deleteRestrictedWord(id: string) {
 
-        const that = this;
+        try {
 
-        return promisify<string, void>(async function (id: string, done: Function) {
+            await axiosInstance.delete(`/word/${id}`, {
+                data: {
+                    "deleted_by": this._username
+                }
+            });
 
-            try {
-
-                await axiosInstance.delete(`/word/${id}`, {
-                    data: {
-                        "deleted_by": that._username
-                    }
-                });
-
-                return done();
-
-            } catch (error) {
-                return that.handleErrors.bind(that)(error, done);
-            }
-        })(wordId);
+        } catch (error) {
+            throw this.handleErrors(error);
+        }
     }
 }
 

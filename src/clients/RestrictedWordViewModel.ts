@@ -5,7 +5,7 @@ interface RestrictedWordViewModel {
     deletedBy: string;
     createdAt: string;
     deletedAt: string;
+    deleted: boolean;
 }
 
-// eslint-disable-next-line no-undef
 export = RestrictedWordViewModel;

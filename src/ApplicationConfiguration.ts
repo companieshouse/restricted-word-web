@@ -8,12 +8,12 @@ interface ApplicationConfiguration {
         cookieName: string;
         cookieSecret: string;
         cacheServer: string;
-    }
+    };
+    applicationNamespace: string;
     proxy?: {
         host: string;
         port: number;
     };
 }
 
-// eslint-disable-next-line no-undef
 export = ApplicationConfiguration;

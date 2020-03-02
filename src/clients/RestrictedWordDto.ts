@@ -6,7 +6,7 @@ interface RestrictedWordDto {
     deleted_by: string;
     created_at: string;
     deleted_at: string;
+    deleted: boolean;
 }
 
-// eslint-disable-next-line no-undef
 export = RestrictedWordDto;

@@ -33,3 +33,14 @@ RESTRICTED_WORD_ADMIN_WEB_API_URL                 | URL to Restricted Word Api  
 1. Have the restricted word api running on your same machine
 2. In project home directory `npm start`
 3. In browser go to <http://localhost:3001>
+
+### Vagrant
+
+1. Start restricted-word-web via ubic (it is in the chs.chips group)
+2. In a browser go to <http://web.chs-dev.internal:4000/restricted-word>
+
+### AWS Test
+
+The application is installed via the restricted-word-web concourse pipeline.
+
+In a browser go to <https://[E2E Environment].aws.chdev.org/restricted-word>. Example:  https://parent1.aws.chdev.org/restricted-word

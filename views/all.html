@@ -34,7 +34,8 @@
       <h1 class="govuk-heading-xl">Restricted words</h1>
       {{ govukButton({
         text: "Add new word",
-        href: "/" + urlPrefix + "/add-new-word"
+        href: "/" + urlPrefix + "/add-new-word",
+        attributes: { id: "add-new-word-button" }
       }) }}
     </div>
   </div>
@@ -55,7 +56,7 @@
           </thead>
           <tbody class="govuk-table__body">
             {% for word in words %}
-              <tr class="govuk-table__row">
+              <tr id="word-{{word.id}}" class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">
                   {{ word.word }}
                 </th>
@@ -72,7 +73,8 @@
                   {{ govukButton({
                     text: "Delete",
                     classes: "govuk-button--secondary govuk-!-margin-0",
-                    href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word
+                    href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
+                    attributes: { id: "delete-word-" + word.id + "-button" }
                   }) }}
                 </td>
               </tr>

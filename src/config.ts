@@ -10,7 +10,8 @@ const config: ApplicationConfiguration = {
         cookieName: process.env.COOKIE_NAME as string,
         cookieSecret: process.env.COOKIE_SECRET as string,
         cacheServer: process.env.CACHE_SERVER as string
-    }
+    },
+    applicationNamespace: "restricted-word-web"
 };
 
 const httpsProxy = process.env.HTTPS_PROXY;
