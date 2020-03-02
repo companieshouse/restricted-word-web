@@ -46,7 +46,7 @@ class RestrictedWordApiClient {
             deletedAt: serverObject.deleted_at ?
                 moment(serverObject.deleted_at).format("DD MMM YY") :
                 "-",
-            deleted: serverObject.deleted
+            deleted: serverObject.deleted ? serverObject.deleted : false
         };
     }
 

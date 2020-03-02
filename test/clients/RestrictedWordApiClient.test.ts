@@ -6,6 +6,7 @@ import { AxiosInstance } from "axios";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordFilterDto from "../../src/clients/RestrictedWordFilterDto";
 import RestrictedWordQueryOptions from "../../src/clients/RestrictedWordQueryOptions";
+import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import axiosInstance from "../../src/clients/axiosInstance";
 import chaiAsPromised from "chai-as-promised";
 import sinonChai from "sinon-chai";
@@ -82,26 +83,81 @@ describe("RestrictedWordApiClient", function () {
                     id: "2",
                     "full_word": "Second",
                     "created_by": "Jill Jones",
-                    "created_at": "2020-01-24T12:05:08.096"
+                    "created_at": "2020-01-24T12:05:08.096",
+                    "deleted_by": "Ben Gun",
+                    "deleted_at": "2020-02-21T11:03:04.019",
+                    deleted: true
                 }
             ]
         };
 
-        it("successfully maps results with words");
+        it("successfully maps results with words", async function () {
 
-        it("successfully maps results with NO words");
+            mockAxiosInstance.get.resolves(testResults);
+
+            const options: RestrictedWordQueryOptions = {};
+            const queryString: RestrictedWordFilterDto = {};
+
+            const results = await apiClient.getAllRestrictedWords(options);
+
+            expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
+                params: queryString
+            });
+
+            const mappedResults = [
+                {
+                    id: "1",
+                    word: "FIRST",
+                    createdBy: "Fred Jones",
+                    deletedBy: undefined,
+                    createdAt: "23 Jan 20",
+                    deletedAt: "-",
+                    deleted: false
+                },
+                {
+                    id: "2",
+                    word: "Second",
+                    createdBy: "Jill Jones",
+                    deletedBy: "Ben Gun",
+                    createdAt: "24 Jan 20",
+                    deletedAt: "21 Feb 20",
+                    deleted: true
+                }
+            ];
+
+            expect(mappedResults).to.eql(results);
+
+        });
+
+        it("successfully maps results with NO words", async function () {
+
+            const emptyResults = {
+                data: []
+            };
+
+            mockAxiosInstance.get.resolves(emptyResults);
+
+            const options: RestrictedWordQueryOptions = {};
+            const queryString: RestrictedWordFilterDto = {};
+
+            const results = await apiClient.getAllRestrictedWords(options);
+
+            expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
+                params: queryString
+            });
+
+            const mappedResults: RestrictedWordViewModel[] = [];
+
+            expect(mappedResults).to.eql(results);
+
+        });
 
         it("passes filter options starts_with", async function () {
 
             mockAxiosInstance.get.resolves(testResults);
 
-            const options: RestrictedWordQueryOptions = {
-                startsWith: "PA"
-            };
-
-            const queryString: RestrictedWordFilterDto = {
-                "starts_with": "PA"
-            };
+            const options: RestrictedWordQueryOptions = {};
+            const queryString: RestrictedWordFilterDto = {};
 
             await apiClient.getAllRestrictedWords(options);
 
