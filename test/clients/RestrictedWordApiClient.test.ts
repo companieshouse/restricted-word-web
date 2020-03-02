@@ -125,8 +125,7 @@ describe("RestrictedWordApiClient", function () {
                 }
             ];
 
-            expect(mappedResults).to.eql(results);
-
+            expect(mappedResults).to.deep.equal(results);
         });
 
         it("successfully maps results with NO words", async function () {
@@ -148,7 +147,7 @@ describe("RestrictedWordApiClient", function () {
 
             const mappedResults: RestrictedWordViewModel[] = [];
 
-            expect(mappedResults).to.eql(results);
+            expect(mappedResults).to.deep.equal(results);
 
         });
 
