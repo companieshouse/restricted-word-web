@@ -18,6 +18,13 @@ const sessionMiddleware = SessionMiddleware({ // eslint-disable-line new-cap
 
 const app = express();
 
+app.use(function (request, _response, next) {
+
+    console.log(request.session.__value);
+
+    return next();
+});
+
 const nunjucksConfig: ConfigureOptions = {
     autoescape: true,
     noCache: false,
