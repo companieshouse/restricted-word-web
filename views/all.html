@@ -70,12 +70,14 @@
                   {{ word.deletedAt }}
                 </td>
                 <td class="govuk-table__cell" scope="row">
-                  {{ govukButton({
-                    text: "Delete",
-                    classes: "govuk-button--secondary govuk-!-margin-0",
-                    href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
-                    attributes: { id: "delete-word-" + word.id + "-button" }
-                  }) }}
+                  {% if not word.deleted %}
+                    {{ govukButton({
+                      text: "Delete",
+                      classes: "govuk-button--secondary govuk-!-margin-0",
+                      href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
+                      attributes: { id: "delete-word-" + word.id + "-button" }
+                    }) }}
+                  {% endif %}
                 </td>
               </tr>
             {% endfor %}
