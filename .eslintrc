@@ -84,6 +84,7 @@
         "no-multi-spaces": 2,
         "no-multiple-empty-lines": 2,
         "no-new": 2,
+        "no-new-func": 2,
         "no-process-env": 2,
         "no-spaced-func": 2,
         "no-tabs": 2,
