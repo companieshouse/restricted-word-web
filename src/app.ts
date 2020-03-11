@@ -1,11 +1,14 @@
-import { SessionMiddleware, SessionStore } from "ch-node-session-handler";
+import { Session, SessionMiddleware, SessionStore } from "ch-node-session-handler";
 import { createLogger, createLoggerMiddleware } from "ch-structured-logging";
+import express, { response } from "express";
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
+import { ISignInInfo } from "ch-node-session-handler/lib/session/model/SessionInterfaces";
 import Redis from "ioredis";
 import RestrictedWordRouter from "./routers/RestrictedWordRouter";
+import { SessionKey } from "ch-node-session-handler/lib/session/keys/SessionKey";
+import { SignInInfoKeys } from "ch-node-session-handler/lib/session/keys/SignInInfoKeys";
 import config from "./config";
-import express from "express";
 import helmet from "helmet";
 import path from "path";
 
@@ -20,9 +23,23 @@ const app = express();
 
 app.use((request, _response, next) => {
 
-    console.log(request.session.__value);
+    request.session.ifNothing(() => {
 
-    return next();
+        logger.errorRequest(request, "Session doesn't exist");
+
+        return next();
+    });
+
+    const signedIn = request.session
+        .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
+        .map((signInInfo: ISignInInfo) => signInInfo[SignInInfoKeys.SignedIn] === 1)
+        .orDefault(false);
+
+    if (signedIn) {
+        return next();
+    }
+
+    return response.redirect(`/signin?return_to=${"test"}`);
 });
 
 const nunjucksConfig: ConfigureOptions = {
