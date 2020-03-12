@@ -21,30 +21,6 @@ const sessionMiddleware = SessionMiddleware({ // eslint-disable-line new-cap
 
 const app = express();
 
-app.use((request, response, next) => {
-
-    if (request.session !== undefined) {
-
-        request.session.ifNothing(() => {
-
-            logger.errorRequest(request, "Session doesn't exist");
-
-            return next();
-        });
-
-        const signedIn = request.session
-            .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
-            .map((signInInfo: ISignInInfo) => signInInfo[SignInInfoKeys.SignedIn] === 1)
-            .orDefault(false);
-
-        if (signedIn) {
-            return next();
-        }
-    }
-
-    return response.redirect(`/signin?return_to=${config.urlPrefix}`);
-});
-
 const nunjucksConfig: ConfigureOptions = {
     autoescape: true,
     noCache: false,
@@ -73,6 +49,27 @@ app.use(createLoggerMiddleware(config.applicationNamespace));
 app.use(sessionMiddleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
+
+app.use((request, response, next) => {
+
+    request.session.ifNothing(() => {
+
+        logger.errorRequest(request, "Session doesn't exist");
+
+        return next();
+    });
+
+    const signedIn = request.session
+        .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
+        .map((signInInfo: ISignInInfo) => signInInfo[SignInInfoKeys.SignedIn] === 1)
+        .orDefault(false);
+
+    if (signedIn) {
+        return next();
+    }
+
+    return response.redirect(`/signin?return_to=${config.urlPrefix}`);
+});
 
 app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
 
