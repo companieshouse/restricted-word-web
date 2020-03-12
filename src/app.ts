@@ -1,6 +1,5 @@
 import { Session, SessionMiddleware, SessionStore } from "ch-node-session-handler";
 import { createLogger, createLoggerMiddleware } from "ch-structured-logging";
-import express, { response } from "express";
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
 import { ISignInInfo } from "ch-node-session-handler/lib/session/model/SessionInterfaces";
@@ -9,6 +8,7 @@ import RestrictedWordRouter from "./routers/RestrictedWordRouter";
 import { SessionKey } from "ch-node-session-handler/lib/session/keys/SessionKey";
 import { SignInInfoKeys } from "ch-node-session-handler/lib/session/keys/SignInInfoKeys";
 import config from "./config";
+import express from "express";
 import helmet from "helmet";
 import path from "path";
 
