@@ -70,7 +70,7 @@ app.use((request, response, next) => {
         return next();
     }
 
-    return response.redirect(`/signin?return_to=${config.urlPrefix}`);
+    return response.redirect(`/signin?return_to=/${config.urlPrefix}`);
 });
 
 app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
