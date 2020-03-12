@@ -1,12 +1,10 @@
-import { Session, SessionMiddleware, SessionStore } from "ch-node-session-handler";
+import { SessionMiddleware, SessionStore } from "ch-node-session-handler";
 import { createLogger, createLoggerMiddleware } from "ch-structured-logging";
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
-import { ISignInInfo } from "ch-node-session-handler/lib/session/model/SessionInterfaces";
 import Redis from "ioredis";
 import RestrictedWordRouter from "./routers/RestrictedWordRouter";
-import { SessionKey } from "ch-node-session-handler/lib/session/keys/SessionKey";
-import { SignInInfoKeys } from "ch-node-session-handler/lib/session/keys/SignInInfoKeys";
+import authenticationMiddleware from "./middleware/authenticationMiddleware";
 import config from "./config";
 import cookieParser from "cookie-parser";
 import express from "express";
@@ -52,26 +50,7 @@ app.use(sessionMiddleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 
-app.use((request, response, next) => {
-
-    request.session.ifNothing(() => {
-
-        logger.errorRequest(request, "Session doesn't exist");
-
-        return next();
-    });
-
-    const signedIn = request.session
-        .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
-        .map((signInInfo: ISignInInfo) => signInInfo[SignInInfoKeys.SignedIn] === 1)
-        .orDefault(false);
-
-    if (signedIn) {
-        return next();
-    }
-
-    return response.redirect(`/signin?return_to=/${config.urlPrefix}`);
-});
+app.use(authenticationMiddleware());
 
 app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
 
