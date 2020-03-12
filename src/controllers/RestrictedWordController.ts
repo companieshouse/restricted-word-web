@@ -94,11 +94,11 @@ class RestrictedWordController {
         });
     }
 
-    public static createNewWord(_request: Request, response: Response) {
+    public static getCreateNewWord(_request: Request, response: Response) {
         return response.render("add-new-word");
     }
 
-    public static async handleCreateNewWord(request: Request, response: Response) {
+    public static async postCreateNewWord(request: Request, response: Response) {
 
         const newWord = request.body.word;
 
@@ -129,7 +129,7 @@ class RestrictedWordController {
         return response.redirect(`/${config.urlPrefix}/?addedWord=${encodeURIComponent(newWord)}`);
     }
 
-    public static deleteWord(request: Request, response: Response) {
+    public static getDeleteWord(request: Request, response: Response) {
 
         const wordId = request.query.id;
         const word = request.query.word;
@@ -152,7 +152,7 @@ class RestrictedWordController {
         });
     }
 
-    public static async handleDeleteWord(request: Request, response: Response) {
+    public static async postDeleteWord(request: Request, response: Response) {
 
         const wordId = request.body.id;
         const word = request.body.word;

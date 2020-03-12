@@ -293,13 +293,13 @@ describe("RestrictedWordController", function () {
         });
     });
 
-    describe("#createNewWord", function () {
+    describe("#getCreateNewWord", function () {
 
         const createNewWordViewName = "add-new-word";
 
         it("returns the correct view", async function () {
 
-            await restrictedWordController.createNewWord(mockRequest, mockResponse);
+            await restrictedWordController.getCreateNewWord(mockRequest, mockResponse);
 
             mockResponse
                 .received()
@@ -307,7 +307,7 @@ describe("RestrictedWordController", function () {
         });
     });
 
-    describe("#handleCreateNewWord", function () {
+    describe("#postCreateNewWord", function () {
 
         const createNewWordViewName = "add-new-word";
 
@@ -319,7 +319,7 @@ describe("RestrictedWordController", function () {
 
             const expectedRedirectUrl = `/${mockConfig.urlPrefix}/?addedWord=${encodeURIComponent(exampleWord1)}`;
 
-            await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
+            await restrictedWordController.postCreateNewWord(mockRequest, mockResponse);
 
             mockApiClient
                 .received()
@@ -344,7 +344,7 @@ describe("RestrictedWordController", function () {
                     messages: [exampleError]
                 }));
 
-            await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
+            await restrictedWordController.postCreateNewWord(mockRequest, mockResponse);
 
             mockLogger
                 .received()
@@ -380,7 +380,7 @@ describe("RestrictedWordController", function () {
             const wordRequiredError = "A word is required to create a new word";
             const expectedError = [{ text: wordRequiredError }];
 
-            await restrictedWordController.handleCreateNewWord(mockRequest, mockResponse);
+            await restrictedWordController.postCreateNewWord(mockRequest, mockResponse);
 
             mockLogger
                 .received()
@@ -399,7 +399,7 @@ describe("RestrictedWordController", function () {
         });
     });
 
-    describe("#deleteWord", function () {
+    describe("#getDeleteWord", function () {
 
         const deleteWordViewName = "delete-word";
 
@@ -410,7 +410,7 @@ describe("RestrictedWordController", function () {
                 word: exampleWord1
             });
 
-            await restrictedWordController.deleteWord(mockRequest, mockResponse);
+            await restrictedWordController.getDeleteWord(mockRequest, mockResponse);
 
             mockResponse
                 .received()
@@ -433,7 +433,7 @@ describe("RestrictedWordController", function () {
 
             const expectedError = [{ text: missingIdError }];
 
-            await restrictedWordController.deleteWord(mockRequest, mockResponse);
+            await restrictedWordController.getDeleteWord(mockRequest, mockResponse);
 
             mockLogger
                 .received()
@@ -459,7 +459,7 @@ describe("RestrictedWordController", function () {
 
             const expectedError = [{ text: missingIdError }];
 
-            await restrictedWordController.deleteWord(mockRequest, mockResponse);
+            await restrictedWordController.getDeleteWord(mockRequest, mockResponse);
 
             mockLogger
                 .received()
@@ -476,7 +476,7 @@ describe("RestrictedWordController", function () {
         });
     });
 
-    describe("#handleDeleteWord", function () {
+    describe("#postDeleteWord", function () {
 
         const deleteWordViewName = "delete-word";
 
@@ -489,7 +489,7 @@ describe("RestrictedWordController", function () {
             const missingIdError = "Id required to delete word";
             const expectedError = [{ text: missingIdError }];
 
-            await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
+            await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
 
             mockLogger
                 .received()
@@ -514,7 +514,7 @@ describe("RestrictedWordController", function () {
             const missingIdError = "Word required to delete word";
             const expectedError = [{ text: missingIdError }];
 
-            await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
+            await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
 
             mockLogger
                 .received()
@@ -537,7 +537,7 @@ describe("RestrictedWordController", function () {
                 word: exampleWord1
             });
 
-            await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
+            await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
 
             mockApiClient
                 .received()
@@ -563,7 +563,7 @@ describe("RestrictedWordController", function () {
                     messages: [exampleError]
                 }));
 
-            await restrictedWordController.handleDeleteWord(mockRequest, mockResponse);
+            await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
 
             mockLogger
                 .received()

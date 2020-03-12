@@ -77,7 +77,8 @@ describe("RestrictedWordApiClient", function () {
                     id: "1",
                     "full_word": "FIRST",
                     "created_by": "Fred Jones",
-                    "created_at": "2020-01-23T12:05:08.096"
+                    "created_at": "2020-01-23T12:05:08.096",
+                    deleted: false
                 },
                 {
                     id: "2",
