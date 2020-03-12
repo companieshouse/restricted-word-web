@@ -8,6 +8,7 @@ import RestrictedWordRouter from "./routers/RestrictedWordRouter";
 import { SessionKey } from "ch-node-session-handler/lib/session/keys/SessionKey";
 import { SignInInfoKeys } from "ch-node-session-handler/lib/session/keys/SignInInfoKeys";
 import config from "./config";
+import cookieParser from "cookie-parser";
 import express from "express";
 import helmet from "helmet";
 import path from "path";
@@ -46,6 +47,7 @@ app.set("view engine", "html");
 app.use(`/${config.urlPrefix}/public`, express.static(path.join(__dirname, "../dist")));
 
 app.use(createLoggerMiddleware(config.applicationNamespace));
+app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
