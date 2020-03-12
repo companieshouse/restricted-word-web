@@ -39,7 +39,7 @@ app.use((request, _response, next) => {
         return next();
     }
 
-    return response.redirect(`/signin?return_to=${"test"}`);
+    return response.redirect(`/signin?return_to=${config.urlPrefix}`);
 });
 
 const nunjucksConfig: ConfigureOptions = {
