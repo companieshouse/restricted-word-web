@@ -21,22 +21,25 @@ const sessionMiddleware = SessionMiddleware({ // eslint-disable-line new-cap
 
 const app = express();
 
-app.use((request, _response, next) => {
+app.use((request, response, next) => {
 
-    request.session.ifNothing(() => {
+    if (request.session !== undefined) {
 
-        logger.errorRequest(request, "Session doesn't exist");
+        request.session.ifNothing(() => {
 
-        return next();
-    });
+            logger.errorRequest(request, "Session doesn't exist");
 
-    const signedIn = request.session
-        .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
-        .map((signInInfo: ISignInInfo) => signInInfo[SignInInfoKeys.SignedIn] === 1)
-        .orDefault(false);
+            return next();
+        });
 
-    if (signedIn) {
-        return next();
+        const signedIn = request.session
+            .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
+            .map((signInInfo: ISignInInfo) => signInInfo[SignInInfoKeys.SignedIn] === 1)
+            .orDefault(false);
+
+        if (signedIn) {
+            return next();
+        }
     }
 
     return response.redirect(`/signin?return_to=${config.urlPrefix}`);
