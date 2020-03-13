@@ -4,7 +4,7 @@
 
       <div role="widget" class="filter open">
         <div class="govuk-body filters-heading" role="button" aria-controls="filter-crn" aria-expanded="true" tabindex="0">
-          <span id="filter-label-crn"></span>Search by word</span>
+          <span id="filter-label-crn"></span>Search for word</span>
         <div class="toggle"></div>
       </div>
       <div id="filter-crn" class="filters-wrapper" aria-hidden="true" aria-labelledby="filter-label-crn">
@@ -54,12 +54,12 @@
         }) }}
     </div>
     {{ govukButton({
-      text: "Filter",
+      text: "Search",
       classes: "govuk-!-margin-right-1",
       attributes: { id: "filter-button" }
     }) }}
     {{ govukButton({
-      text: "Clear",
+      text: "Clear Search",
       classes: "govuk-button--secondary link filter-reset",
       href: "/" + urlPrefix,
       attributes: { id: "clear-filter-button" }
