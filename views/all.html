@@ -31,7 +31,7 @@
   {% endif %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
-      <h1 class="govuk-heading-xl">Restricted words</h1>
+      <h1 class="govuk-heading-xl">Restricted words list</h1>
       {{ govukButton({
         text: "Add new word",
         href: "/" + urlPrefix + "/add-new-word",
@@ -39,7 +39,6 @@
       }) }}
     </div>
   </div>
-  <h2 class="govuk-heading-l">All words</h2>
   {% if words.length > 0 %}
     <div class="govuk-grid-row">
       {% include "includes/filters.html" %}
@@ -49,8 +48,8 @@
             <tr class="govuk-table__row">
               <th class="govuk-table__header" scope="col">Word</th>
               <th class="govuk-table__header" scope="col">Added by</th>
-              <th class="govuk-table__header" scope="col">Added on</th>
-              <th class="govuk-table__header" scope="col">Removed on</th>
+              <th class="govuk-table__header" scope="col">Date added</th>
+              <th class="govuk-table__header" scope="col">Date removed</th>
               <th class="govuk-table__header" scope="col">Manage</th>
             </tr>
           </thead>
