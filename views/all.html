@@ -92,7 +92,20 @@
     <div class="govuk-grid-row">
       {% include "includes/filters.html" %}
       <div class="govuk-grid-column-three-quarters column-results column-results--active">
-        <p>There are no words to show</p>
+        <p>
+          {% if not filterParams.word %}
+            No words are on the
+          {% else %}
+            The word {{filterParams.word}} is not on the
+          {% endif %}
+          {% if filterParams.status === "Active" %}
+            Active list.
+          {% elif filterParams.status === "Deleted" %}
+            Deleted list.
+          {% else %}
+            Active or Deleted list.
+          {% endif %}
+        </p>
       </div>
     </div>
   {% endif %}
