@@ -11,7 +11,8 @@
     "start:dev": "nodemon",
     "test": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts",
     "test:watch": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts --watch",
-    "lint": "eslint src/**/* test/**/*"
+    "lint": "eslint src/**/* test/**/*",
+    "lint:fix": "eslint src/**/* test/**/* --fix"
   },
   "repository": {
     "type": "git",
@@ -56,6 +57,7 @@
     "chai": "~4.2.0",
     "chai-as-promised": "~7.1.1",
     "eslint": "~6.8.0",
+    "eslint-config-standard": "~14.1.0",
     "eslint-plugin-chai-friendly": "~0.5.0",
     "gulp": "~4.0.2",
     "gulp-cli": "~2.2.0",
