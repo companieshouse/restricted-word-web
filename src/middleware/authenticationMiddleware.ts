@@ -22,12 +22,14 @@ const createAuthenticationMiddleware = function (): RequestHandler {
             const signedIn = signInInfo[SignInInfoKeys.SignedIn] === 1;
             const userInfo = signInInfo[SignInInfoKeys.UserProfile];
 
-            if (userInfo !== undefined) {
+            if (signedIn && userInfo !== undefined) {
 
                 const permissions = userInfo[UserProfileKeys.Permissions];
 
-                if (signedIn && permissions !== undefined && permissions["/admin/restricted-word"] === 1) {
+                if (permissions !== undefined && permissions["/admin/restricted-word"] === 1) {
                     return next();
+                } else {
+                    return response.send("You are signed in but do not have permissions!");
                 }
             }
         }
