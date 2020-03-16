@@ -7,4 +7,4 @@ class ErrorThrower {
     }
 }
 
-export = ErrorThrower;
+export default ErrorThrower;

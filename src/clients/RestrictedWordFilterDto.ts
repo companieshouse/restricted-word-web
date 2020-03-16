@@ -5,4 +5,4 @@ interface RestrictedWordFilterDto {
     deleted?: boolean;
 }
 
-export = RestrictedWordFilterDto;
+export default RestrictedWordFilterDto;

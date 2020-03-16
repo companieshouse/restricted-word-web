@@ -9,4 +9,4 @@ interface PaginationOptions {
 }
 
 // eslint-disable-next-line no-undef
-export = PaginationOptions;
+export default PaginationOptions;

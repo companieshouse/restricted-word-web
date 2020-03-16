@@ -4,4 +4,4 @@ interface RestrictedWordQueryOptions {
     deleted?: boolean;
 }
 
-export = RestrictedWordQueryOptions;
+export default RestrictedWordQueryOptions;

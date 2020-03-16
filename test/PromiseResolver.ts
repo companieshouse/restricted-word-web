@@ -5,4 +5,4 @@ class PromiseResolver {
     }
 }
 
-export = PromiseResolver;
+export default PromiseResolver;

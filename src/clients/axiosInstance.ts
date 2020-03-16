@@ -3,7 +3,7 @@ import config from "../config";
 import tunnel = require("tunnel");
 
 const requiredHeaders = {
-    "Authorization": config.internalApiKey
+    Authorization: config.internalApiKey
 };
 
 const agent = config.proxy === undefined ?
@@ -20,4 +20,4 @@ const axiosInstance = axios.create({
     httpsAgent: agent
 });
 
-export = axiosInstance;
+export default axiosInstance;

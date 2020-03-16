@@ -4,4 +4,4 @@ interface SubstituteConfigurator<T> {
     (substitute: SubstituteOf<T>): void;
 }
 
-export = SubstituteConfigurator;
+export default SubstituteConfigurator;

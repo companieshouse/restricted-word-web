@@ -8,4 +8,4 @@ interface RestrictedWordViewModel {
     deleted: boolean;
 }
 
-export = RestrictedWordViewModel;
+export default RestrictedWordViewModel;

@@ -18,4 +18,4 @@ class RestrictedWordRouter {
     }
 }
 
-export = RestrictedWordRouter;
+export default RestrictedWordRouter;
