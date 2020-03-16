@@ -10,30 +10,23 @@ import { createLogger } from "ch-structured-logging";
 const logger = createLogger(config.applicationNamespace);
 
 const createAuthenticationMiddleware = function (): RequestHandler {
+
     return (request, response, next) => {
-        // request.session.ifNothing(() => {
-        //     logger.errorRequest(request, "Session doesn't exist");
 
-        //     return response.redirect(`/signin?return_to=/${config.urlPrefix}`);
-        // });
-
-        console.log("headers", request.headers);
-
-        const signInInfo: ISignInInfo | undefined = request.session
-            .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo)).extract();
+        const signInInfo = request.session
+            .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
+            .extract();
 
         if (signInInfo !== undefined) {
+
             const signedIn = signInInfo[SignInInfoKeys.SignedIn] === 1;
-            const userInfo: any = signInInfo[SignInInfoKeys.UserProfile];
+            const userInfo = signInInfo[SignInInfoKeys.UserProfile];
 
             if (userInfo !== undefined) {
-                const permissions = userInfo[UserProfileKeys.Permissions] as any;
-                const scope = userInfo[UserProfileKeys.Scope];
 
-                console.log("permissions is", permissions);
-                console.log("scope is", scope);
+                const permissions = userInfo[UserProfileKeys.Permissions];
 
-                if (signedIn) {
+                if (signedIn && permissions !== undefined && permissions["/admin/restricted-word"] === 1) {
                     return next();
                 }
             }
