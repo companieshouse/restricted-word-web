@@ -11,8 +11,8 @@
     "start:dev": "nodemon",
     "test": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts",
     "test:watch": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts --watch",
-    "lint": "eslint src/**/* test/**/*",
-    "lint:fix": "eslint src/**/* test/**/* --fix"
+    "lint": "eslint 'src/**/*' 'test/**/*'",
+    "lint:fix": "eslint 'src/**/*' 'test/**/*' --fix"
   },
   "repository": {
     "type": "git",
