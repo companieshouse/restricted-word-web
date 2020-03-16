@@ -57,4 +57,4 @@ class Pager<T> {
     }
 }
 
-export = Pager;
+export default Pager;

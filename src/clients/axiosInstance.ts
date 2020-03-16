@@ -20,4 +20,4 @@ const axiosInstance = axios.create({
     httpsAgent: agent
 });
 
-export = axiosInstance;
+export default axiosInstance;

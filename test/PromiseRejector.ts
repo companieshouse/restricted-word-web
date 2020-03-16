@@ -5,4 +5,4 @@ class PromiseRejector {
     }
 }
 
-export = PromiseRejector;
+export default PromiseRejector;

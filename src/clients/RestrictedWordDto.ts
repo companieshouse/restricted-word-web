@@ -9,4 +9,4 @@ interface RestrictedWordDto {
     deleted: boolean;
 }
 
-export = RestrictedWordDto;
+export default RestrictedWordDto;

@@ -37,7 +37,7 @@ describe("RestrictedWordApiClient", function () {
                     return mockApplicationLogger;
                 }
             }
-        });
+        }).default;
 
         return client;
     };

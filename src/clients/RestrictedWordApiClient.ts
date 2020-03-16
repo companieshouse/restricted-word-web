@@ -109,4 +109,4 @@ class RestrictedWordApiClient {
     }
 }
 
-export = RestrictedWordApiClient;
+export default RestrictedWordApiClient;

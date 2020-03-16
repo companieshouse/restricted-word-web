@@ -6,7 +6,7 @@ const proxyquire = require("proxyquire").noCallThru();
 describe("config", function () {
 
     const getFreshConfig = function (): ApplicationConfiguration {
-        return proxyquire("../src/config", {});
+        return proxyquire("../src/config", {}).default;
     };
 
     it("provides a proxy object if HTTPS_PROXY is defined", function () {
