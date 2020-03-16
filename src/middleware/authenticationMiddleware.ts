@@ -17,14 +17,20 @@ const createAuthenticationMiddleware = function (): RequestHandler {
             .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
             .extract();
 
+        console.log("signInInfo", signInInfo);
+
         if (signInInfo !== undefined) {
 
             const signedIn = signInInfo[SignInInfoKeys.SignedIn] === 1;
             const userInfo = signInInfo[SignInInfoKeys.UserProfile];
 
+            console.log("userInfo", userInfo);
+
             if (signedIn && userInfo !== undefined) {
 
                 const permissions = userInfo[UserProfileKeys.Permissions];
+
+                console.log("permissions", permissions);
 
                 if (permissions !== undefined && permissions["/admin/restricted-word"] === 1) {
                     return next();
