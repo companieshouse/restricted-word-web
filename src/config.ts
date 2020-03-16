@@ -26,4 +26,4 @@ if (httpsProxy) {
     };
 }
 
-export = config;
+export default config;

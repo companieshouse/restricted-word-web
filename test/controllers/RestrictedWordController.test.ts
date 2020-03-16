@@ -43,7 +43,7 @@ describe("RestrictedWordController", function () {
                     return mockLogger;
                 }
             }
-        });
+        }).default;
     };
 
     const createRestrictedWordViewModel = function (): RestrictedWordViewModel {

@@ -37,7 +37,7 @@ describe("RestrictedWordApiClient", function () {
                     return mockApplicationLogger;
                 }
             }
-        });
+        }).default;
 
         return client;
     };
@@ -75,18 +75,18 @@ describe("RestrictedWordApiClient", function () {
             data: [
                 {
                     id: "1",
-                    "full_word": "FIRST",
-                    "created_by": "Fred Jones",
-                    "created_at": "2020-01-23T12:05:08.096",
+                    full_word: "FIRST",
+                    created_by: "Fred Jones",
+                    created_at: "2020-01-23T12:05:08.096",
                     deleted: false
                 },
                 {
                     id: "2",
-                    "full_word": "Second",
-                    "created_by": "Jill Jones",
-                    "created_at": "2020-01-24T12:05:08.096",
-                    "deleted_by": "Ben Gun",
-                    "deleted_at": "2020-02-21T11:03:04.019",
+                    full_word: "Second",
+                    created_by: "Jill Jones",
+                    created_at: "2020-01-24T12:05:08.096",
+                    deleted_by: "Ben Gun",
+                    deleted_at: "2020-02-21T11:03:04.019",
                     deleted: true
                 }
             ]
@@ -176,7 +176,7 @@ describe("RestrictedWordApiClient", function () {
             };
 
             const queryString: RestrictedWordFilterDto = {
-                "contains": "Flower"
+                contains: "Flower"
             };
 
             await apiClient.getAllRestrictedWords(options);
@@ -218,8 +218,8 @@ describe("RestrictedWordApiClient", function () {
             await apiClient.createRestrictedWord(testWord);
 
             expect(mockAxiosInstance.post).to.have.been.calledWithExactly("/word", {
-                "created_by": testUser,
-                "full_word": testWord
+                created_by: testUser,
+                full_word: testWord
             });
         });
 
@@ -243,7 +243,7 @@ describe("RestrictedWordApiClient", function () {
 
             expect(mockAxiosInstance.delete).to.have.been.calledWithExactly(`/word/${testId}`, {
                 data: {
-                    "deleted_by": "test@user.com"
+                    deleted_by: "test@user.com"
                 }
             });
         });

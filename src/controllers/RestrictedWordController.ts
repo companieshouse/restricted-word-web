@@ -190,4 +190,4 @@ class RestrictedWordController {
     }
 }
 
-export = RestrictedWordController;
+export default RestrictedWordController;

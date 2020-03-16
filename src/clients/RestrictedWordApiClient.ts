@@ -55,7 +55,7 @@ class RestrictedWordApiClient {
         const queryString: RestrictedWordFilterDto = {};
 
         if (options.startsWith) {
-            queryString["starts_with"] = options.startsWith;
+            queryString.starts_with = options.startsWith;
         }
 
         if (options.contains) {
@@ -84,8 +84,8 @@ class RestrictedWordApiClient {
         try {
 
             await axiosInstance.post("/word", {
-                "full_word": word,
-                "created_by": this._username
+                full_word: word,
+                created_by: this._username
             });
 
         } catch (error) {
@@ -99,7 +99,7 @@ class RestrictedWordApiClient {
 
             await axiosInstance.delete(`/word/${id}`, {
                 data: {
-                    "deleted_by": this._username
+                    deleted_by: this._username
                 }
             });
 
@@ -109,4 +109,4 @@ class RestrictedWordApiClient {
     }
 }
 
-export = RestrictedWordApiClient;
+export default RestrictedWordApiClient;

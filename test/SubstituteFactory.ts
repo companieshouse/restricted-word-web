@@ -16,4 +16,4 @@ class SubstituteFactory {
     }
 }
 
-export = SubstituteFactory;
+export default SubstituteFactory;
