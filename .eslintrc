@@ -19,11 +19,11 @@
         }, {
             "files": ["*.test.ts", "*.spec.ts"],
             "rules": {
-                "no-magic-numbers": "off",
-                "@typescript-eslint/no-magic-numbers": "off",
                 "no-process-env": "off",
                 "no-unused-expressions": "off",
-                "chai-friendly/no-unused-expressions": 2
+                "chai-friendly/no-unused-expressions": 2,
+                "no-magic-numbers": "off",
+                "@typescript-eslint/no-magic-numbers": "off"
             }
         }
     ],
@@ -38,18 +38,18 @@
           }
         ],
         "operator-linebreak": ["error", "after"],
-        "no-unused-vars": "off",
         "no-undef": "off",
-        "@typescript-eslint/no-unused-vars": "error",
         "no-extra-semi": 2,
+        "no-process-env": 2,
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error",
         "no-magic-numbers": "off",
         "@typescript-eslint/no-magic-numbers": ["error", {
             "ignore": [0, 1],
             "ignoreArrayIndexes": true,
             "ignoreReadonlyClassProperties": true,
             "ignoreEnums": true
-        }],
-        "no-process-env": 2
+        }]
     },
     "env": {
         "node": true,
