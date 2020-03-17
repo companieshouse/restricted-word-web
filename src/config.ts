@@ -5,7 +5,7 @@ const config: ApplicationConfiguration = {
     apiAddress: process.env.INTERNAL_API_URL as string,
     internalApiKey: process.env.CHS_INTERNAL_API_KEY as string,
     env: (process.env.NODE_ENV || "development").toLowerCase(),
-    urlPrefix: "restricted-word",
+    urlPrefix: "admin/restricted-word",
     session: {
         cookieName: process.env.COOKIE_NAME as string,
         cookieSecret: process.env.COOKIE_SECRET as string,
