@@ -39,4 +39,4 @@ const createAuthenticationMiddleware = function (): RequestHandler {
     };
 };
 
-export = createAuthenticationMiddleware;
+export default createAuthenticationMiddleware;
