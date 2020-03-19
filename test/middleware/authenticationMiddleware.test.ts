@@ -1,19 +1,39 @@
-import { Request, Response } from "express";
-import sinon, { SinonSandbox, SinonStubbedInstance } from "sinon";
+import sinon, { SinonStubbedInstance } from "sinon";
 
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
+import { ISignInInfo } from "ch-node-session-handler/lib/session/model/SessionInterfaces";
 import { RequestHandler } from "express";
+import { SignInInfoKeys } from "ch-node-session-handler/lib/session/keys/SignInInfoKeys";
+import { UserProfileKeys } from "ch-node-session-handler/lib/session/keys/UserProfileKeys";
 import { expect } from "chai";
 
 const proxyquire = require("proxyquire");
 
 describe("authenticationMiddleware", function () {
 
-    let sandbox: SinonSandbox;
-
     const mockApplicationLogger: SinonStubbedInstance<ApplicationLogger> = sinon.createStubInstance(ApplicationLogger);
-    let mockRequest = sinon.createStubInstance<Request>();
-    let mockResponse = sinon.createStubInstance<Response>();
+
+    const createMockRequest = function (signInInfo?: ISignInInfo) {
+        return {
+            session: {
+                chain: function () {
+                    return {
+                        extract: () => signInInfo
+                    };
+                }
+            }
+        };
+    };
+
+    const createMockResponse = function () {
+        return {
+            send: sinon.stub(),
+            redirect: sinon.stub()
+        };
+    };
+
+    let mockResponse: any;
+    let mockNext: any;
 
     const testNamespace = "test-namespace";
     const mockConfig = {
@@ -31,28 +51,124 @@ describe("authenticationMiddleware", function () {
                     return mockApplicationLogger;
                 }
             },
-            "../config": mockConfig
-        }).default;
+            "../config": {
+                default: mockConfig
+            }
+        }).default();
     };
+
+    const permissionError = "You are signed in but do not have permissions!";
 
     beforeEach(function () {
 
-        sandbox = sinon.createSandbox();
+        mockResponse = createMockResponse();
+        mockNext = sinon.stub();
 
         middleware = requireMiddleware();
+
     });
 
-    afterEach(function () {
-        sandbox.restore();
+    it("redirects to signin if session does not exist", function () {
+
+        const mockRequest: any = createMockRequest();
+
+        middleware(mockRequest, mockResponse, mockNext);
+
+        expect(mockResponse.redirect)
+            .to.have.been.calledOnceWithExactly(`/signin?return_to=/${mockConfig.urlPrefix}`);
     });
 
-    it("redirects to signin if session");
+    it("redirects to signin if session exists but you are not signed in", function () {
 
-    it("redirects to signin if session exists but you are not signed in");
+        const mockRequest: any = createMockRequest({
+            [SignInInfoKeys.SignedIn]: 0
+        });
 
-    it("redirects to signin if you are signed in but user info is undefined");
+        middleware(mockRequest, mockResponse, mockNext);
 
-    it("calls next if you are signed in and have the correct permissions");
+        expect(mockResponse.redirect)
+            .to.have.been.calledOnceWithExactly(`/signin?return_to=/${mockConfig.urlPrefix}`);
+    });
 
-    it("sends an error response if you are logged in and do not have correct permissions");
+    it("redirects to signin if you are signed in but user profile is undefined", function () {
+
+        const mockRequest: any = createMockRequest({
+            [SignInInfoKeys.SignedIn]: 1,
+            [SignInInfoKeys.UserProfile]: undefined
+        });
+
+        middleware(mockRequest, mockResponse, mockNext);
+
+        expect(mockResponse.redirect)
+            .to.have.been.calledOnceWithExactly(`/signin?return_to=/${mockConfig.urlPrefix}`);
+    });
+
+    it("calls next if you are signed in and have the correct permissions", function () {
+
+        const mockRequest: any = createMockRequest({
+            [SignInInfoKeys.SignedIn]: 1,
+            [SignInInfoKeys.UserProfile]: {
+                [UserProfileKeys.Permissions]: {
+                    "/admin/restricted-word": 1
+                }
+            }
+        });
+
+        middleware(mockRequest, mockResponse, mockNext);
+
+        expect(mockNext)
+            .to.have.been.called.calledOnce;
+    });
+
+    it("sends an error response if you are logged in and do not have correct permissions", function () {
+
+        const mockRequest: any = createMockRequest({
+            [SignInInfoKeys.SignedIn]: 1,
+            [SignInInfoKeys.UserProfile]: {
+                [UserProfileKeys.Permissions]: {
+                    "/dog-show": 1,
+                    "/admin/dog-show": 1
+                }
+            }
+        });
+
+        middleware(mockRequest, mockResponse, mockNext);
+
+        expect(mockResponse.send)
+            .to.have.been.calledOnceWithExactly(permissionError);
+    });
+
+    it("sends an error response if you are logged in and do not have the admin permission", function () {
+
+        const mockRequest: any = createMockRequest({
+            [SignInInfoKeys.SignedIn]: 1,
+            [SignInInfoKeys.UserProfile]: {
+                [UserProfileKeys.Permissions]: {
+                    "/restricted-word": 1
+                }
+            }
+        });
+
+        middleware(mockRequest, mockResponse, mockNext);
+
+        expect(mockResponse.send)
+            .to.have.been.calledOnceWithExactly(permissionError);
+    });
+
+    it("sends an error response if you are logged in and only have a child permission", function () {
+
+        const mockRequest: any = createMockRequest({
+            [SignInInfoKeys.SignedIn]: 1,
+            [SignInInfoKeys.UserProfile]: {
+                [UserProfileKeys.Permissions]: {
+                    "/admin/restricted-word/delete-word": 1
+                }
+            }
+        });
+
+        middleware(mockRequest, mockResponse, mockNext);
+
+        expect(mockResponse.send)
+            .to.have.been.calledOnceWithExactly(permissionError);
+    });
 });
