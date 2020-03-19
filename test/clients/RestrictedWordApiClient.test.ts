@@ -1,5 +1,5 @@
 import chai, { expect } from "chai";
-import sinon, { SinonSandbox, SinonStubbedInstance } from "sinon";
+import sinon, { SinonStubbedInstance } from "sinon";
 
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import { AxiosInstance } from "axios";
