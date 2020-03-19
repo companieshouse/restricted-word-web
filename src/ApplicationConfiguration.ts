@@ -4,6 +4,11 @@ interface ApplicationConfiguration {
     internalApiKey: string;
     env: string;
     urlPrefix: string;
+    session: {
+        cookieName: string;
+        cookieSecret: string;
+        cacheServer: string;
+    };
     applicationNamespace: string;
     proxy?: {
         host: string;

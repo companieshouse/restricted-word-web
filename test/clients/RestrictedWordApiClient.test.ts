@@ -1,5 +1,5 @@
 import chai, { expect } from "chai";
-import sinon, { SinonSandbox, SinonStubbedInstance } from "sinon";
+import sinon, { SinonStubbedInstance } from "sinon";
 
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import { AxiosInstance } from "axios";
@@ -17,8 +17,6 @@ chai.use(chaiAsPromised);
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordApiClient", function () {
-
-    let sandbox: SinonSandbox;
 
     const mockAxiosInstance: SinonStubbedInstance<AxiosInstance> = sinon.stub(axiosInstance);
     const mockApplicationLogger: SinonStubbedInstance<ApplicationLogger> = sinon.createStubInstance(ApplicationLogger);
@@ -56,17 +54,11 @@ describe("RestrictedWordApiClient", function () {
 
     beforeEach(function () {
 
-        sandbox = sinon.createSandbox();
-
         mockAxiosInstance.post = sinon.stub();
         mockAxiosInstance.delete = sinon.stub();
         mockAxiosInstance.get = sinon.stub();
 
         apiClient = new (requireApiClient())(testUser);
-    });
-
-    afterEach(function () {
-        sandbox.restore();
     });
 
     describe("#getAllRestrictedWords", function () {
