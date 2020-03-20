@@ -25,18 +25,24 @@
       <h1 class="govuk-heading-xl">Add new word</h1>
       <form method="POST" action="/{{urlPrefix}}/add-new-word">
         <input type="hidden" name="deleteConflicting" value="{{hasConflicting === true}}" />
+
         {% if hasConflicting %}
+
           {% set pluralS = "s" if conflictingWords.length > 1 else "" %}
           {% set determiner = " " if conflictingWords.length > 1 else " an " %}
           {% set wordOrPhrase = "phrase" if word.indexOf(" ") > -1 else "word" %}
+
           <p>The {{wordOrPhrase}} <b>{{word}}</b> contains{{determiner}}excluded word{{pluralS}} which would hide it from validation checks.</p>
           <p>If you wish to continue, the following <b>excluded word{{pluralS}}</b> will be deleted:</p>
+
           <ul class="govuk-list govuk-list--bullet">
             {% for conflictingWord in conflictingWords %}
               <li>{{conflictingWord}}</li>
             {% endfor %}
           </ul>
+
           <input type="hidden" name="word" value="{{word}}" />
+
           {{ govukButton({
             text: "Add new " + wordOrPhrase + " and delete excluded word" + pluralS,
             classes: "govuk-!-margin-right-1",
