@@ -25,7 +25,7 @@ class RestrictedWordApiClient {
         if (error.response && error.response.data && error.response.data.errors) {
 
             handledError.messages = error.response.data.errors;
-            handledError.conflictingWords = error.response.data.conflictingWords;
+            handledError.conflictingWords = error.response.data.conflicting_words;
 
             return handledError;
         }
