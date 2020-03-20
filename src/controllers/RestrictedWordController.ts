@@ -53,7 +53,7 @@ class RestrictedWordController {
          * This will be session.signInData.userProfile.email - bit long winded perhaps.
          * Maybe the client should just take in the request.
          */
-        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         let results: RestrictedWordViewModel[];
 
@@ -105,7 +105,7 @@ class RestrictedWordController {
 
         logger.infoRequest(request, `Attempting to create new word "${newWord}".`);
 
-        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
 
@@ -168,7 +168,7 @@ class RestrictedWordController {
 
         logger.infoRequest(request, `Attempting to delete "${word}" with id "${wordId}"`);
 
-        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
 
