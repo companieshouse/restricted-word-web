@@ -101,6 +101,7 @@ class RestrictedWordController {
     public static async postCreateNewWord(request: Request, response: Response) {
 
         const newWord = request.body.word;
+        const deleteConflicting = request.body.deleteConflicting;
 
         logger.infoRequest(request, `Attempting to create new word "${newWord}".`);
 
@@ -112,9 +113,17 @@ class RestrictedWordController {
                 throw new Error("A word is required to create a new word");
             }
 
-            await restrictedWordApiClient.createRestrictedWord(newWord);
+            await restrictedWordApiClient.createRestrictedWord(newWord, deleteConflicting);
 
         } catch (unknownError) {
+
+            if (unknownError.conflictingWords) {
+                return response.render("add-new-word", {
+                    word: newWord.toUpperCase(),
+                    hasConflicting: true,
+                    conflictingWords: unknownError.conflictingWords
+                });
+            }
 
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, `Error creating new word "${newWord}"`, unknownError);
 
