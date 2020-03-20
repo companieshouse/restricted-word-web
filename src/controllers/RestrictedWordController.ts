@@ -53,7 +53,7 @@ class RestrictedWordController {
          * This will be session.signInData.userProfile.email - bit long winded perhaps.
          * Maybe the client should just take in the request.
          */
-        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         let results: RestrictedWordViewModel[];
 
@@ -101,10 +101,11 @@ class RestrictedWordController {
     public static async postCreateNewWord(request: Request, response: Response) {
 
         const newWord = request.body.word;
+        const deleteConflicting = request.body.deleteConflicting;
 
         logger.infoRequest(request, `Attempting to create new word "${newWord}".`);
 
-        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
 
@@ -112,9 +113,17 @@ class RestrictedWordController {
                 throw new Error("A word is required to create a new word");
             }
 
-            await restrictedWordApiClient.createRestrictedWord(newWord);
+            await restrictedWordApiClient.createRestrictedWord(newWord, deleteConflicting);
 
         } catch (unknownError) {
+
+            if (unknownError.conflictingWords) {
+                return response.render("add-new-word", {
+                    word: newWord.toUpperCase(),
+                    hasConflicting: true,
+                    conflictingWords: unknownError.conflictingWords
+                });
+            }
 
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, `Error creating new word "${newWord}"`, unknownError);
 
@@ -159,7 +168,7 @@ class RestrictedWordController {
 
         logger.infoRequest(request, `Attempting to delete "${word}" with id "${wordId}"`);
 
-        const restrictedWordApiClient = new RestrictedWordApiClient("change me");
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
 

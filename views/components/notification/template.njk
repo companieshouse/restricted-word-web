@@ -5,7 +5,7 @@
   role="notification"
   tabindex="-1"
   {%- for attribute, value in params.attributes %}
-  {{ attribute }}="{{ value }}"
+    {{ attribute }}="{{ value }}"
   {% endfor %}
   data-module="error-summary">
   <h2 class="govuk-heading-m" id="notification">

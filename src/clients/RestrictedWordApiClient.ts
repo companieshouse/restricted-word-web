@@ -25,6 +25,7 @@ class RestrictedWordApiClient {
         if (error.response && error.response.data && error.response.data.errors) {
 
             handledError.messages = error.response.data.errors;
+            handledError.conflictingWords = error.response.data.conflicting_words;
 
             return handledError;
         }
@@ -79,12 +80,13 @@ class RestrictedWordApiClient {
         }
     }
 
-    public async createRestrictedWord(word: string) {
+    public async createRestrictedWord(word: string, deleteConflicting: boolean) {
 
         try {
 
             await axiosInstance.post("/word", {
                 full_word: word,
+                delete_conflicting: deleteConflicting,
                 created_by: this._username
             });
 
