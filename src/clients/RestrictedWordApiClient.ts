@@ -22,7 +22,7 @@ class RestrictedWordApiClient {
 
         const handledError: any = {};
 
-        if (error.response && error.response.data && error.response.data.errors) {
+        if (error.response && error.response.data && (error.response.data.errors || error.response.data.conflicting_words)) {
 
             handledError.messages = error.response.data.errors;
             handledError.conflictingWords = error.response.data.conflicting_words;

@@ -323,7 +323,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .createRestrictedWord(exampleWord1);
+                .createRestrictedWord(exampleWord1, false);
 
             mockResponse
                 .received()
@@ -339,7 +339,7 @@ describe("RestrictedWordController", function () {
             const expectedError = [{ text: exampleError }];
 
             mockApiClient
-                .createRestrictedWord(Arg.any())
+                .createRestrictedWord(exampleWord1, false)
                 .returns(PromiseRejector.rejectWith({
                     messages: [exampleError]
                 }));
@@ -393,6 +393,42 @@ describe("RestrictedWordController", function () {
                     expect(options.errors)
                         .to.have.length(1)
                         .to.deep.equal(expectedError);
+
+                    return true;
+                }));
+        });
+
+        it("returns appropriate information if word needs forcing", async function () {
+
+            mockRequest.body.returns({
+                word: exampleWord1
+            });
+
+            mockApiClient
+                .createRestrictedWord(exampleWord1, false)
+                .returns(Promise.reject({ // eslint-disable-line prefer-promise-reject-errors
+                    conflictingWords: ["DOG", "CAT"]
+                }));
+
+            await restrictedWordController.postCreateNewWord(mockRequest, mockResponse);
+
+            mockApiClient
+                .received()
+                .createRestrictedWord(exampleWord1, false);
+
+            mockResponse
+                .received()
+                .render("add-new-word", Arg.is(options => {
+
+                    expect(options)
+                        .to.deep.equal({
+                            word: exampleWord1.toUpperCase(),
+                            hasConflicting: true,
+                            conflictingWords: [
+                                "DOG",
+                                "CAT"
+                            ]
+                        });
 
                     return true;
                 }));
