@@ -48,6 +48,19 @@ describe("RestrictedWordApiClient", function () {
         }
     };
 
+    const testForceRequiredResponse = {
+        response: {
+            data: {
+                conflicting_words: [
+                    "DOG",
+                    "CAT",
+                    "MONKEY",
+                    "SEALION"
+                ]
+            }
+        }
+    };
+
     const testUser = "test@user.com";
     const testWord = "Test word";
     const testId = "abc123";
@@ -207,11 +220,12 @@ describe("RestrictedWordApiClient", function () {
 
         it("creates a word successfully", async function () {
 
-            await apiClient.createRestrictedWord(testWord);
+            await apiClient.createRestrictedWord(testWord, false);
 
             expect(mockAxiosInstance.post).to.have.been.calledWithExactly("/word", {
                 created_by: testUser,
-                full_word: testWord
+                full_word: testWord,
+                delete_conflicting: false
             });
         });
 
@@ -219,10 +233,25 @@ describe("RestrictedWordApiClient", function () {
 
             mockAxiosInstance.post.rejects(testErrorResponse);
 
-            await expect(apiClient.createRestrictedWord(testWord))
-                .to.eventually.rejectedWith()
+            await expect(apiClient.createRestrictedWord(testWord, false))
+                .to.eventually.be.rejected
                 .and.have.property("messages")
                 .with.lengthOf(1);
+        });
+
+        it("returns an error with conflictingWords when conflicting_words is in the response", async function () {
+
+            mockAxiosInstance.post.rejects(testForceRequiredResponse);
+
+            await expect(apiClient.createRestrictedWord(testWord, false))
+                .to.eventually.be.rejectedWith()
+                .and.have.property("conflictingWords")
+                .which.deep.equals([
+                    "DOG",
+                    "CAT",
+                    "MONKEY",
+                    "SEALION"
+                ]);
         });
 
     });

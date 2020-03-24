@@ -101,7 +101,7 @@ class RestrictedWordController {
     public static async postCreateNewWord(request: Request, response: Response) {
 
         const newWord = request.body.word;
-        const deleteConflicting = request.body.deleteConflicting;
+        const deleteConflicting = request.body.deleteConflicting === "true";
 
         logger.infoRequest(request, `Attempting to create new word "${newWord}".`);
 

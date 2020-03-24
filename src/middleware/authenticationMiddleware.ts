@@ -27,6 +27,10 @@ const createAuthenticationMiddleware = function (): RequestHandler {
                 const permissions = userInfo[UserProfileKeys.Permissions];
 
                 // Not optimal, awaiting api with request.session.email or similar
+                if (request.body === undefined) {
+                    request.body = {};
+                }
+
                 request.body.loggedInUserEmail = userInfo[UserProfileKeys.Email];
 
                 if (permissions !== undefined && permissions["/admin/restricted-word"] === 1) {
