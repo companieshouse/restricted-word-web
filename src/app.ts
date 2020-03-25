@@ -9,6 +9,7 @@ import config from "./config";
 import cookieParser from "cookie-parser";
 import express from "express";
 import helmet from "helmet";
+import notFoundMiddleware from "./middleware/notFoundMiddleware";
 import path from "path";
 
 const logger = createLogger(config.applicationNamespace);
@@ -53,6 +54,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(authenticationMiddleware());
 
 app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
+
+app.use(notFoundMiddleware());
 
 app.listen(config.port, function () {
     logger.info(`Server started on port ${config.port}`);

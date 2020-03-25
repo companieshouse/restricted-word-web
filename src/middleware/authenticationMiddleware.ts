@@ -32,12 +32,16 @@ const createAuthenticationMiddleware = function (): RequestHandler {
                 }
 
                 request.body.loggedInUserEmail = userInfo[UserProfileKeys.Email];
+                // /Not optimal
 
                 if (permissions !== undefined && permissions["/admin/restricted-word"] === 1) {
                     return next();
                 } else {
                     logger.infoRequest(request, "Signed in users does not have the correct permissions");
-                    return response.send("You are signed in but do not have permissions!");
+
+                    response.status(404); // eslint-disable-line @typescript-eslint/no-magic-numbers
+
+                    return response.render("404");
                 }
             }
         }
