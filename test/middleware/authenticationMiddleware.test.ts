@@ -27,8 +27,9 @@ describe("authenticationMiddleware", function () {
 
     const createMockResponse = function () {
         return {
-            send: sinon.stub(),
-            redirect: sinon.stub()
+            redirect: sinon.stub(),
+            status: sinon.stub(),
+            render: sinon.stub()
         };
     };
 
@@ -134,8 +135,11 @@ describe("authenticationMiddleware", function () {
 
         middleware(mockRequest, mockResponse, mockNext);
 
-        expect(mockResponse.send)
-            .to.have.been.calledOnceWithExactly(permissionError);
+        expect(mockResponse.status)
+            .to.have.been.calledOnceWithExactly(404);
+
+        expect(mockResponse.render)
+            .to.have.been.calledOnceWithExactly("404");
     });
 
     it("sends an error response if you are logged in and do not have the admin permission", function () {
@@ -151,8 +155,12 @@ describe("authenticationMiddleware", function () {
 
         middleware(mockRequest, mockResponse, mockNext);
 
-        expect(mockResponse.send)
-            .to.have.been.calledOnceWithExactly(permissionError);
+
+        expect(mockResponse.status)
+            .to.have.been.calledOnceWithExactly(404);
+
+        expect(mockResponse.render)
+            .to.have.been.calledOnceWithExactly("404");
     });
 
     it("sends an error response if you are logged in and only have a child permission", function () {
@@ -168,7 +176,10 @@ describe("authenticationMiddleware", function () {
 
         middleware(mockRequest, mockResponse, mockNext);
 
-        expect(mockResponse.send)
-            .to.have.been.calledOnceWithExactly(permissionError);
+        expect(mockResponse.status)
+            .to.have.been.calledOnceWithExactly(404);
+
+        expect(mockResponse.render)
+            .to.have.been.calledOnceWithExactly("404");
     });
 });
