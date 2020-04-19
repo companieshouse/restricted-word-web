@@ -36,13 +36,19 @@ class RestrictedWordApiClient {
         return handledError;
     }
 
+    private static getUsernameFromEmail(email: string): string {
+        return email.split("@")[0];
+    }
+
     private static mapFromApi(serverObject: RestrictedWordDto): RestrictedWordViewModel {
 
         return {
             id: serverObject.id,
             word: serverObject.full_word,
-            createdBy: serverObject.created_by,
-            deletedBy: serverObject.deleted_by,
+            createdBy: RestrictedWordApiClient.getUsernameFromEmail(serverObject.created_by),
+            deletedBy: serverObject.deleted_by ?
+                RestrictedWordApiClient.getUsernameFromEmail(serverObject.deleted_by) :
+                undefined,
             createdAt: moment(serverObject.created_at).format("DD MMM YY"),
             deletedAt: serverObject.deleted_at ?
                 moment(serverObject.deleted_at).format("DD MMM YY") :

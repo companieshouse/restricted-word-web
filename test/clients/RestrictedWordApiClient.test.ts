@@ -81,16 +81,16 @@ describe("RestrictedWordApiClient", function () {
                 {
                     id: "1",
                     full_word: "FIRST",
-                    created_by: "Fred Jones",
+                    created_by: "FredJones@domain.other.tld",
                     created_at: "2020-01-23T12:05:08.096",
                     deleted: false
                 },
                 {
                     id: "2",
                     full_word: "Second",
-                    created_by: "Jill Jones",
+                    created_by: "Jill+Jones@email",
                     created_at: "2020-01-24T12:05:08.096",
-                    deleted_by: "Ben Gun",
+                    deleted_by: "Ben.Gun@anotheremail.net",
                     deleted_at: "2020-02-21T11:03:04.019",
                     deleted: true
                 }
@@ -114,7 +114,7 @@ describe("RestrictedWordApiClient", function () {
                 {
                     id: "1",
                     word: "FIRST",
-                    createdBy: "Fred Jones",
+                    createdBy: "FredJones",
                     deletedBy: undefined,
                     createdAt: "23 Jan 20",
                     deletedAt: "-",
@@ -123,8 +123,8 @@ describe("RestrictedWordApiClient", function () {
                 {
                     id: "2",
                     word: "Second",
-                    createdBy: "Jill Jones",
-                    deletedBy: "Ben Gun",
+                    createdBy: "Jill+Jones",
+                    deletedBy: "Ben.Gun",
                     createdAt: "24 Jan 20",
                     deletedAt: "21 Feb 20",
                     deleted: true
