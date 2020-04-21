@@ -47,9 +47,8 @@
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
               <th class="govuk-table__header" scope="col">Word</th>
-              <th class="govuk-table__header" scope="col">Added by</th>
-              <th class="govuk-table__header" scope="col">Date added</th>
-              <th class="govuk-table__header" scope="col">Date removed</th>
+              <th class="govuk-table__header" scope="col">Added on</th>
+              <th class="govuk-table__header" scope="col">Removed on</th>
               <th class="govuk-table__header" scope="col">Manage</th>
             </tr>
           </thead>
@@ -60,13 +59,16 @@
                   {{ word.word }}
                 </th>
                 <td class="govuk-table__cell" scope="row">
-                  {{ word.createdBy }}
+                  {{ word.createdAt }}<br />
+                  <span class="govuk-body-s">By {{ word.createdBy }}</span>
                 </td>
                 <td class="govuk-table__cell" scope="row">
-                  {{ word.createdAt }}
-                </td>
-                <td class="govuk-table__cell" scope="row">
-                  {{ word.deletedAt }}
+                  {% if word.deleted %}
+                    {{ word.deletedAt }}<br />
+                    <span class="govuk-body-s">By {{ word.deletedBy}}</span>
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="govuk-table__cell" scope="row">
                   {% if not word.deleted %}
