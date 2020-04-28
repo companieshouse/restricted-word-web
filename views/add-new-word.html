@@ -29,11 +29,11 @@
         {% if hasConflicting %}
 
           {% set pluralS = "s" if conflictingWords.length > 1 else "" %}
-          {% set determiner = " " if conflictingWords.length > 1 else " an " %}
+          {% set determiner = " " if conflictingWords.length > 1 else " a " %}
           {% set wordOrPhrase = "phrase" if word.indexOf(" ") > -1 else "word" %}
 
-          <p>The {{wordOrPhrase}} <b>{{word}}</b> contains{{determiner}}excluded word{{pluralS}} which would hide it from validation checks.</p>
-          <p>If you wish to continue, the following <b>excluded word{{pluralS}}</b> will be deleted:</p>
+          <p>The {{wordOrPhrase}} <b>{{word}}</b> contains{{determiner}}word{{pluralS}} on the excluded word list. This means the {{wordOrPhrase}} would be excluded from restricted word checks.</p>
+          <p>If you add <b>{{word}}</b> to the list, the following word{{pluralS}} will be deleted from the excluded word list:</p>
 
           <ul class="govuk-list govuk-list--bullet">
             {% for conflictingWord in conflictingWords %}
