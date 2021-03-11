@@ -12,6 +12,8 @@ const logger = createLogger(config.applicationNamespace);
 const createAuthenticationMiddleware = function (): RequestHandler {
 
     return (request, response, next) => {
+        // request.body.loggedInUserEmail = "testerester";
+        // return next();
 
         const signInInfo = request.session
             .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))

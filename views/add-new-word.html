@@ -58,6 +58,34 @@
             name: "word",
             value: word
           }) }}
+          {% set superChecked = superRestricted == true %}
+          {{ govukRadios({
+            classes: "govuk-radios--inline",
+            idPrefix: "super-restricted",
+            name: "superRestricted",
+            fieldset: {
+              legend: {
+                text: "Is this a super restricted word?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+              }
+            },
+            hint: {
+              text: "This is an exceptionally offensive word which will be checked in documents."
+            },
+            items: [
+              {
+                value: "true",
+                text: "Yes",
+                checked: superChecked
+              },
+              {
+                value: "false",
+                text: "No",
+                checked: not superChecked
+              }
+            ]
+          }) }}
           {{ govukButton({
             text: "Add new word",
             classes: "govuk-!-margin-right-1",

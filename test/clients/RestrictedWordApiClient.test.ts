@@ -83,6 +83,7 @@ describe("RestrictedWordApiClient", function () {
                     full_word: "FIRST",
                     created_by: "FredJones@domain.other.tld",
                     created_at: "2020-01-23T12:05:08.096",
+                    super_restricted: false,
                     deleted: false
                 },
                 {
@@ -90,6 +91,7 @@ describe("RestrictedWordApiClient", function () {
                     full_word: "Second",
                     created_by: "Jill+Jones@email",
                     created_at: "2020-01-24T12:05:08.096",
+                    super_restricted: true,
                     deleted_by: "Ben.Gun@anotheremail.net",
                     deleted_at: "2020-02-21T11:03:04.019",
                     deleted: true
@@ -117,6 +119,7 @@ describe("RestrictedWordApiClient", function () {
                     createdBy: "FredJones",
                     deletedBy: undefined,
                     createdAt: "23 Jan 20",
+                    superRestricted: false,
                     deletedAt: "-",
                     deleted: false
                 },
@@ -126,6 +129,7 @@ describe("RestrictedWordApiClient", function () {
                     createdBy: "Jill+Jones",
                     deletedBy: "Ben.Gun",
                     createdAt: "24 Jan 20",
+                    superRestricted: true,
                     deletedAt: "21 Feb 20",
                     deleted: true
                 }
@@ -220,11 +224,12 @@ describe("RestrictedWordApiClient", function () {
 
         it("creates a word successfully", async function () {
 
-            await apiClient.createRestrictedWord(testWord, false);
+            await apiClient.createRestrictedWord(testWord, true, false);
 
             expect(mockAxiosInstance.post).to.have.been.calledWithExactly("/word", {
                 created_by: testUser,
                 full_word: testWord,
+                super_restricted: true,
                 delete_conflicting: false
             });
         });
@@ -233,7 +238,7 @@ describe("RestrictedWordApiClient", function () {
 
             mockAxiosInstance.post.rejects(testErrorResponse);
 
-            await expect(apiClient.createRestrictedWord(testWord, false))
+            await expect(apiClient.createRestrictedWord(testWord, false, false))
                 .to.eventually.be.rejected
                 .and.have.property("messages")
                 .with.lengthOf(1);
@@ -243,7 +248,7 @@ describe("RestrictedWordApiClient", function () {
 
             mockAxiosInstance.post.rejects(testForceRequiredResponse);
 
-            await expect(apiClient.createRestrictedWord(testWord, false))
+            await expect(apiClient.createRestrictedWord(testWord, false, false))
                 .to.eventually.be.rejectedWith()
                 .and.have.property("conflictingWords")
                 .which.deep.equals([
