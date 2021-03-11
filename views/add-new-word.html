@@ -52,7 +52,9 @@
         {% else %}
           {{ govukInput({
             label: {
-              text: "The word"
+              text: "The word",
+              isPageHeading: false,
+              classes: "govuk-label--m"
             },
             id: "event-name",
             name: "word",
@@ -66,8 +68,8 @@
             fieldset: {
               legend: {
                 text: "Is this a super restricted word?",
-                isPageHeading: true,
-                classes: "govuk-fieldset__legend--l"
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
               }
             },
             hint: {
