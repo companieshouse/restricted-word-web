@@ -104,7 +104,7 @@ class RestrictedWordController {
         const superRestricted = request.body.superRestricted === "true";
         const deleteConflicting = request.body.deleteConflicting === "true";
 
-        logger.infoRequest(request, `Attempting to create new word "${newWord}".`);
+        logger.infoRequest(request, `Attempting to create new word "${newWord}" with super restricted "${superRestricted}".`);
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 

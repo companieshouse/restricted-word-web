@@ -22,7 +22,7 @@
         }) }}
       {% endif %}
 
-      <h1 class="govuk-heading-xl">Add new word</h1>
+      <h1 class="govuk-heading-xl">Add a restricted word</h1>
       <form method="POST" action="/{{urlPrefix}}/add-new-word">
         <input type="hidden" name="deleteConflicting" value="{{hasConflicting === true}}" />
 
@@ -52,7 +52,7 @@
         {% else %}
           {{ govukInput({
             label: {
-              text: "The word",
+              text: "Which word do you want to add?",
               isPageHeading: false,
               classes: "govuk-label--m"
             },
@@ -73,7 +73,7 @@
               }
             },
             hint: {
-              text: "This is an exceptionally offensive word which will be checked in documents."
+              text: "This is an exceptionally offensive word which will be checked in the articles."
             },
             items: [
               {
