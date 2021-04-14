@@ -12,43 +12,41 @@ const logger = createLogger(config.applicationNamespace);
 const createAuthenticationMiddleware = function (): RequestHandler {
 
     return (request, response, next) => {
-        request.body.loggedInUserEmail = "testerester";
-        return next();
 
-        // const signInInfo = request.session
-        //     .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
-        //     .extract();
+        const signInInfo = request.session
+            .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
+            .extract();
 
-        // if (signInInfo !== undefined) {
+        if (signInInfo !== undefined) {
 
-        //     const signedIn = signInInfo[SignInInfoKeys.SignedIn] === 1;
-        //     const userInfo = signInInfo[SignInInfoKeys.UserProfile];
+            const signedIn = signInInfo[SignInInfoKeys.SignedIn] === 1;
+            const userInfo = signInInfo[SignInInfoKeys.UserProfile];
 
-        //     if (signedIn && userInfo !== undefined) {
+            if (signedIn && userInfo !== undefined) {
 
-        //         const permissions = userInfo[UserProfileKeys.Permissions];
+                const permissions = userInfo[UserProfileKeys.Permissions];
 
-        //         // Not optimal, awaiting api with request.session.email or similar
-        //         if (request.body === undefined) {
-        //             request.body = {};
-        //         }
+                // Not optimal, awaiting api with request.session.email or similar
+                if (request.body === undefined) {
+                    request.body = {};
+                }
 
-        //         request.body.loggedInUserEmail = userInfo[UserProfileKeys.Email];
-        //         // /Not optimal
+                request.body.loggedInUserEmail = userInfo[UserProfileKeys.Email];
+                // /Not optimal
 
-        //         if (permissions !== undefined && permissions["/admin/restricted-word"] === 1) {
-        //             return next();
-        //         } else {
-        //             logger.infoRequest(request, `Signed in user (${request.body.loggedInUserEmail}) does not have the correct permissions`);
+                if (permissions !== undefined && permissions["/admin/restricted-word"] === 1) {
+                    return next();
+                } else {
+                    logger.infoRequest(request, `Signed in user (${request.body.loggedInUserEmail}) does not have the correct permissions`);
 
-        //             response.status(404); // eslint-disable-line @typescript-eslint/no-magic-numbers
+                    response.status(404); // eslint-disable-line @typescript-eslint/no-magic-numbers
 
-        //             return response.render("404");
-        //         }
-        //     }
-        // }
+                    return response.render("404");
+                }
+            }
+        }
 
-        // return response.redirect(`/signin?return_to=/${config.urlPrefix}`);
+        return response.redirect(`/signin?return_to=/${config.urlPrefix}`);
     };
 };
 
