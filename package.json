@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/companieshouse/restricted-word-web#readme",
   "dependencies": {
-    "axios": "~0.19.2",
+    "axios": "~0.21.1",
     "ch-node-session-handler": "git+ssh://git@github.com/companieshouse/node-session-handler.git#1.0.0",
     "ch-structured-logging": "git+ssh://git@github.com/companieshouse/ch-structured-logging-node.git#15a8112",
     "cookie-parser": "~1.4.4",
