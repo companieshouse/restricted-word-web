@@ -101,9 +101,10 @@ class RestrictedWordController {
     public static async postCreateNewWord(request: Request, response: Response) {
 
         const newWord = request.body.word;
+        const superRestricted = request.body.superRestricted === "true";
         const deleteConflicting = request.body.deleteConflicting === "true";
 
-        logger.infoRequest(request, `Attempting to create new word "${newWord}".`);
+        logger.infoRequest(request, `Attempting to create new word "${newWord}" with super restricted "${superRestricted}".`);
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
@@ -113,13 +114,14 @@ class RestrictedWordController {
                 throw new Error("A word is required to create a new word");
             }
 
-            await restrictedWordApiClient.createRestrictedWord(newWord, deleteConflicting);
+            await restrictedWordApiClient.createRestrictedWord(newWord, superRestricted, deleteConflicting);
 
         } catch (unknownError) {
 
             if (unknownError.conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),
+                    superRestricted: superRestricted,
                     hasConflicting: true,
                     conflictingWords: unknownError.conflictingWords
                 });
@@ -129,6 +131,7 @@ class RestrictedWordController {
 
             return response.render("add-new-word", {
                 word: newWord,
+                superRestricted: superRestricted,
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }

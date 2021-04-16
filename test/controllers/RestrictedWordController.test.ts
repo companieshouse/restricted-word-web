@@ -54,7 +54,8 @@ describe("RestrictedWordController", function () {
             deletedBy: "deletedBy",
             createdAt: "createdAt",
             deletedAt: "deletedAt",
-            deleted: false
+            deleted: false,
+            superRestricted: false
         };
     };
 
@@ -323,7 +324,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .createRestrictedWord(exampleWord1, false);
+                .createRestrictedWord(exampleWord1, false, false);
 
             mockResponse
                 .received()
@@ -339,7 +340,7 @@ describe("RestrictedWordController", function () {
             const expectedError = [{ text: exampleError }];
 
             mockApiClient
-                .createRestrictedWord(exampleWord1, false)
+                .createRestrictedWord(exampleWord1, false, false)
                 .returns(PromiseRejector.rejectWith({
                     messages: [exampleError]
                 }));
@@ -366,6 +367,7 @@ describe("RestrictedWordController", function () {
                         .to.deep.equal(expectedError);
 
                     expect(options.word).to.equal(exampleWord1);
+                    expect(options.superRestricted).to.equal(false);
 
                     return true;
                 }));
@@ -405,7 +407,7 @@ describe("RestrictedWordController", function () {
             });
 
             mockApiClient
-                .createRestrictedWord(exampleWord1, false)
+                .createRestrictedWord(exampleWord1, false, false)
                 .returns(Promise.reject({ // eslint-disable-line prefer-promise-reject-errors
                     conflictingWords: ["DOG", "CAT"]
                 }));
@@ -414,7 +416,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .createRestrictedWord(exampleWord1, false);
+                .createRestrictedWord(exampleWord1, false, false);
 
             mockResponse
                 .received()
@@ -423,6 +425,7 @@ describe("RestrictedWordController", function () {
                     expect(options)
                         .to.deep.equal({
                             word: exampleWord1.toUpperCase(),
+                            superRestricted: false,
                             hasConflicting: true,
                             conflictingWords: [
                                 "DOG",
