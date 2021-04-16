@@ -28,7 +28,6 @@ const nunjucksConfig: ConfigureOptions = {
 };
 
 if (config.env === "development") {
-
     logger.info("Configuring nunjucks for development mode");
     nunjucksConfig.watch = true;
     nunjucksConfig.noCache = true;
