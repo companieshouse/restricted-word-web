@@ -22,7 +22,7 @@
         }) }}
       {% endif %}
 
-      <h1 class="govuk-heading-xl">Add new word</h1>
+      <h1 class="govuk-heading-xl">Add a restricted word</h1>
       <form method="POST" action="/{{urlPrefix}}/add-new-word">
         <input type="hidden" name="deleteConflicting" value="{{hasConflicting === true}}" />
 
@@ -52,11 +52,41 @@
         {% else %}
           {{ govukInput({
             label: {
-              text: "The word"
+              text: "Which word do you want to add?",
+              isPageHeading: false,
+              classes: "govuk-label--m"
             },
             id: "event-name",
             name: "word",
             value: word
+          }) }}
+          {% set superChecked = superRestricted == true %}
+          {{ govukRadios({
+            classes: "govuk-radios--inline",
+            idPrefix: "super-restricted",
+            name: "superRestricted",
+            fieldset: {
+              legend: {
+                text: "Is this a super restricted word?",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: {
+              text: "This is an exceptionally offensive word which will be checked in the articles."
+            },
+            items: [
+              {
+                value: "true",
+                text: "Yes",
+                checked: superChecked
+              },
+              {
+                value: "false",
+                text: "No",
+                checked: not superChecked
+              }
+            ]
           }) }}
           {{ govukButton({
             text: "Add new word",

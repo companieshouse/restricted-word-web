@@ -53,8 +53,8 @@ class RestrictedWordApiClient {
             deletedAt: serverObject.deleted_at ?
                 moment(serverObject.deleted_at).format("DD MMM YY") :
                 "-",
-            deleted: serverObject.deleted,
-            superRestricted: serverObject.super_restricted
+            superRestricted: serverObject.super_restricted,
+            deleted: serverObject.deleted
         };
     }
 
@@ -99,12 +99,13 @@ class RestrictedWordApiClient {
         }
     }
 
-    public async createRestrictedWord(word: string, deleteConflicting: boolean) {
+    public async createRestrictedWord(word: string, superRestricted: boolean, deleteConflicting: boolean) {
 
         try {
 
             await axiosInstance.post("/word", {
                 full_word: word,
+                super_restricted: superRestricted,
                 delete_conflicting: deleteConflicting,
                 created_by: this._username
             });
