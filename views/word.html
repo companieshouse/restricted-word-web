@@ -19,7 +19,7 @@
               text: "Added by"
             },
             value: {
-              text: " 	rdavies@companieshouse.gov.uk "
+              text: word.createdBy
             }
           },
           {
@@ -27,7 +27,7 @@
               text: "Date added"
             },
             value: {
-              text: "02/03/2016"
+              text: word.createdAt
             }
           },
           {
@@ -35,7 +35,7 @@
               text: "Removed by"
             },
             value: {
-              html: "ddavies@companieshouse.gov.uk"
+              html: word.deletedBy
             }
           },
           {
@@ -43,7 +43,7 @@
               text: "Date removed"
             },
             value: {
-              html: "25/04/2021"
+              html: word.deletedAt
             }
           },
 
@@ -52,7 +52,7 @@
               text: "Super restricted"
             },
             value: {
-              html: 'No'
+              html: word.superRestricted
             }
           }
         ]

@@ -101,7 +101,9 @@ class RestrictedWordController {
         const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
         console.dir(word);
 
-        return response.render("word");
+        return response.render("word", {
+            word: word
+        });
     }
 
     public static getCreateNewWord(_request: Request, response: Response) {
