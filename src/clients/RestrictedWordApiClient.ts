@@ -53,8 +53,21 @@ class RestrictedWordApiClient {
             deletedAt: serverObject.deleted_at ?
                 moment(serverObject.deleted_at).format("DD MMM YY") :
                 "-",
-            deleted: serverObject.deleted
+            deleted: serverObject.deleted,
+            superRestricted: serverObject.super_restricted
         };
+    }
+
+    public async getSingleRestrictedWord(id: string) {
+
+        try {
+            const response = await axiosInstance.get(`/word/${id}`);
+
+            return RestrictedWordApiClient.mapFromApi(response.data);
+
+        } catch (error) {
+            throw this.handleErrors(error);
+        }
     }
 
     public async getAllRestrictedWords(options: RestrictedWordQueryOptions) {

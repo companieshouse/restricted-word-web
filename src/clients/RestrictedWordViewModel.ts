@@ -6,6 +6,7 @@ interface RestrictedWordViewModel {
     createdAt: string;
     deletedAt?: string;
     deleted: boolean;
+    superRestricted: boolean;
 }
 
 export default RestrictedWordViewModel;

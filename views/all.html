@@ -56,7 +56,7 @@
             {% for word in words %}
               <tr id="word-{{word.id}}" class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">
-                  {{ word.word }}
+                  <a href="/{{ urlPrefix }}/word/{{ word.id }}" class="govuk-link govuk-link--no-visited-state">{{ word.word }}</a>
                 </th>
                 <td class="govuk-table__cell" scope="row">
                   {{ word.createdAt }}<br />

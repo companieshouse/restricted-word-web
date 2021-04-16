@@ -94,6 +94,16 @@ class RestrictedWordController {
         });
     }
 
+    public static async getWord(request: Request, response: Response) {
+
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
+
+        const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
+        console.dir(word);
+
+        return response.render("word");
+    }
+
     public static getCreateNewWord(_request: Request, response: Response) {
         return response.render("add-new-word");
     }

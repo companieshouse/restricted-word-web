@@ -9,6 +9,7 @@ class RestrictedWordRouter {
         const router = express.Router();
 
         router.get("/", RestrictedWordController.getAllWords);
+        router.get("/word/:wordId", RestrictedWordController.getWord);
         router.get("/add-new-word", RestrictedWordController.getCreateNewWord);
         router.post("/add-new-word", RestrictedWordController.postCreateNewWord);
         router.get("/delete", RestrictedWordController.getDeleteWord);
