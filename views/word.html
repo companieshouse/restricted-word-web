@@ -35,7 +35,7 @@
               text: "Removed by"
             },
             value: {
-              html: word.deletedBy
+              html: word.deletedBy if word.deleted else "-"
             }
           },
           {
@@ -52,7 +52,7 @@
               text: "Super restricted"
             },
             value: {
-              html: word.superRestricted
+              html: "Yes" if word.superRestricted else "No"
             }
           }
         ]
@@ -79,11 +79,12 @@
         {
           value: "yes",
           text: "Yes",
-          checked: true
+          checked: word.superRestricted
         },
         {
           value: "no",
-          text: "No"
+          text: "No",
+          checked: not word.superRestricted
         }
       ]
     }) }}
