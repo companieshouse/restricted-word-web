@@ -62,7 +62,7 @@
         href: "delete-word?word=" + word + '',
         classes: "govuk-button--warning"
       }) }}
-      <h2 class="govuk-heading-l">Super restricted word</h2>
+      {# <h2 class="govuk-heading-l">Super restricted word</h2>
       {{ govukRadios({
       classes: "govuk-radios--inline",
       idPrefix: "super-restricted-word",
@@ -90,8 +90,8 @@
     }) }}
       {{ govukButton({
         text: "Update"
-      }) }}
-      {{ govukTable({
+      }) }} #}
+      {# {{ govukTable({
         caption: "Super restricted history",
         captionClasses: "govuk-table__caption--m",
         head: [
@@ -140,7 +140,7 @@
             }
           ]
         ]
-      }) }}
+      }) }} #}
     </div>
   </div>
 {% endblock %}
