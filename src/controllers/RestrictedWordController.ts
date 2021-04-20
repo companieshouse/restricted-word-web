@@ -98,12 +98,20 @@ class RestrictedWordController {
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
-        const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
-        console.dir(word);
+        try {
+            const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
 
-        return response.render("word", {
-            word: word
-        });
+            return response.render("word", {
+                word: word
+            });
+
+        } catch (unknownError) {
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
+
+            return response.render("all", {
+                errors: RestrictedWordController.mapErrors(errorMessages)
+            });
+        }
     }
 
     public static getCreateNewWord(_request: Request, response: Response) {

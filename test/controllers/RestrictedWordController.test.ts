@@ -86,6 +86,22 @@ describe("RestrictedWordController", function () {
         restrictedWordController = requireController();
     });
 
+    describe("#getWord", function () {
+
+        const getWordViewName = "word";
+
+        it("returns the correct view", async function () {
+
+            mockRequest.query.returns({});
+
+            await restrictedWordController.getWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render(getWordViewName, Arg.any());
+        });
+    });
+
     describe("#getAllWords", function () {
 
         const getAllWordsViewName = "all";
