@@ -49,6 +49,7 @@
               <th class="govuk-table__header" scope="col">Word</th>
               <th class="govuk-table__header" scope="col">Added on</th>
               <th class="govuk-table__header" scope="col">Removed on</th>
+              <th class="govuk-table__header" scope="col">Super restricted?</th>
             </tr>
           </thead>
           <tbody class="govuk-table__body">
@@ -68,6 +69,9 @@
                   {% else %}
                     -
                   {% endif %}
+                </td>
+                <td class="govuk-table__cell" scope="row">
+                  {{ "Yes" if word.superRestricted else "No" }}
                 </td>
               </tr>
             {% endfor %}
