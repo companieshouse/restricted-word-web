@@ -77,7 +77,6 @@ describe("RestrictedWordController", function () {
     const exampleId = "abc123";
 
     beforeEach(function () {
-
         mockRequest = SubstituteFactory.create<Request>();
         mockResponse = SubstituteFactory.create<Response>();
         mockLogger = SubstituteFactory.create<ApplicationLogger>();
