@@ -8,7 +8,6 @@ interface RestrictedWordDto {
     super_restricted: boolean;
     deleted_at: string;
     deleted: boolean;
-    super_restricted: boolean;
 }
 
 export default RestrictedWordDto;

@@ -7,7 +7,6 @@ interface RestrictedWordViewModel {
     superRestricted: boolean;
     deletedAt?: string;
     deleted: boolean;
-    superRestricted: boolean;
 }
 
 export default RestrictedWordViewModel;
