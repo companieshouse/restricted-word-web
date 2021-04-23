@@ -74,6 +74,42 @@ describe("RestrictedWordApiClient", function () {
         apiClient = new (requireApiClient())(testUser);
     });
 
+    describe("#getSingleRestrictedWord", function () {
+
+        const testResult = {
+            data: {
+                id: testId,
+                full_word: "FIRST",
+                created_by: "FredJones@domain.other.tld",
+                created_at: "2020-01-23T12:05:08.096",
+                super_restricted: false,
+                deleted: false
+            }
+        };
+
+        it("successfully maps result", async function () {
+
+            mockAxiosInstance.get.resolves(testResult);
+
+            const results = await apiClient.getSingleRestrictedWord(testId);
+
+            expect(mockAxiosInstance.get).to.have.been.calledWithExactly(`/word/${testId}`);
+
+            const mappedResult = {
+                id: testId,
+                word: "FIRST",
+                createdBy: "FredJones",
+                deletedBy: undefined,
+                createdAt: "23 Jan 20",
+                superRestricted: false,
+                deletedAt: "-",
+                deleted: false
+            };
+
+            expect(mappedResult).to.deep.equal(results)
+        });
+    });
+
     describe("#getAllRestrictedWords", function () {
 
         const testResults = {

@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+  Restricted words - Companies House Internal Service
+{% endblock %}
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/" + urlPrefix
+  }) }}
+{% endblock %}
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters-from-desktop">
+      <h1 class="govuk-heading-xl">{{word.word}}</h1>
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Added by"
+            },
+            value: {
+              text: word.createdBy
+            }
+          },
+          {
+            key: {
+              text: "Date added"
+            },
+            value: {
+              text: word.createdAt
+            }
+          },
+          {
+            key: {
+              text: "Removed by"
+            },
+            value: {
+              html: word.deletedBy if word.deleted else "-"
+            }
+          },
+          {
+            key: {
+              text: "Date removed"
+            },
+            value: {
+              html: word.deletedAt
+            }
+          },
+
+          {
+            key: {
+              text: "Super restricted"
+            },
+            value: {
+              html: "Yes" if word.superRestricted else "No"
+            }
+          }
+        ]
+      }) }}
+      {# {{ govukButton({
+        text: "Delete word",
+        href: "delete-word?word=" + word + '',
+        classes: "govuk-button--warning"
+      }) }} #}
+      {# <h2 class="govuk-heading-l">Super restricted word</h2>
+      {{ govukRadios({
+      classes: "govuk-radios--inline",
+      idPrefix: "super-restricted-word",
+      name: "super-restricted-word",
+      fieldset: {
+        legend: {
+          text: "Is this a super restricted word?"
+        }
+      },
+      hint: {
+        text: "This is an exceptionally offensive word which will be checked in documents."
+      },
+      items: [
+        {
+          value: "yes",
+          text: "Yes",
+          checked: word.superRestricted
+        },
+        {
+          value: "no",
+          text: "No",
+          checked: not word.superRestricted
+        }
+      ]
+    }) }}
+      {{ govukButton({
+        text: "Update"
+      }) }} #}
+      {# {{ govukTable({
+        caption: "Super restricted history",
+        captionClasses: "govuk-table__caption--m",
+        head: [
+          {
+            text: "Date"
+          },
+          {
+            text: "Updated by"
+          },
+          {
+            text: "Super restricted?"
+          }
+        ],
+        rows: [
+          [
+            {
+              text: "02/04/2020"
+            },
+            {
+              text: "sberry@companieshouse.gov.uk"
+            },
+            {
+              text: "Yes"
+            }
+          ],
+          [
+            {
+              text: "03/05/2019"
+            },
+            {
+              text: "sberry@companieshouse.gov.uk"
+            },
+            {
+              text: "No"
+            }
+          ],
+          [
+            {
+              text: "22/08/2016"
+            },
+            {
+              text: "sberry@companieshouse.gov.uk"
+            },
+            {
+              text: "Yes"
+            }
+          ]
+        ]
+      }) }} #}
+    </div>
+  </div>
+{% endblock %}

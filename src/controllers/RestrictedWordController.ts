@@ -94,6 +94,26 @@ class RestrictedWordController {
         });
     }
 
+    public static async getWord(request: Request, response: Response) {
+
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
+
+        try {
+            const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
+
+            return response.render("word", {
+                word: word
+            });
+
+        } catch (unknownError) {
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
+
+            return response.render("all", {
+                errors: RestrictedWordController.mapErrors(errorMessages)
+            });
+        }
+    }
+
     public static getCreateNewWord(_request: Request, response: Response) {
         return response.render("add-new-word");
     }

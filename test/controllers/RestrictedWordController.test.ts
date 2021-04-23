@@ -77,13 +77,28 @@ describe("RestrictedWordController", function () {
     const exampleId = "abc123";
 
     beforeEach(function () {
-
         mockRequest = SubstituteFactory.create<Request>();
         mockResponse = SubstituteFactory.create<Response>();
         mockLogger = SubstituteFactory.create<ApplicationLogger>();
         mockApiClient = SubstituteFactory.create<RestrictedWordApiClient>();
         mockPager = SubstituteFactory.create<Pager<RestrictedWordViewModel>>();
         restrictedWordController = requireController();
+    });
+
+    describe("#getWord", function () {
+
+        const getWordViewName = "word";
+
+        it("returns the correct view", async function () {
+
+            mockRequest.query.returns({});
+
+            await restrictedWordController.getWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render(getWordViewName, Arg.any());
+        });
     });
 
     describe("#getAllWords", function () {

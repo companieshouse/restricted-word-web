@@ -58,6 +58,18 @@ class RestrictedWordApiClient {
         };
     }
 
+    public async getSingleRestrictedWord(id: string) {
+
+        try {
+            const response = await axiosInstance.get(`/word/${id}`);
+
+            return RestrictedWordApiClient.mapFromApi(response.data);
+
+        } catch (error) {
+            throw this.handleErrors(error);
+        }
+    }
+
     public async getAllRestrictedWords(options: RestrictedWordQueryOptions) {
 
         const queryString: RestrictedWordFilterDto = {};
