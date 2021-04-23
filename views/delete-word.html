@@ -4,10 +4,12 @@
   Restricted words - Delete Word
 {% endblock %}
 
+{% set backUrl = "/" + urlPrefix + "/word/" + id %}
+
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/" + urlPrefix
+    href: backUrl
   }) }}
 {% endblock %}
 
@@ -36,7 +38,7 @@
         {{ govukButton({
           text: "Cancel",
           classes: "govuk-button--secondary",
-          href: "/" + urlPrefix,
+          href: backUrl,
           attributes: { id: "cancel-delete-word-button" }
         }) }}
       </form>
