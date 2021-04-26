@@ -65,35 +65,35 @@
         }) }}
       {% endif %}
 
-      {# <h2 class="govuk-heading-l">Super restricted word</h2>
+      <h2 class="govuk-heading-l">Super restricted word</h2>
       {{ govukRadios({
-      classes: "govuk-radios--inline",
-      idPrefix: "super-restricted-word",
-      name: "super-restricted-word",
-      fieldset: {
-        legend: {
-          text: "Is this a super restricted word?"
-        }
-      },
-      hint: {
-        text: "This is an exceptionally offensive word which will be checked in documents."
-      },
-      items: [
-        {
-          value: "yes",
-          text: "Yes",
-          checked: word.superRestricted
+        classes: "govuk-radios--inline",
+        idPrefix: "super-restricted-word",
+        name: "super-restricted-word",
+        fieldset: {
+          legend: {
+            text: "Is this a super restricted word?"
+          }
         },
-        {
-          value: "no",
-          text: "No",
-          checked: not word.superRestricted
-        }
-      ]
-    }) }}
+        hint: {
+          text: "This is an exceptionally offensive word which will be checked in documents."
+        },
+        items: [
+          {
+            value: "yes",
+            text: "Yes",
+            checked: word.superRestricted
+          },
+          {
+            value: "no",
+            text: "No",
+            checked: not word.superRestricted
+          }
+        ]
+      }) }}
       {{ govukButton({
         text: "Update"
-      }) }} #}
+      }) }}
       {# {{ govukTable({
         caption: "Super restricted history",
         captionClasses: "govuk-table__caption--m",

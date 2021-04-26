@@ -94,6 +94,17 @@ class RestrictedWordController {
         });
     }
 
+    public static async patchSuperRestrictedWord(request: Request, response: Response) {
+
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
+
+        try {
+
+        } catch (unknownError) {
+            
+        }
+    }
+
     public static async getWord(request: Request, response: Response) {
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);

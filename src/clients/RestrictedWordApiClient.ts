@@ -1,6 +1,7 @@
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import RestrictedWordDto from "./RestrictedWordDto";
 import RestrictedWordFilterDto from "./RestrictedWordFilterDto";
+import RestrictedWordPatchSuperRestrictedRequest from "./RestrictedWordPatchSuperRestrictedRequest";
 import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "./RestrictedWordViewModel";
 import axiosInstance from "./axiosInstance";
@@ -56,6 +57,18 @@ class RestrictedWordApiClient {
             superRestricted: serverObject.super_restricted,
             deleted: serverObject.deleted
         };
+    }
+
+    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest) {
+
+        try {
+            await axiosInstance.patch(`/word/${options.id}`, {
+                patched_by: options.patchedBy,
+                super_restricted: options.superRestricted
+            });
+        } catch (error) {
+            throw this.handleErrors(error);
+        }
     }
 
     public async getSingleRestrictedWord(id: string) {
