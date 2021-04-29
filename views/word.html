@@ -9,6 +9,21 @@
   }) }}
 {% endblock %}
 {% block content %}
+  {%if setSuperRestricted %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ chNotification({
+          titleText: "You've set super restricted to " + ("Yes" if word.superRestricted else "No")
+        }) }}
+      </div>
+    </div>
+  {% endif %}
+  {%if errors.length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors
+    }) }}
+  {% endif %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters-from-desktop">
       <h1 class="govuk-heading-xl">{{word.word}}</h1>
@@ -21,33 +36,28 @@
             value: {
               text: word.createdBy
             }
-          },
-          {
+          }, {
             key: {
               text: "Date added"
             },
             value: {
               text: word.createdAt
             }
-          },
-          {
+          }, {
             key: {
               text: "Removed by"
             },
             value: {
               html: word.deletedBy if word.deleted else "-"
             }
-          },
-          {
+          }, {
             key: {
               text: "Date removed"
             },
             value: {
               html: word.deletedAt
             }
-          },
-
-          {
+          }, {
             key: {
               text: "Super restricted"
             },
@@ -63,37 +73,40 @@
           href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
           classes: "govuk-button--warning"
         }) }}
-      {% endif %}
 
-      <h2 class="govuk-heading-l">Super restricted word</h2>
-      {{ govukRadios({
-        classes: "govuk-radios--inline",
-        idPrefix: "super-restricted-word",
-        name: "super-restricted-word",
-        fieldset: {
-          legend: {
-            text: "Is this a super restricted word?"
-          }
-        },
-        hint: {
-          text: "This is an exceptionally offensive word which will be checked in documents."
-        },
-        items: [
-          {
-            value: "yes",
-            text: "Yes",
-            checked: word.superRestricted
-          },
-          {
-            value: "no",
-            text: "No",
-            checked: not word.superRestricted
-          }
-        ]
-      }) }}
-      {{ govukButton({
-        text: "Update"
-      }) }}
+        <h2 class="govuk-heading-l">Super restricted word</h2>
+        <form action="/{{ urlPrefix }}/set-super-restricted" method="POST">
+          <input type="hidden" name="id" value="{{ word.id }}" />
+          {{ govukRadios({
+            classes: "govuk-radios--inline",
+            idPrefix: "super-restricted-word",
+            name: "superRestricted",
+            fieldset: {
+              legend: {
+                text: "Is this a super restricted word?"
+              }
+            },
+            hint: {
+              text: "This is an exceptionally offensive word which will be checked in documents."
+            },
+            items: [
+              {
+                value: true,
+                text: "Yes",
+                checked: word.superRestricted
+              },
+              {
+                value: false,
+                text: "No",
+                checked: not word.superRestricted
+              }
+            ]
+          }) }}
+          {{ govukButton({
+            text: "Update"
+          }) }}
+        </form>
+      {% endif %}
       {# {{ govukTable({
         caption: "Super restricted history",
         captionClasses: "govuk-table__caption--m",
