@@ -101,6 +101,15 @@ describe("RestrictedWordController", function () {
         });
     });
 
+    describe("#postSuperRestrictedWord", function () {
+
+        const viewName = "word";
+
+        it("redirects after successful patch", async function () {
+            
+        });
+    });
+
     describe("#getAllWords", function () {
 
         const getAllWordsViewName = "all";

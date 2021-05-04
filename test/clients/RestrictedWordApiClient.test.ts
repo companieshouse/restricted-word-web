@@ -110,6 +110,28 @@ describe("RestrictedWordApiClient", function () {
         });
     });
 
+    describe("#patchSuperRestrictedStatus", function () {
+
+        const testOptions = {
+            id: testId,
+            patchedBy: testUser,
+            superRestricted: true
+        };
+
+        it("successfully calls the patch url", async function () {
+
+            const expectedCallingObject = {
+                patched_by: testUser,
+                super_restricted: true
+            };
+
+            await apiClient.patchSuperRestrictedStatus(testOptions);
+
+            expect(mockAxiosInstance.patch).to.have.been.calledWithExactly(`/word/${testId}`, expectedCallingObject);
+
+        });
+    });
+
     describe("#getAllRestrictedWords", function () {
 
         const testResults = {
