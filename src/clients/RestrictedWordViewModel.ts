@@ -1,3 +1,5 @@
+import AuditEntryViewModel from "./AuditEntryViewModel";
+
 interface RestrictedWordViewModel {
     id: string;
     word: string;
@@ -7,6 +9,7 @@ interface RestrictedWordViewModel {
     superRestricted: boolean;
     deletedAt?: string;
     deleted: boolean;
+    superRestrictedAuditLog: AuditEntryViewModel[]
 }
 
 export default RestrictedWordViewModel;

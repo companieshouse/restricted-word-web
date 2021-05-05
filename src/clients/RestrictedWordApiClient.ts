@@ -54,7 +54,14 @@ class RestrictedWordApiClient {
                 moment(serverObject.deleted_at).format("DD MMM YY") :
                 "-",
             superRestricted: serverObject.super_restricted,
-            deleted: serverObject.deleted
+            deleted: serverObject.deleted,
+            superRestrictedAuditLog: serverObject.super_restricted_audit_log.map(function (auditEntry) {
+                return {
+                    changedAt: auditEntry.changed_at,
+                    changedBy: auditEntry.changed_by,
+                    newValue: auditEntry.new_value
+                }
+            })
         };
     }
 

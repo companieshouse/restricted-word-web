@@ -102,7 +102,8 @@ class RestrictedWordController {
             const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
 
             return response.render("word", {
-                word: word
+                word: word,
+                wordHistory: word.superRestrictedAuditLog
             });
 
         } catch (unknownError) {
