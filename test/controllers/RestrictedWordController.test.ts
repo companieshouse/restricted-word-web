@@ -99,6 +99,42 @@ describe("RestrictedWordController", function () {
                 .received()
                 .render(getWordViewName, Arg.any());
         });
+
+        it("renders the true super restricted value correctly", async function () {
+
+            mockRequest.query.returns({
+                setSuperRestricted: true
+            });
+
+            await restrictedWordController.getWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render(getWordViewName, Arg.is(options => {
+                    
+                    expect(options.setSuperRestricted).to.equal(true);
+
+                    return true;
+                }));
+        });
+
+        it("renders the false super restricted value correctly", async function () {
+
+            mockRequest.query.returns({
+                setSuperRestricted: false
+            });
+
+            await restrictedWordController.getWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render(getWordViewName, Arg.is(options => {
+                    
+                    expect(options.setSuperRestricted).to.equal(false);
+
+                    return true;
+                }));
+        });
     });
 
     describe("#postSuperRestrictedWord", function () {
