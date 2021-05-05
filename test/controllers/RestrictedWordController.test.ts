@@ -104,9 +104,49 @@ describe("RestrictedWordController", function () {
     describe("#postSuperRestrictedWord", function () {
 
         const viewName = "word";
+        const testId = "abc123";
+        const testUser = "test@test.com";
 
         it("redirects after successful patch", async function () {
-            
+
+            mockRequest.body.returns({
+                id: testId,
+                superRestricted: "true",
+                loggedInUserEmail: testUser
+            });
+
+            await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .redirect(Arg.is(options => {
+
+                    expect(options).to.equal(`/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
+
+                    return true;
+                }));
+        });
+
+        it("renders the word page if there is an error", async function () {
+
+            mockApiClient.patchSuperRestrictedStatus(Arg.any()).returns(PromiseRejector.rejectWith({
+                messages: [exampleError]
+            }));
+
+            await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("word", Arg.is(options => {
+
+                    const expectedErrors = [{
+                        text: exampleError
+                    }];
+
+                    expect(options.errors).to.deep.equal(expectedErrors);
+
+                    return true;
+                }));
         });
     });
 
