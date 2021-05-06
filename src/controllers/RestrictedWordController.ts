@@ -94,6 +94,34 @@ class RestrictedWordController {
         });
     }
 
+    public static async postSuperRestrictedWord(request: Request, response: Response) {
+
+        const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
+
+        const id = request.body.id;
+        const superRestricted = request.body.superRestricted === "true";
+
+        try {
+            await restrictedWordApiClient.patchSuperRestrictedStatus({
+                id: id,
+                superRestricted: superRestricted,
+                patchedBy: request.body.loggedInUserEmail
+            });
+
+            return response.redirect(`/${config.urlPrefix}/word/${id}?setSuperRestricted=true`);
+
+        } catch (unknownError) {
+
+            const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
+            const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
+
+            return response.render("word", {
+                word: word,
+                errors: RestrictedWordController.mapErrors(errorMessages)
+            });
+        }
+    }
+
     public static async getWord(request: Request, response: Response) {
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
@@ -103,13 +131,20 @@ class RestrictedWordController {
 
             return response.render("word", {
                 word: word,
-                wordHistory: word.superRestrictedAuditLog
+                setSuperRestricted: request.query.setSuperRestricted,
+                wordHistory: word.superRestrictedAuditLog.map(auditEntry => [{
+                    text: auditEntry.changedAt
+                }, {
+                    text: auditEntry.changedBy
+                }, {
+                    text: auditEntry.newValue
+                }])
             });
 
         } catch (unknownError) {
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
 
-            return response.render("all", {
+            return response.render("word", {
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
