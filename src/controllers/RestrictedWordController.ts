@@ -41,11 +41,19 @@ class RestrictedWordController {
             contains: filterWord || undefined
         };
 
-        const filterStatus = request.query.filterStatus;
+        const superRestrictedStatus = request.query.superRestrictedStatus;
 
-        if (filterStatus === "Active") {
+        if (superRestrictedStatus === "Normal") {
+            queryOptions.superRestricted = false;
+        } else if (superRestrictedStatus === "Super") {
+            queryOptions.superRestricted = true;
+        }
+
+        const deletedStatus = request.query.deletedStatus;
+
+        if (deletedStatus === "Active") {
             queryOptions.deleted = false;
-        } else if (filterStatus === "Deleted") {
+        } else if (deletedStatus === "Deleted") {
             queryOptions.deleted = true;
         }
 
