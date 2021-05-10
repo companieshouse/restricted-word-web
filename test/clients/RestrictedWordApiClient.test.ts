@@ -165,7 +165,8 @@ describe("RestrictedWordApiClient", function () {
                     created_by: "FredJones@domain.other.tld",
                     created_at: "2020-01-23T12:05:08.096",
                     super_restricted: false,
-                    deleted: false
+                    deleted: false,
+                    super_restricted_audit_log: []
                 },
                 {
                     id: "2",
@@ -175,7 +176,8 @@ describe("RestrictedWordApiClient", function () {
                     super_restricted: true,
                     deleted_by: "Ben.Gun@anotheremail.net",
                     deleted_at: "2020-02-21T11:03:04.019",
-                    deleted: true
+                    deleted: true,
+                    super_restricted_audit_log: []
                 }
             ]
         };

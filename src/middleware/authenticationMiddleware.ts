@@ -13,10 +13,6 @@ const createAuthenticationMiddleware = function (): RequestHandler {
 
     return (request, response, next) => {
 
-        // request.body.loggedInUserEmail = "test@test.com";
-
-        // return next();
-
         const signInInfo = request.session
             .chain((session: Session) => session.getValue<ISignInInfo>(SessionKey.SignInInfo))
             .extract();
