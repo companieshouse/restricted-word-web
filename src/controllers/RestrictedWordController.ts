@@ -130,8 +130,15 @@ class RestrictedWordController {
             const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
 
             return response.render("word", {
+                word: word,
                 setSuperRestricted: request.query.setSuperRestricted,
-                word: word
+                wordHistory: word.superRestrictedAuditLog.map(auditEntry => [{
+                    text: auditEntry.changedAt
+                }, {
+                    text: auditEntry.changedBy
+                }, {
+                    text: auditEntry.newValue
+                }])
             });
 
         } catch (unknownError) {

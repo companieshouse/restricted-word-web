@@ -107,7 +107,7 @@
           }) }}
         </form>
       {% endif %}
-      {# {{ govukTable({
+      {{ govukTable({
         caption: "Super restricted history",
         captionClasses: "govuk-table__caption--m",
         head: [
@@ -121,42 +121,8 @@
             text: "Super restricted?"
           }
         ],
-        rows: [
-          [
-            {
-              text: "02/04/2020"
-            },
-            {
-              text: "sberry@companieshouse.gov.uk"
-            },
-            {
-              text: "Yes"
-            }
-          ],
-          [
-            {
-              text: "03/05/2019"
-            },
-            {
-              text: "sberry@companieshouse.gov.uk"
-            },
-            {
-              text: "No"
-            }
-          ],
-          [
-            {
-              text: "22/08/2016"
-            },
-            {
-              text: "sberry@companieshouse.gov.uk"
-            },
-            {
-              text: "Yes"
-            }
-          ]
-        ]
-      }) }} #}
+        rows: wordHistory
+      }) }}
     </div>
   </div>
 {% endblock %}

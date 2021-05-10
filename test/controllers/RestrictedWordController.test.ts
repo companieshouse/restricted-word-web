@@ -55,7 +55,8 @@ describe("RestrictedWordController", function () {
             createdAt: "createdAt",
             deletedAt: "deletedAt",
             deleted: false,
-            superRestricted: false
+            superRestricted: false,
+            superRestrictedAuditLog: []
         };
     };
 
