@@ -41,7 +41,7 @@ class RestrictedWordController {
             contains: filterWord || undefined
         };
 
-        const superRestrictedStatus = request.query.superRestrictedStatus;
+        const superRestrictedStatus = request.query.filterSuperRestricted;
 
         if (superRestrictedStatus === "Normal") {
             queryOptions.superRestricted = false;
@@ -56,11 +56,7 @@ class RestrictedWordController {
         } else if (deletedStatus === "Deleted") {
             queryOptions.deleted = true;
         }
-
-        /**
-         * This will be session.signInData.userProfile.email - bit long winded perhaps.
-         * Maybe the client should just take in the request.
-         */
+        
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         let results: RestrictedWordViewModel[];
@@ -81,8 +77,12 @@ class RestrictedWordController {
         const pager = new Pager(request.query.page, results);
         const urlParams: string[] = [];
 
-        if (filterStatus) {
-            urlParams.push(`filterStatus=${filterStatus}`);
+        if (superRestrictedStatus) {
+            urlParams.push(`superRestrictedStatus=${superRestrictedStatus}`);
+        }
+
+        if (deletedStatus) {
+            urlParams.push(`deletedStatus=${deletedStatus}`);
         }
 
         if (filterWord) {
@@ -96,7 +96,8 @@ class RestrictedWordController {
             addedWord: request.query.addedWord,
             filterParams: {
                 word: filterWord,
-                status: filterStatus
+                superRestricted: superRestrictedStatus,
+                status: deletedStatus
             },
             pagination: pager.getPaginationOptions()
         });

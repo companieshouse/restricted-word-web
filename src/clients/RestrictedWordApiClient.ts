@@ -106,6 +106,12 @@ class RestrictedWordApiClient {
             queryString.deleted = options.deleted;
         }
 
+        if (options.superRestricted !== undefined) {
+            queryString.super_restricted = options.superRestricted;
+        }
+
+        console.dir(queryString);
+
         try {
 
             const response = await axiosInstance.get("/word", {
