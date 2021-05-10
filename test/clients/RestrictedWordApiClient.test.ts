@@ -4,6 +4,7 @@ import sinon, { SinonStubbedInstance } from "sinon";
 import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import { AxiosInstance } from "axios";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
+import RestrictedWordDto from "../../src/clients/RestrictedWordDto";
 import RestrictedWordFilterDto from "../../src/clients/RestrictedWordFilterDto";
 import RestrictedWordQueryOptions from "../../src/clients/RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
@@ -76,15 +77,28 @@ describe("RestrictedWordApiClient", function () {
 
     describe("#getSingleRestrictedWord", function () {
 
+        const data: RestrictedWordDto = {
+            id: testId,
+            full_word: "FIRST",
+            created_by: "FredJones@domain.other.tld",
+            created_at: "2020-01-23T12:05:08.096",
+            super_restricted: false,
+            deleted: false,
+            deleted_by: "",
+            deleted_at: "",
+            super_restricted_audit_log: [{
+                changed_at: "2020-04-16T16:23:30",
+                changed_by: "testname",
+                new_value: true
+            }, {
+                changed_at: "2021-01-26T15:16:30",
+                changed_by: "testnom",
+                new_value: false
+            }]
+        };
+
         const testResult = {
-            data: {
-                id: testId,
-                full_word: "FIRST",
-                created_by: "FredJones@domain.other.tld",
-                created_at: "2020-01-23T12:05:08.096",
-                super_restricted: false,
-                deleted: false
-            }
+            data: data
         };
 
         it("successfully maps result", async function () {
@@ -95,7 +109,7 @@ describe("RestrictedWordApiClient", function () {
 
             expect(mockAxiosInstance.get).to.have.been.calledWithExactly(`/word/${testId}`);
 
-            const mappedResult = {
+            const mappedResult: RestrictedWordViewModel = {
                 id: testId,
                 word: "FIRST",
                 createdBy: "FredJones",
@@ -103,7 +117,16 @@ describe("RestrictedWordApiClient", function () {
                 createdAt: "23 Jan 20",
                 superRestricted: false,
                 deletedAt: "-",
-                deleted: false
+                deleted: false,
+                superRestrictedAuditLog: [{
+                    changedAt: "16 Apr 20",
+                    changedBy: "testname",
+                    newValue: true
+                }, {
+                    changedAt: "26 Jan 21",
+                    changedBy: "testnom",
+                    newValue: false
+                }]
             };
 
             expect(mappedResult).to.deep.equal(results)
@@ -179,7 +202,8 @@ describe("RestrictedWordApiClient", function () {
                     createdAt: "23 Jan 20",
                     superRestricted: false,
                     deletedAt: "-",
-                    deleted: false
+                    deleted: false,
+                    superRestrictedAuditLog: []
                 },
                 {
                     id: "2",
@@ -189,7 +213,8 @@ describe("RestrictedWordApiClient", function () {
                     createdAt: "24 Jan 20",
                     superRestricted: true,
                     deletedAt: "21 Feb 20",
-                    deleted: true
+                    deleted: true,
+                    superRestrictedAuditLog: []
                 }
             ];
 
