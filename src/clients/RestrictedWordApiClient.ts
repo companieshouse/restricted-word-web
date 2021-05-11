@@ -59,7 +59,7 @@ class RestrictedWordApiClient {
             superRestrictedAuditLog: serverObject.super_restricted_audit_log.map(function (auditEntry) {
                 return {
                     changedAt: moment(auditEntry.changed_at).format("DD MMM YY"),
-                    changedBy: auditEntry.changed_by,
+                    changedBy: RestrictedWordApiClient.getUsernameFromEmail(auditEntry.changed_by),
                     newValue: auditEntry.new_value
                 }
             })
