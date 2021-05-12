@@ -16,6 +16,43 @@
       </div>
     </div>
 
+
+    <div role="widget" class="filter open">
+      <div class="govuk-body filters-heading" role="button" aria-controls="filter-crn" aria-expanded="true" tabindex="0">
+        <span id="filter-label-status"><span class="govuk-visually-hidden">Filter by</span>Word type</span>
+      </div>
+      <div id="filter-crn" class="filters-wrapper" aria-hidden="true" aria-labelledby="filter-label-crn">
+        {{ govukRadios({
+          idPrefix: "filter-word-type",
+          name: "filterSuperRestricted",
+          fieldset: {
+            legend: {
+              text: "What word type do you want to see?",
+              isPageHeading: false,
+              classes: "govuk-visually-hidden"
+            }
+          },
+          items: [
+          {
+            value: "All",
+            text: "Show all",
+            checked: not filterParams.superRestricted or filterParams.superRestricted === "All"
+          },
+            {
+              value: "Super",
+              text: "Super restricted words",
+              checked: filterParams.superRestricted === "Super"
+            },
+            {
+              value: "Normal",
+              text: "Non-super restricted words",
+              checked: filterParams.superRestricted === "Normal"
+            }
+          ]
+        }) }}
+      </div>
+    </div>
+
     <div role="widget" class="filter open">
       <div class="govuk-body filters-heading" role="button" aria-controls="filter-status" aria-expanded="true" tabindex="0">
         <span id="filter-label-status">
@@ -25,7 +62,7 @@
       </div>
       {{ govukRadios({
           idPrefix: "filter-status",
-          name: "filterStatus",
+          name: "deletedStatus",
           fieldset: {
             legend: {
               text: "What case statuses do you want to see?",
