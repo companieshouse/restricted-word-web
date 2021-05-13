@@ -255,14 +255,15 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("returns the supplied filterWord, filterStatus 'Active' if 'Active' supplied, and filterUrl is correct", async function () {
+        it("returns the supplied filterWord, superRestricted 'Super' if 'Super' supplied, deletedStatus 'Active' if 'Active' supplied, and filterUrl is correct", async function () {
 
             mockRequest.query.returns({
                 filterWord: exampleWord1,
-                filterStatus: "Active"
+                deletedStatus: "Active",
+                filterSuperRestricted: "Super"
             });
 
-            const expectedFilterUrl = `?filterStatus=Active&filterWord=${encodeURIComponent(exampleWord1)}`;
+            const expectedFilterUrl = `?superRestrictedStatus=Super&deletedStatus=Active&filterWord=${encodeURIComponent(exampleWord1)}`;
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
@@ -282,6 +283,7 @@ describe("RestrictedWordController", function () {
                 .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.filterParams.status).to.equal("Active");
+                    expect(options.filterParams.superRestricted).to.equal("Super");
                     expect(options.filterParams.word).to.equal(exampleWord1);
                     expect(options.filterUrl).to.equal(expectedFilterUrl);
 
@@ -289,14 +291,15 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("returns filterStatus 'Deleted' if 'Deleted' supplied, and filterUrl is correct", async function () {
+        it("returns filterStatus 'Deleted' if 'Deleted' supplied, superRestricted 'Normal' if 'Normal' supplied,  and filterUrl is correct", async function () {
 
             mockRequest.query.returns({
                 filterWord: "",
-                filterStatus: "Deleted"
+                deletedStatus: "Deleted",
+                filterSuperRestricted: "Normal"
             });
 
-            const expectedFilterUrl = "?filterStatus=Deleted";
+            const expectedFilterUrl = "?superRestrictedStatus=Normal&deletedStatus=Deleted";
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
@@ -316,6 +319,7 @@ describe("RestrictedWordController", function () {
                 .render(getAllWordsViewName, Arg.is(options => {
 
                     expect(options.filterParams.status).to.equal("Deleted");
+                    expect(options.filterParams.superRestricted).to.equal("Normal");
                     expect(options.filterParams.word).to.be.empty;
                     expect(options.filterUrl).to.equal(expectedFilterUrl);
 

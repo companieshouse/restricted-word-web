@@ -110,8 +110,6 @@ class RestrictedWordApiClient {
             queryString.super_restricted = options.superRestricted;
         }
 
-        console.dir(queryString);
-
         try {
 
             const response = await axiosInstance.get("/word", {
