@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 
+import AuditEntryViewModel from "../clients/AuditEntryViewModel";
 import Pager from "../pagination/Pager";
 import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
 import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
@@ -122,10 +123,11 @@ class RestrictedWordController {
         } catch (unknownError) {
 
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
-            const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
+            const word = await restrictedWordApiClient.getSingleRestrictedWord(id);
 
             return response.render("word", {
                 word: word,
+                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
@@ -141,13 +143,7 @@ class RestrictedWordController {
             return response.render("word", {
                 word: word,
                 setSuperRestricted: request.query.setSuperRestricted,
-                wordHistory: word.superRestrictedAuditLog.map(auditEntry => [{
-                    text: auditEntry.changedAt
-                }, {
-                    text: auditEntry.changedBy
-                }, {
-                    text: auditEntry.newValue
-                }])
+                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog)
             });
 
         } catch (unknownError) {
@@ -157,6 +153,16 @@ class RestrictedWordController {
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
+    }
+
+    private static mapWordHistory(auditLog: AuditEntryViewModel[]) {
+        return auditLog.map(auditEntry => [{
+            text: auditEntry.changedAt
+        }, {
+            text: auditEntry.changedBy
+        }, {
+            text: auditEntry.newValue
+        }]);
     }
 
     public static getCreateNewWord(_request: Request, response: Response) {
