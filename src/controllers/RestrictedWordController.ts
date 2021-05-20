@@ -79,7 +79,7 @@ class RestrictedWordController {
         const urlParams: string[] = [];
 
         if (superRestrictedStatus) {
-            urlParams.push(`superRestrictedStatus=${superRestrictedStatus}`);
+            urlParams.push(`filterSuperRestricted=${superRestrictedStatus}`);
         }
 
         if (deletedStatus) {
