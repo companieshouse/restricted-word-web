@@ -161,7 +161,7 @@ class RestrictedWordController {
         }, {
             text: auditEntry.changedBy
         }, {
-            text: auditEntry.newValue
+            text: auditEntry.newValue ? "Yes" : "No"
         }]);
     }
 

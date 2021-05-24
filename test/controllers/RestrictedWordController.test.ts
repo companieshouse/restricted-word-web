@@ -5,6 +5,7 @@ import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
 import Pager from "../../src/pagination/Pager";
 import PaginationOptions from "../../src/pagination/PaginationOptions";
 import PromiseRejector from "../PromiseRejector";
+import PromiseResolver from "../PromiseResolver";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import SubstituteFactory from "../SubstituteFactory";
@@ -136,6 +137,56 @@ describe("RestrictedWordController", function () {
                     return true;
                 }));
         });
+
+        it("maps the audit correctly", async function () {
+
+            const databaseWord = {
+                superRestrictedAuditLog: [{
+                    changedAt: "18 May 2020",
+                    changedBy: "todd",
+                    newValue: true
+                }, {
+                    changedAt: "19 June 2020",
+                    changedBy: "kenneth",
+                    newValue: false
+                }]
+            };
+
+            const expectedResult1 = [{
+                text: "18 May 2020"
+            }, {
+                text: "todd"
+            }, {
+                text: "Yes"
+            }];
+
+            const expectedResult2 = [{
+                text: "19 June 2020"
+            }, {
+                text: "kenneth"
+            }, {
+                text: "No"
+            }];
+
+            mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+
+            await restrictedWordController.getWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render("word", Arg.is(options => {
+
+                    expect(options.wordHistory.length).to.equal(2);
+
+                    const record1 = options.wordHistory[0];
+                    const record2 = options.wordHistory[1];
+
+                    expect(record1).to.deep.equal(expectedResult1);
+                    expect(record2).to.deep.equal(expectedResult2);
+
+                    return true;
+                }));
+        });
     });
 
     describe("#postSuperRestrictedWord", function () {
@@ -174,7 +225,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("word", Arg.is(options => {
+                .render(viewName, Arg.is(options => {
 
                     const expectedErrors = [{
                         text: exampleError
