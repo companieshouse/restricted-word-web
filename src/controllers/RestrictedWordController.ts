@@ -138,6 +138,7 @@ class RestrictedWordController {
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
+
             const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
 
             return response.render("word", {
