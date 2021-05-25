@@ -314,7 +314,7 @@ describe("RestrictedWordController", function () {
                 filterSuperRestricted: "Super"
             });
 
-            const expectedFilterUrl = `?superRestrictedStatus=Super&deletedStatus=Active&filterWord=${encodeURIComponent(exampleWord1)}`;
+            const expectedFilterUrl = `?filterSuperRestricted=Super&deletedStatus=Active&filterWord=${encodeURIComponent(exampleWord1)}`;
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
@@ -350,7 +350,7 @@ describe("RestrictedWordController", function () {
                 filterSuperRestricted: "Normal"
             });
 
-            const expectedFilterUrl = "?superRestrictedStatus=Normal&deletedStatus=Deleted";
+            const expectedFilterUrl = "?filterSuperRestricted=Normal&deletedStatus=Deleted";
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
