@@ -39,8 +39,8 @@ CHS_INTERNAL_API_KEY                        | Internal API Key
 
 _remember to run `rm -rf node_modules && npm install` when you switch between mac and vagrant environments when developing._
 
-1. Start restricted-word-web via ubic (it is in the chs.chips group).
-2. In a browser go to <http://web.chs-dev.internal:4000/admin/restricted-word>.
+1. Start restricted-word-web via ubic (it is in the chs.chips group)
+2. In a browser go to <http://web.chs-dev.internal:4000/admin/restricted-word>
 
 ### AWS Test
 
