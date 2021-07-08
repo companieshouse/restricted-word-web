@@ -58,11 +58,11 @@
                 <th class="govuk-table__header" scope="row">
                   <a href="/{{ urlPrefix }}/word/{{ word.id }}" class="govuk-link govuk-link--no-visited-state">{{ word.word }}</a>
                 </th>
-                <td class="govuk-table__cell" scope="row">
+                <td class="govuk-table__cell">
                   {{ word.createdAt }}<br />
                   <span class="govuk-body-s">By {{ word.createdBy }}</span>
                 </td>
-                <td class="govuk-table__cell" scope="row">
+                <td class="govuk-table__cell">
                   {% if word.deleted %}
                     {{ word.deletedAt }}<br />
                     <span class="govuk-body-s">By {{ word.deletedBy }}</span>
@@ -70,7 +70,7 @@
                     -
                   {% endif %}
                 </td>
-                <td class="govuk-table__cell" scope="row">
+                <td class="govuk-table__cell">
                   {{ "Yes" if word.superRestricted else "No" }}
                 </td>
               </tr>
