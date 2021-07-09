@@ -35,7 +35,7 @@ class RestrictedWordController {
 
     public static async getAllWords(request: Request, response: Response) {
 
-        const filterWord = request.query.filterWord;
+        const filterWord = request.query.filterWord as string;
 
         const queryOptions: RestrictedWordQueryOptions = {
             startsWith: undefined,
@@ -57,7 +57,7 @@ class RestrictedWordController {
         } else if (deletedStatus === "Deleted") {
             queryOptions.deleted = true;
         }
-        
+
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         let results: RestrictedWordViewModel[];
@@ -75,7 +75,7 @@ class RestrictedWordController {
             });
         }
 
-        const pager = new Pager(request.query.page, results);
+        const pager = new Pager(request.query.page as string, results);
         const urlParams: string[] = [];
 
         if (superRestrictedStatus) {
