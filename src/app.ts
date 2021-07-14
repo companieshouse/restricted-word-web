@@ -4,12 +4,12 @@ import nunjucks, { ConfigureOptions } from "nunjucks";
 
 import Redis from "ioredis";
 import RestrictedWordRouter from "./routers/RestrictedWordRouter";
-import authenticationMiddleware from "./middleware/authenticationMiddleware";
 import config from "./config";
 import cookieParser from "cookie-parser";
+import createAuthenticationMiddleware from "./middleware/createAuthenticationMiddleware";
+import createNotFoundMiddleware from "./middleware/createNotFoundMiddleware";
 import express from "express";
 import helmet from "helmet";
-import notFoundMiddleware from "./middleware/notFoundMiddleware";
 import path from "path";
 
 const logger = createLogger(config.applicationNamespace);
@@ -50,11 +50,11 @@ app.use(sessionMiddleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(authenticationMiddleware());
+app.use(createAuthenticationMiddleware());
 
 app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
 
-app.use(notFoundMiddleware());
+app.use(createNotFoundMiddleware());
 
 app.listen(config.port, function () {
     logger.info(`Server started on port ${config.port}`);

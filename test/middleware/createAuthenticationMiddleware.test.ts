@@ -9,7 +9,7 @@ import { expect } from "chai";
 
 const proxyquire = require("proxyquire");
 
-describe("authenticationMiddleware", function () {
+describe("createAuthenticationMiddleware", function () {
 
     const mockApplicationLogger: SinonStubbedInstance<ApplicationLogger> = sinon.createStubInstance(ApplicationLogger);
 
@@ -46,7 +46,7 @@ describe("authenticationMiddleware", function () {
 
     const requireMiddleware = function () {
 
-        return proxyquire("../../src/middleware/authenticationMiddleware", {
+        return proxyquire("../../src/middleware/createAuthenticationMiddleware", {
             "ch-structured-logging": {
                 createLogger: function () {
                     return mockApplicationLogger;
