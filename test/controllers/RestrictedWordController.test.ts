@@ -105,7 +105,7 @@ describe("RestrictedWordController", function () {
         it("renders the true super restricted value correctly", async function () {
 
             mockRequest.query.returns({
-                setSuperRestricted: true
+                setSuperRestricted: "true"
             });
 
             await restrictedWordController.getWord(mockRequest, mockResponse);
@@ -113,8 +113,8 @@ describe("RestrictedWordController", function () {
             mockResponse
                 .received()
                 .render(getWordViewName, Arg.is(options => {
-                    
-                    expect(options.setSuperRestricted).to.equal(true);
+
+                    expect(options.setSuperRestricted).to.equal("true");
 
                     return true;
                 }));
@@ -123,7 +123,7 @@ describe("RestrictedWordController", function () {
         it("renders the false super restricted value correctly", async function () {
 
             mockRequest.query.returns({
-                setSuperRestricted: false
+                setSuperRestricted: "false"
             });
 
             await restrictedWordController.getWord(mockRequest, mockResponse);
@@ -131,8 +131,8 @@ describe("RestrictedWordController", function () {
             mockResponse
                 .received()
                 .render(getWordViewName, Arg.is(options => {
-                    
-                    expect(options.setSuperRestricted).to.equal(false);
+
+                    expect(options.setSuperRestricted).to.equal("false");
 
                     return true;
                 }));
