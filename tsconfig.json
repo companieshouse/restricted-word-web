@@ -3,7 +3,8 @@
         "target": "es6",
         "module": "commonjs",
         "declaration": true,
-        "outDir": "./app",
+        "outDir": "./dist",
+        "baseUrl": "./src",
         "strict": true,
         "esModuleInterop": true,
         "pretty": true,
@@ -16,7 +17,7 @@
         ]
     },
     "include": [
-        "./src"
+        "./src/**/*"
     ],
     "exclude": [
         "node_modules",
