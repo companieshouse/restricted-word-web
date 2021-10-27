@@ -40,9 +40,9 @@ COOKIE_SECRET   |                       |
 
 ## Running in Docker locally
 
-This project uses the node-base-images(https://github.com/companieshouse/node-base-image) to build docker images. If running locally and connecting to services on host machine use `host.docker.internal` in place of localhost for environment variables.
+This project uses the node-base-image(https://github.com/companieshouse/node-base-image) to build docker images. If running locally and connecting to services on host machine use `host.docker.internal` in place of localhost for environment variables.
 
-1. Inside your `.chs_env` folder create a `restricted-word-web` folder and inside create a file named `env`. Place your environment variables here.
+1. Create the following folder structure `~/.chs_env/restricted-word-web`. Inside the `restricted-word-web` folder create a file named `env` and place your environment variables inside.
 2. Run `DOCKER_BUILDKIT=0 docker build --build-arg SSH_PRIVATE_KEY="<YOUR_PRIVATE_KEY>" --build-arg SSH_PRIVATE_KEY_PASSPHRASE -t restricted-word-web .`
 3. Run `docker run --env-file ~/.chs_env/restricted-word-web/env -p 3000:3000 restricted-word-web`
 
