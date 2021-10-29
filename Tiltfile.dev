@@ -1,0 +1,25 @@
+local_resource(
+  name = 'dev:restricted-word-web:init',
+  cmd = 'npm install && npm run build'
+)
+
+local_resource(
+  name = 'dev:restricted-word-web:build',
+  cmd = 'npm run build'
+)
+
+custom_build(
+  ref = '169942020521.dkr.ecr.eu-west-1.amazonaws.com/local/restricted-word-web',
+  command = 'DOCKER_BUILDKIT=0 docker build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)" --build-arg SSH_PRIVATE_KEY_PASSPHRASE --tag $EXPECTED_REF .',
+  live_update = [
+    sync(
+      local_path = './dist/app',
+      remote_path = '/app/dist/app'
+    ),
+    run('cd /app && yarn install', trigger=['./package.json', './yarn.lock']),
+    restart_container()
+  ],
+  deps = [
+    './dist'
+  ]
+)
