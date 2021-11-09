@@ -25,7 +25,6 @@ ifndef version
 endif
 	$(info Packaging version: $(version))
 	$(eval tmpdir := $(shell mktemp -d build-XXXXXXXXXX))
-	cp -r ./app $(tmpdir)
 	cp -r ./dist $(tmpdir)
 	cp -r ./views $(tmpdir)
 	cp -r ./package.json $(tmpdir)
