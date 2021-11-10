@@ -14,8 +14,6 @@ const createAuthenticationMiddleware = function (): RequestHandler {
 
         const signInInfo: ISignInInfo | undefined = request.session?.data[SessionKey.SignInInfo];
 
-        console.log(signInInfo);
-
         if (signInInfo !== undefined) {
 
             const signedIn = signInInfo[SignInInfoKeys.SignedIn] === 1;
