@@ -7,6 +7,7 @@ interface ApplicationConfiguration {
     session: {
         cookieName: string;
         cookieSecret: string;
+        cookieDomain: string;
         cacheServer: string;
     };
     applicationNamespace: string;

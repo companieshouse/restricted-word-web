@@ -9,6 +9,7 @@ const config: ApplicationConfiguration = {
     session: {
         cookieName: process.env.COOKIE_NAME as string,
         cookieSecret: process.env.COOKIE_SECRET as string,
+        cookieDomain: process.env.COOKIE_DOMAIN as string,
         cacheServer: process.env.CACHE_SERVER as string
     },
     applicationNamespace: "restricted-word-web"
