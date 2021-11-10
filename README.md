@@ -16,9 +16,20 @@ The following is a list of mandatory environment variables for the service to ru
 
 Name                                        | Description                                                               | Example Value
 ------------------------------------------- | ------------------------------------------------------------------------- | ------------------------
-RESTRICTED_WORD_ADMIN_WEB_PORT              | Application Port                                                          | 8080
+RESTRICTED_WORD_ADMIN_WEB_PORT              | Application Port                                                          | 3000
 INTERNAL_API_URL                            | URL to Restricted Word Api                                                | http://internalapi.chs-dev.internal:4001
 CHS_INTERNAL_API_KEY                        | Internal API Key
+RESTRICTED_WORD_WEB_PORT                    | Application Port                                                           3000
+
+## Config variables
+
+Key             | Example Value         | Description
+----------------|-----------------------|------------------------------------
+CACHE_SERVER    | localhost:6379        | Required for storing values in memory(Redis)
+CDN_HOST        | http://cdn.chs.local  | Used when navigating to the webpage
+COOKIE_DOMAIN   | chs.local             |
+COOKIE_NAME     |__SID                  |
+COOKIE_SECRET   |                       |
 
 ## Installation
 
@@ -27,6 +38,15 @@ CHS_INTERNAL_API_KEY                        | Internal API Key
 3. npm install  (this installs the dependencies)
 4. make build
 
+## Running in Docker locally
+
+This project uses the node-base-image(https://github.com/companieshouse/node-base-image) to build docker images. If running locally and connecting to services on host machine use `host.docker.internal` in place of localhost for environment variables.
+
+1. Create the following folder structure `~/.chs_env/restricted-word-web`. Inside the `restricted-word-web` folder create a file named `env` and place your environment variables inside.
+2. Run `DOCKER_BUILDKIT=0 docker build --build-arg SSH_PRIVATE_KEY="<YOUR_PRIVATE_KEY>" --build-arg SSH_PRIVATE_KEY_PASSPHRASE -t restricted-word-web .`
+3. Run `docker run --env-file ~/.chs_env/restricted-word-web/env -p 3000:3000 restricted-word-web`
+
+
 ## Testing  
 
 ### Local
@@ -34,6 +54,7 @@ CHS_INTERNAL_API_KEY                        | Internal API Key
 1. Have the restricted word api running on your same machine
 2. In project home directory `npm start`
 3. In browser go to <http://localhost:3001>
+
 
 ### Vagrant
 

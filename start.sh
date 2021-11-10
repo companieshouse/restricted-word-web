@@ -29,4 +29,4 @@ else
 fi
 
 
-node app/app
+node dist/app
