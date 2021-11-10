@@ -5,7 +5,6 @@ import { SignInInfoKeys } from "@companieshouse/node-session-handler/lib/session
 import { UserProfileKeys } from "@companieshouse/node-session-handler/lib/session/keys/UserProfileKeys";
 import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
-import { Session } from "@companieshouse/node-session-handler";
 
 const logger = createLogger(config.applicationNamespace);
 
@@ -16,7 +15,7 @@ const createAuthenticationMiddleware = function (): RequestHandler {
         const signInInfo: ISignInInfo | undefined = request.session?.data[SessionKey.SignInInfo];
 
         console.log(signInInfo);
-        
+
         if (signInInfo !== undefined) {
 
             const signedIn = signInInfo[SignInInfoKeys.SignedIn] === 1;

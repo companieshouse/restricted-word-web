@@ -14,18 +14,18 @@ import { Session } from "@companieshouse/node-session-handler";
 describe("createAuthenticationMiddleware", function () {
 
     const mockApplicationLogger: SinonStubbedInstance<ApplicationLogger> = sinon.createStubInstance(ApplicationLogger);
-    
-    const createMockSession = function(signInInfo?: ISignInInfo): Session {
+
+    const createMockSession = function (signInInfo?: ISignInInfo): Session {
         return new Session({
             [SessionKey.SignInInfo]: signInInfo
-        })
-    }
+        });
+    };
 
-    const createMockRequest = function(signInInfo?: ISignInInfo) {
+    const createMockRequest = function (signInInfo?: ISignInInfo) {
         return {
             session: createMockSession(signInInfo)
         };
-    }
+    };
 
     const createMockResponse = function () {
         return {
@@ -82,9 +82,6 @@ describe("createAuthenticationMiddleware", function () {
     it("redirects to signin if session exists but you are not signed in", function () {
 
         const mockRequest: any = createMockRequest();
-        const mockSession: Session = createMockSession({
-            [SignInInfoKeys.SignedIn]: 0
-        });
 
         middleware(mockRequest, mockResponse, mockNext);
 
