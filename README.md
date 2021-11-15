@@ -47,7 +47,10 @@ This project uses the node-base-image(https://github.com/companieshouse/node-bas
 3. Run `docker run --env-file ~/.chs_env/restricted-word-web/env -p 3000:3000 restricted-word-web`
 
 
-## Testing  
+## Testing
+
+### Unit Tests
+Run `npm run test` or `npm run test:coverage` (to get a coverage report).
 
 ### Local
 
