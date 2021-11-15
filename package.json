@@ -9,8 +9,8 @@
     "build-js": "webpack --mode production",
     "start": "node ./dist/app",
     "start:dev": "nodemon",
-    "test": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts",
-    "test:watch": "mocha -r ts-node/register --recursive --reporter nyan test --extension ts --watch",
+    "test": "mocha -r ts-node/register --recursive test --extension ts",
+    "test:watch": "mocha -r ts-node/register --recursive test --extension ts --watch",
     "lint": "eslint 'src/**/*' 'test/**/*'",
     "lint:fix": "eslint 'src/**/*' 'test/**/*' --fix",
     "analyse-code": "sonar-scanner"
@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/companieshouse/restricted-word-web#readme",
   "dependencies": {
-    "ch-node-session-handler": "git+ssh://git@github.com/companieshouse/node-session-handler.git#1.0.0",
-    "ch-structured-logging": "git+ssh://git@github.com/companieshouse/ch-structured-logging-node.git#15a8112",
+    "@companieshouse/node-session-handler": "^4.1.6",
+    "@companieshouse/structured-logging-node": "^1.0.4",
     "axios": "~0.21.1",
     "chokidar": "^3.3.0",
     "cookie-parser": "~1.4.4",

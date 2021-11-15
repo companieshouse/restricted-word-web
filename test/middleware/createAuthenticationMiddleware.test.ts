@@ -1,27 +1,29 @@
 import sinon, { SinonStubbedInstance } from "sinon";
 
-import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
-import { ISignInInfo } from "ch-node-session-handler/lib/session/model/SessionInterfaces";
+import ApplicationLogger from "@companieshouse/structured-logging-node/lib/ApplicationLogger";
+import { ISignInInfo } from "@companieshouse/node-session-handler/lib/session/model/SessionInterfaces";
+import { SessionKey } from "@companieshouse/node-session-handler/lib/session/keys/SessionKey";
 import { RequestHandler } from "express";
-import { SignInInfoKeys } from "ch-node-session-handler/lib/session/keys/SignInInfoKeys";
-import { UserProfileKeys } from "ch-node-session-handler/lib/session/keys/UserProfileKeys";
+import { SignInInfoKeys } from "@companieshouse/node-session-handler/lib/session/keys/SignInInfoKeys";
+import { UserProfileKeys } from "@companieshouse/node-session-handler/lib/session/keys/UserProfileKeys";
 import { expect } from "chai";
 
-const proxyquire = require("proxyquire");
+import proxyquire from "proxyquire";
+import { Session } from "@companieshouse/node-session-handler";
 
 describe("createAuthenticationMiddleware", function () {
 
     const mockApplicationLogger: SinonStubbedInstance<ApplicationLogger> = sinon.createStubInstance(ApplicationLogger);
 
+    const createMockSession = function (signInInfo?: ISignInInfo): Session {
+        return new Session({
+            [SessionKey.SignInInfo]: signInInfo
+        });
+    };
+
     const createMockRequest = function (signInInfo?: ISignInInfo) {
         return {
-            session: {
-                chain: function () {
-                    return {
-                        extract: () => signInInfo
-                    };
-                }
-            }
+            session: createMockSession(signInInfo)
         };
     };
 
@@ -47,7 +49,7 @@ describe("createAuthenticationMiddleware", function () {
     const requireMiddleware = function () {
 
         return proxyquire("../../src/middleware/createAuthenticationMiddleware", {
-            "ch-structured-logging": {
+            "@companieshouse/structured-logging-node": {
                 createLogger: function () {
                     return mockApplicationLogger;
                 }
@@ -57,8 +59,6 @@ describe("createAuthenticationMiddleware", function () {
             }
         }).default();
     };
-
-    const permissionError = "You are signed in but do not have permissions!";
 
     beforeEach(function () {
 
@@ -81,9 +81,7 @@ describe("createAuthenticationMiddleware", function () {
 
     it("redirects to signin if session exists but you are not signed in", function () {
 
-        const mockRequest: any = createMockRequest({
-            [SignInInfoKeys.SignedIn]: 0
-        });
+        const mockRequest: any = createMockRequest();
 
         middleware(mockRequest, mockResponse, mockNext);
 
@@ -154,7 +152,6 @@ describe("createAuthenticationMiddleware", function () {
         });
 
         middleware(mockRequest, mockResponse, mockNext);
-
 
         expect(mockResponse.status)
             .to.have.been.calledOnceWithExactly(404);

@@ -1,7 +1,7 @@
 import { Arg, SubstituteOf } from "@fluffy-spoon/substitute";
 import { Request, Response } from "express";
 
-import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
+import ApplicationLogger from "@companieshouse/structured-logging-node/lib/ApplicationLogger";
 import Pager from "../../src/pagination/Pager";
 import PaginationOptions from "../../src/pagination/PaginationOptions";
 import PromiseRejector from "../PromiseRejector";
@@ -39,7 +39,7 @@ describe("RestrictedWordController", function () {
                 return mockPager;
             },
             "../config": mockConfig,
-            "ch-structured-logging": {
+            "@companieshouse/structured-logging-node": {
                 createLogger: function () {
                     return mockLogger;
                 }
@@ -92,8 +92,9 @@ describe("RestrictedWordController", function () {
         const getWordViewName = "word";
 
         it("returns the correct view", async function () {
-
-            mockRequest.query.returns({});
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({});
+            }
 
             await restrictedWordController.getWord(mockRequest, mockResponse);
 
@@ -103,10 +104,11 @@ describe("RestrictedWordController", function () {
         });
 
         it("renders the true super restricted value correctly", async function () {
-
-            mockRequest.query.returns({
-                setSuperRestricted: "true"
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    setSuperRestricted: "true"
+                });
+            }
 
             await restrictedWordController.getWord(mockRequest, mockResponse);
 
@@ -121,10 +123,11 @@ describe("RestrictedWordController", function () {
         });
 
         it("renders the false super restricted value correctly", async function () {
-
-            mockRequest.query.returns({
-                setSuperRestricted: "false"
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    setSuperRestricted: "false"
+                });
+            }
 
             await restrictedWordController.getWord(mockRequest, mockResponse);
 
@@ -243,9 +246,9 @@ describe("RestrictedWordController", function () {
         const getAllWordsViewName = "all";
 
         it("returns the correct view", async function () {
-
-            mockRequest.query.returns({});
-
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({});
+            }
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
             mockResponse
@@ -254,11 +257,12 @@ describe("RestrictedWordController", function () {
         });
 
         it("returns deletedWord and addedWord if supplied", async function () {
-
-            mockRequest.query.returns({
-                deletedWord: exampleWord1,
-                addedWord: exampleWord2
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    deletedWord: exampleWord1,
+                    addedWord: exampleWord2
+                });
+            }
 
             await restrictedWordController.getAllWords(mockRequest, mockResponse);
 
@@ -274,10 +278,11 @@ describe("RestrictedWordController", function () {
         });
 
         it("returns the filterWord, filterStatus as undefined if not supplied, and filterUrl is correct", async function () {
-
-            mockRequest.query.returns({
-                filterWord: ""
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    filterWord: ""
+                });
+            }
 
             const expectedFilterUrl = "?";
 
@@ -307,12 +312,13 @@ describe("RestrictedWordController", function () {
         });
 
         it("returns the supplied filterWord, superRestricted 'Super' if 'Super' supplied, deletedStatus 'Active' if 'Active' supplied, and filterUrl is correct", async function () {
-
-            mockRequest.query.returns({
-                filterWord: exampleWord1,
-                deletedStatus: "Active",
-                filterSuperRestricted: "Super"
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    filterWord: exampleWord1,
+                    deletedStatus: "Active",
+                    filterSuperRestricted: "Super"
+                });
+            }
 
             const expectedFilterUrl = `?filterSuperRestricted=Super&deletedStatus=Active&filterWord=${encodeURIComponent(exampleWord1)}`;
 
@@ -343,12 +349,13 @@ describe("RestrictedWordController", function () {
         });
 
         it("returns filterStatus 'Deleted' if 'Deleted' supplied, superRestricted 'Normal' if 'Normal' supplied,  and filterUrl is correct", async function () {
-
-            mockRequest.query.returns({
-                filterWord: "",
-                deletedStatus: "Deleted",
-                filterSuperRestricted: "Normal"
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    filterWord: "",
+                    deletedStatus: "Deleted",
+                    filterSuperRestricted: "Normal"
+                });
+            }
 
             const expectedFilterUrl = "?filterSuperRestricted=Normal&deletedStatus=Deleted";
 
@@ -379,9 +386,9 @@ describe("RestrictedWordController", function () {
         });
 
         it("puts the results of 'pageResults' in 'words', and results of 'getPaginationOptions' in 'pagination' on the render options", async function () {
-
-            mockRequest.query.returns({});
-
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({});
+            }
             const expectedResults = [createRestrictedWordViewModel()];
             const expectedPaginationOptions = createPaginationOptions();
 
@@ -415,8 +422,9 @@ describe("RestrictedWordController", function () {
         });
 
         it("calls render with 'errors' defined in the options if the api rejects the promise, and logs error", async function () {
-
-            mockRequest.query.returns({});
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({});
+            }
 
             const expectedError = [{ text: exampleError }];
 
@@ -599,11 +607,12 @@ describe("RestrictedWordController", function () {
         const deleteWordViewName = "delete-word";
 
         it("returns the correct view with the provided word and ID", async function () {
-
-            mockRequest.query.returns({
-                id: exampleId,
-                word: exampleWord1
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    id: exampleId,
+                    word: exampleWord1
+                });
+            }
 
             await restrictedWordController.getDeleteWord(mockRequest, mockResponse);
 
@@ -619,10 +628,11 @@ describe("RestrictedWordController", function () {
         });
 
         it("returns and logs errors if no ID is supplied", async function () {
-
-            mockRequest.query.returns({
-                word: exampleWord1
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    word: exampleWord1
+                });
+            }
 
             const missingIdError = "Id required to delete word";
 
@@ -645,10 +655,11 @@ describe("RestrictedWordController", function () {
         });
 
         it("returns and logs errors if no word is supplied", async function () {
-
-            mockRequest.query.returns({
-                id: exampleId
-            });
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    id: exampleId
+                });
+            }
 
             const missingIdError = "Word required to delete word";
 

@@ -1,5 +1,5 @@
-import { SessionMiddleware, SessionStore } from "ch-node-session-handler";
-import { createLogger, createLoggerMiddleware } from "ch-structured-logging";
+import { SessionMiddleware, SessionStore, CookieConfig } from "@companieshouse/node-session-handler";
+import { createLogger, createLoggerMiddleware } from "@companieshouse/structured-logging-node";
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
 import Redis from "ioredis";
@@ -14,10 +14,8 @@ import path from "path";
 
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
-const sessionMiddleware = SessionMiddleware({ // eslint-disable-line new-cap
-    cookieName: config.session.cookieName,
-    cookieSecret: config.session.cookieSecret
-}, sessionStore);
+const cookieConfig: CookieConfig = { cookieName: config.session.cookieName, cookieSecret: config.session.cookieSecret, cookieDomain: config.session.cookieDomain };
+const sessionMiddleware = SessionMiddleware(cookieConfig, sessionStore);
 
 const app = express();
 

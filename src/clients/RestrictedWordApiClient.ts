@@ -1,4 +1,4 @@
-import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
+import ApplicationLogger from "@companieshouse/structured-logging-node/lib/ApplicationLogger";
 import RestrictedWordDto from "./RestrictedWordDto";
 import RestrictedWordFilterDto from "./RestrictedWordFilterDto";
 import RestrictedWordPatchSuperRestrictedRequest from "./RestrictedWordPatchSuperRestrictedRequest";
@@ -6,7 +6,7 @@ import RestrictedWordQueryOptions from "./RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "./RestrictedWordViewModel";
 import axiosInstance from "./axiosInstance";
 import config from "../config";
-import { createLogger } from "ch-structured-logging";
+import { createLogger } from "@companieshouse/structured-logging-node";
 import moment from "moment";
 
 class RestrictedWordApiClient {
@@ -61,7 +61,7 @@ class RestrictedWordApiClient {
                     changedAt: moment(auditEntry.changed_at).format("DD MMM YY"),
                     changedBy: RestrictedWordApiClient.getUsernameFromEmail(auditEntry.changed_by),
                     newValue: auditEntry.new_value
-                }
+                };
             })
         };
     }

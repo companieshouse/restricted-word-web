@@ -1,7 +1,7 @@
 import chai, { expect } from "chai";
 import sinon, { SinonStubbedInstance } from "sinon";
 
-import ApplicationLogger from "ch-structured-logging/lib/ApplicationLogger";
+import ApplicationLogger from "@companieshouse/structured-logging-node/lib/ApplicationLogger";
 import { AxiosInstance } from "axios";
 import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordDto from "../../src/clients/RestrictedWordDto";
@@ -31,7 +31,7 @@ describe("RestrictedWordApiClient", function () {
             "../config": {
                 applicationNamespace: "testNamespace"
             },
-            "ch-structured-logging": {
+            "@companieshouse/structured-logging-node": {
                 createLogger: function () {
                     return mockApplicationLogger;
                 }
@@ -129,7 +129,7 @@ describe("RestrictedWordApiClient", function () {
                 }]
             };
 
-            expect(mappedResult).to.deep.equal(results)
+            expect(mappedResult).to.deep.equal(results);
         });
     });
 
