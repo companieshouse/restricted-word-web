@@ -10,6 +10,10 @@ build: clean init
 clean:
 	rm -rf dist/*
 
+.PHONY: test
+test:
+	npm run test:coverage
+
 .PHONY: test-unit
 test-unit:
 	npm run test
