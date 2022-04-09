@@ -37,7 +37,7 @@
     "govuk-frontend": "~3.6.0",
     "helmet": "~3.21.2",
     "ioredis": "~4.16.0",
-    "moment": "~2.24.0",
+    "moment": "~2.29.2",
     "nunjucks": "~3.2.0",
     "tunnel": "0.0.6",
     "winston": "~3.2.1"
