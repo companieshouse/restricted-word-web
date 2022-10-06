@@ -55,7 +55,6 @@ This project uses the node-base-image(https://github.com/companieshouse/node-bas
 2. In project home directory `npm start`
 3. In browser go to <http://localhost:3001>
 
-
 ### Vagrant
 
 _remember to run `rm -rf node_modules && npm install` when you switch between mac and vagrant environments when developing._
