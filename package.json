@@ -19,6 +19,10 @@
     "type": "git",
     "url": "git+https://github.com/companieshouse/restricted-word-web.git"
   },
+  "engines": {
+    "node": "16.13.1",
+    "npm": "^8"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
