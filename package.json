@@ -20,7 +20,7 @@
     "url": "git+https://github.com/companieshouse/restricted-word-web.git"
   },
   "engines": {
-    "node": "16.13.1",
+    "node": "16.17.0",
     "npm": "^8"
   },
   "keywords": [],
@@ -31,9 +31,9 @@
   },
   "homepage": "https://github.com/companieshouse/restricted-word-web#readme",
   "dependencies": {
+    "axios": "~0.21.1",
     "ch-node-session-handler": "git+ssh://git@github.com/companieshouse/node-session-handler.git#1.0.0",
     "ch-structured-logging": "git+ssh://git@github.com/companieshouse/ch-structured-logging-node.git#15a8112",
-    "axios": "~0.21.1",
     "chokidar": "^3.3.0",
     "cookie-parser": "~1.4.4",
     "express": "~4.17.1",
