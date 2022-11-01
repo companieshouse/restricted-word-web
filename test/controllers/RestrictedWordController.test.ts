@@ -14,7 +14,6 @@ import { expect } from "chai";
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordController", function () {
-
     const testNamespace = "test-namespace";
 
     const mockConfig = {
@@ -30,7 +29,6 @@ describe("RestrictedWordController", function () {
     let restrictedWordController: any;
 
     const requireController = function () {
-
         return proxyquire("../../src/controllers/RestrictedWordController", {
             "../clients/RestrictedWordApiClient": function () {
                 return mockApiClient;
@@ -88,7 +86,6 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#getWord", function () {
-
         const getWordViewName = "word";
 
         it("returns the correct view", async function () {
@@ -114,9 +111,8 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(getWordViewName, Arg.is(options => {
-
-                    expect(options.setSuperRestricted).to.equal("true");
+                .render(getWordViewName, Arg.is((options: any) => {
+                    expect(options?.setSuperRestricted).to.equal("true");
 
                     return true;
                 }));
@@ -133,9 +129,8 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(getWordViewName, Arg.is(options => {
-
-                    expect(options.setSuperRestricted).to.equal("false");
+                .render(getWordViewName, Arg.is((options: any) => {
+                    expect(options?.setSuperRestricted).to.equal("false");
 
                     return true;
                 }));
@@ -177,8 +172,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("word", Arg.is(options => {
-
+                .render("word", Arg.is((options: any) => {
                     expect(options.wordHistory.length).to.equal(2);
 
                     const record1 = options.wordHistory[0];
@@ -193,13 +187,11 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#postSuperRestrictedWord", function () {
-
         const viewName = "word";
         const testId = "abc123";
         const testUser = "test@test.com";
 
         it("redirects after successful patch", async function () {
-
             mockRequest.body.returns({
                 id: testId,
                 superRestricted: "true",
@@ -210,8 +202,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .redirect(Arg.is(options => {
-
+                .redirect(Arg.is((options: any) => {
                     expect(options).to.equal(`/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
 
                     return true;
@@ -219,7 +210,6 @@ describe("RestrictedWordController", function () {
         });
 
         it("renders the word page if there is an error", async function () {
-
             mockApiClient.patchSuperRestrictedStatus(Arg.any()).returns(PromiseRejector.rejectWith({
                 messages: [exampleError]
             }));
@@ -228,8 +218,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(viewName, Arg.is(options => {
-
+                .render(viewName, Arg.is((options: any) => {
                     const expectedErrors = [{
                         text: exampleError
                     }];
@@ -242,7 +231,6 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#getAllWords", function () {
-
         const getAllWordsViewName = "all";
 
         it("returns the correct view", async function () {
@@ -268,8 +256,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(getAllWordsViewName, Arg.is(options => {
-
+                .render(getAllWordsViewName, Arg.is((options: any) => {
                     expect(options.deletedWord).to.equal(exampleWord1);
                     expect(options.addedWord).to.equal(exampleWord2);
 
@@ -290,8 +277,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .getAllRestrictedWords(Arg.is(options => {
-
+                .getAllRestrictedWords(Arg.is((options: any) => {
                     expect(options.startsWith).to.not.exist;
                     expect(options.contains).to.not.exist;
                     expect(options.deleted).to.not.exist;
@@ -301,8 +287,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(getAllWordsViewName, Arg.is(options => {
-
+                .render(getAllWordsViewName, Arg.is((options: any) => {
                     expect(options.filterParams.status).to.not.exist;
                     expect(options.filterParams.word).to.be.empty;
                     expect(options.filterUrl).to.equal(expectedFilterUrl);
@@ -326,8 +311,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .getAllRestrictedWords(Arg.is(options => {
-
+                .getAllRestrictedWords(Arg.is((options: any) => {
                     expect(options.startsWith).to.not.exist;
                     expect(options.contains).to.equal(exampleWord1);
                     expect(options.deleted).to.be.false;
@@ -337,8 +321,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(getAllWordsViewName, Arg.is(options => {
-
+                .render(getAllWordsViewName, Arg.is((options: any) => {
                     expect(options.filterParams.status).to.equal("Active");
                     expect(options.filterParams.superRestricted).to.equal("Super");
                     expect(options.filterParams.word).to.equal(exampleWord1);
@@ -363,8 +346,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .getAllRestrictedWords(Arg.is(options => {
-
+                .getAllRestrictedWords(Arg.is((options: any) => {
                     expect(options.startsWith).to.not.exist;
                     expect(options.contains).to.not.exist;
                     expect(options.deleted).to.be.true;
@@ -374,8 +356,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(getAllWordsViewName, Arg.is(options => {
-
+                .render(getAllWordsViewName, Arg.is((options: any) => {
                     expect(options.filterParams.status).to.equal("Deleted");
                     expect(options.filterParams.superRestricted).to.equal("Normal");
                     expect(options.filterParams.word).to.be.empty;
@@ -407,8 +388,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(getAllWordsViewName, Arg.is(options => {
-
+                .render(getAllWordsViewName, Arg.is((options: any) => {
                     expect(options.words)
                         .to.equal(expectedResults)
                         .to.deep.equal(originalResultValues);
@@ -439,7 +419,6 @@ describe("RestrictedWordController", function () {
             mockLogger
                 .received()
                 .errorRequest(mockRequest, Arg.is(message => {
-
                     expect(message).to.include(exampleError);
 
                     return true;
@@ -447,8 +426,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(getAllWordsViewName, Arg.is(options => {
-
+                .render(getAllWordsViewName, Arg.is((options: any) => {
                     expect(options.errors)
                         .to.have.length(1)
                         .to.deep.equal(expectedError);
@@ -514,7 +492,6 @@ describe("RestrictedWordController", function () {
             mockLogger
                 .received()
                 .errorRequest(mockRequest, Arg.is(message => {
-
                     expect(message)
                         .to.include(exampleError)
                         .to.include(exampleWord1);
@@ -524,8 +501,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(createNewWordViewName, Arg.is(options => {
-
+                .render(createNewWordViewName, Arg.is((options: any) => {
                     expect(options.errors)
                         .to.have.length(1)
                         .to.deep.equal(expectedError);
@@ -554,8 +530,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(createNewWordViewName, Arg.is(options => {
-
+                .render(createNewWordViewName, Arg.is((options: any) => {
                     expect(options.errors)
                         .to.have.length(1)
                         .to.deep.equal(expectedError);
@@ -584,8 +559,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render("add-new-word", Arg.is(options => {
-
+                .render("add-new-word", Arg.is((options: any) => {
                     expect(options)
                         .to.deep.equal({
                             word: exampleWord1.toUpperCase(),
@@ -618,8 +592,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(deleteWordViewName, Arg.is(options => {
-
+                .render(deleteWordViewName, Arg.is((options: any) => {
                     expect(options.id).to.equal(exampleId);
                     expect(options.word).to.equal(exampleWord1);
 
@@ -646,8 +619,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(deleteWordViewName, Arg.is(options => {
-
+                .render(deleteWordViewName, Arg.is((options: any) => {
                     expect(options.errors).to.deep.equal(expectedError);
 
                     return true;
@@ -673,8 +645,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(deleteWordViewName, Arg.is(options => {
-
+                .render(deleteWordViewName, Arg.is((options: any) => {
                     expect(options.errors).to.deep.equal(expectedError);
 
                     return true;
@@ -703,8 +674,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(deleteWordViewName, Arg.is(options => {
-
+                .render(deleteWordViewName, Arg.is((options: any) => {
                     expect(options.errors).to.deep.equal(expectedError);
 
                     return true;
@@ -728,8 +698,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(deleteWordViewName, Arg.is(options => {
-
+                .render(deleteWordViewName, Arg.is((options: any) => {
                     expect(options.errors).to.deep.equal(expectedError);
 
                     return true;
@@ -737,7 +706,6 @@ describe("RestrictedWordController", function () {
         });
 
         it("calls the api with the word ID provided and succesfully redirects if no errors", async function () {
-
             mockRequest.body.returns({
                 id: exampleId,
                 word: exampleWord1
@@ -755,7 +723,6 @@ describe("RestrictedWordController", function () {
         });
 
         it("returns and logs an error and the word/ID if the api throws an error", async function () {
-
             mockRequest.body.returns({
                 id: exampleId,
                 word: exampleWord1
@@ -774,7 +741,6 @@ describe("RestrictedWordController", function () {
             mockLogger
                 .received()
                 .errorRequest(mockRequest, Arg.is(message => {
-
                     expect(message)
                         .to.include(exampleError)
                         .to.include(exampleId)
@@ -785,8 +751,7 @@ describe("RestrictedWordController", function () {
 
             mockResponse
                 .received()
-                .render(deleteWordViewName, Arg.is(options => {
-
+                .render(deleteWordViewName, Arg.is((options: any) => {
                     expect(options.errors)
                         .to.have.length(1)
                         .to.deep.equal(expectedError);

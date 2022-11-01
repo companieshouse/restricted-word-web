@@ -11,18 +11,13 @@ import { createLogger } from "@companieshouse/structured-logging-node";
 const logger = createLogger(config.applicationNamespace);
 
 class RestrictedWordController {
-
     private static getAndLogErrorList(request: Request, message: any, error: any) {
-
         let errorMessages = error.messages;
 
         if (errorMessages === undefined) {
-
             errorMessages = [error.message];
             logger.errorRequest(request, error.message);
-
         } else {
-
             logger.errorRequest(request, `${message}: ${errorMessages.join(", ")}`);
         }
 
@@ -34,7 +29,6 @@ class RestrictedWordController {
     }
 
     public static async getAllWords(request: Request, response: Response) {
-
         const filterWord = request.query.filterWord as string;
 
         const queryOptions: RestrictedWordQueryOptions = {
@@ -63,15 +57,16 @@ class RestrictedWordController {
         let results: RestrictedWordViewModel[];
 
         try {
-
             results = await restrictedWordApiClient.getAllRestrictedWords(queryOptions);
-
         } catch (unknownError) {
-
-            const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
+            const errorMessages = RestrictedWordController.getAndLogErrorList(
+                request,
+                "Error retrieving word list",
+                unknownError,
+            );
 
             return response.render("all", {
-                errors: RestrictedWordController.mapErrors(errorMessages)
+                errors: RestrictedWordController.mapErrors(errorMessages),
             });
         }
 
@@ -105,7 +100,6 @@ class RestrictedWordController {
     }
 
     public static async postSuperRestrictedWord(request: Request, response: Response) {
-
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         const id = request.body.id;
@@ -121,8 +115,11 @@ class RestrictedWordController {
             return response.redirect(`/${config.urlPrefix}/word/${id}?setSuperRestricted=true`);
 
         } catch (unknownError) {
-
-            const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
+            const errorMessages = RestrictedWordController.getAndLogErrorList(
+                request,
+                "Error retrieving word list",
+                unknownError,
+            );
             const word = await restrictedWordApiClient.getSingleRestrictedWord(id);
 
             return response.render("word", {
@@ -134,7 +131,6 @@ class RestrictedWordController {
     }
 
     public static async getWord(request: Request, response: Response) {
-
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
@@ -148,7 +144,11 @@ class RestrictedWordController {
             });
 
         } catch (unknownError) {
-            const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
+            const errorMessages = RestrictedWordController.getAndLogErrorList(
+                request,
+                "Error retrieving word list",
+                unknownError,
+            );
 
             return response.render("word", {
                 errors: RestrictedWordController.mapErrors(errorMessages)
@@ -171,7 +171,6 @@ class RestrictedWordController {
     }
 
     public static async postCreateNewWord(request: Request, response: Response) {
-
         const newWord = request.body.word;
         const superRestricted = request.body.superRestricted === "true";
         const deleteConflicting = request.body.deleteConflicting === "true";
@@ -181,21 +180,18 @@ class RestrictedWordController {
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
-
             if (!newWord) {
                 throw new Error("A word is required to create a new word");
             }
 
             await restrictedWordApiClient.createRestrictedWord(newWord, superRestricted, deleteConflicting);
-
         } catch (unknownError) {
-
-            if (unknownError.conflictingWords) {
+            if ((unknownError as any).conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),
                     superRestricted: superRestricted,
                     hasConflicting: true,
-                    conflictingWords: unknownError.conflictingWords
+                    conflictingWords: (unknownError as any).conflictingWords,
                 });
             }
 
@@ -214,7 +210,6 @@ class RestrictedWordController {
     }
 
     public static getDeleteWord(request: Request, response: Response) {
-
         const wordId = request.query.id;
         const word = request.query.word;
 
@@ -237,7 +232,6 @@ class RestrictedWordController {
     }
 
     public static async postDeleteWord(request: Request, response: Response) {
-
         const wordId = request.body.id;
         const word = request.body.word;
 
@@ -256,9 +250,7 @@ class RestrictedWordController {
             }
 
             await restrictedWordApiClient.deleteRestrictedWord(wordId);
-
         } catch (unknownError) {
-
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, `Error deleting "${word}" with id "${wordId}"`, unknownError);
 
             return response.render("delete-word", {

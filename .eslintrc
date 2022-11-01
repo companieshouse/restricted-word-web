@@ -4,7 +4,11 @@
         "sourceType": "module",
         "ecmaFeatures": {}
     },
-    "extends": ["standard"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "standard"
+    ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
         "@typescript-eslint",
@@ -28,6 +32,18 @@
         }
     ],
     "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "no-console": "warn",
+        "no-eval": "error",
+        "eol-last": ["error", "always"],
+        "comma-dangle": ["error", "always-multiline"],
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "object-curly-newline": [
+            "error"
+        ],
         "indent": ["error", 4],
         "padded-blocks": "off",
         "quotes": ["error", "double"],

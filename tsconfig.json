@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "moduleResolution": "node",
         "target": "es6",
         "module": "commonjs",
         "declaration": true,
@@ -10,8 +11,9 @@
         "pretty": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "strictNullChecks": true,
+        "strictNullChecks": false,
         "sourceMap": true,
+        "noImplicitAny": false,
         "typeRoots": [
             "./node_modules/@types"
         ]

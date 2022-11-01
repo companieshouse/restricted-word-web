@@ -18,24 +18,22 @@ chai.use(chaiAsPromised);
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordApiClient", function () {
-
     const mockAxiosInstance: SinonStubbedInstance<AxiosInstance> = sinon.stub(axiosInstance);
     const mockApplicationLogger: SinonStubbedInstance<ApplicationLogger> = sinon.createStubInstance(ApplicationLogger);
 
     let apiClient: RestrictedWordApiClient;
 
     const requireApiClient = function () {
-
         const client = proxyquire("../../src/clients/RestrictedWordApiClient", {
             "./axiosInstance": mockAxiosInstance,
             "../config": {
-                applicationNamespace: "testNamespace"
+                applicationNamespace: "testNamespace",
             },
             "@companieshouse/structured-logging-node": {
                 createLogger: function () {
                     return mockApplicationLogger;
-                }
-            }
+                },
+            },
         }).default;
 
         return client;
@@ -44,9 +42,9 @@ describe("RestrictedWordApiClient", function () {
     const testErrorResponse = {
         response: {
             data: {
-                errors: ["Test error"]
-            }
-        }
+                errors: ["Test error"],
+            },
+        },
     };
 
     const testForceRequiredResponse = {
@@ -56,10 +54,10 @@ describe("RestrictedWordApiClient", function () {
                     "DOG",
                     "CAT",
                     "MONKEY",
-                    "SEALION"
-                ]
-            }
-        }
+                    "SEALION",
+                ],
+            },
+        },
     };
 
     const testUser = "test@user.com";
@@ -67,16 +65,14 @@ describe("RestrictedWordApiClient", function () {
     const testId = "abc123";
 
     beforeEach(function () {
-
-        mockAxiosInstance.post = sinon.stub();
-        mockAxiosInstance.delete = sinon.stub();
-        mockAxiosInstance.get = sinon.stub();
+        mockAxiosInstance.post = <any>sinon.stub();
+        mockAxiosInstance.delete = <any>sinon.stub();
+        mockAxiosInstance.get = <any>sinon.stub();
 
         apiClient = new (requireApiClient())(testUser);
     });
 
     describe("#getSingleRestrictedWord", function () {
-
         const data: RestrictedWordDto = {
             id: testId,
             full_word: "FIRST",
@@ -89,20 +85,19 @@ describe("RestrictedWordApiClient", function () {
             super_restricted_audit_log: [{
                 changed_at: "2020-04-16T16:23:30",
                 changed_by: "testname",
-                new_value: true
+                new_value: true,
             }, {
                 changed_at: "2021-01-26T15:16:30",
                 changed_by: "testnom",
-                new_value: false
-            }]
+                new_value: false,
+            }],
         };
 
         const testResult = {
-            data: data
+            data: data,
         };
 
         it("successfully maps result", async function () {
-
             mockAxiosInstance.get.resolves(testResult);
 
             const results = await apiClient.getSingleRestrictedWord(testId);
@@ -121,12 +116,12 @@ describe("RestrictedWordApiClient", function () {
                 superRestrictedAuditLog: [{
                     changedAt: "16 Apr 20",
                     changedBy: "testname",
-                    newValue: true
+                    newValue: true,
                 }, {
                     changedAt: "26 Jan 21",
                     changedBy: "testnom",
-                    newValue: false
-                }]
+                    newValue: false,
+                }],
             };
 
             expect(mappedResult).to.deep.equal(results);
@@ -134,29 +129,25 @@ describe("RestrictedWordApiClient", function () {
     });
 
     describe("#patchSuperRestrictedStatus", function () {
-
         const testOptions = {
             id: testId,
             patchedBy: testUser,
-            superRestricted: true
+            superRestricted: true,
         };
 
         it("successfully calls the patch url", async function () {
-
             const expectedCallingObject = {
                 patched_by: testUser,
-                super_restricted: true
+                super_restricted: true,
             };
 
             await apiClient.patchSuperRestrictedStatus(testOptions);
 
             expect(mockAxiosInstance.patch).to.have.been.calledWithExactly(`/word/${testId}`, expectedCallingObject);
-
         });
     });
 
     describe("#getAllRestrictedWords", function () {
-
         const testResults = {
             data: [
                 {
@@ -166,7 +157,7 @@ describe("RestrictedWordApiClient", function () {
                     created_at: "2020-01-23T12:05:08.096",
                     super_restricted: false,
                     deleted: false,
-                    super_restricted_audit_log: []
+                    super_restricted_audit_log: [],
                 },
                 {
                     id: "2",
@@ -177,9 +168,9 @@ describe("RestrictedWordApiClient", function () {
                     deleted_by: "Ben.Gun@anotheremail.net",
                     deleted_at: "2020-02-21T11:03:04.019",
                     deleted: true,
-                    super_restricted_audit_log: []
-                }
-            ]
+                    super_restricted_audit_log: [],
+                },
+            ],
         };
 
         it("successfully maps results with words", async function () {
@@ -192,7 +183,7 @@ describe("RestrictedWordApiClient", function () {
             const results = await apiClient.getAllRestrictedWords(options);
 
             expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
-                params: queryString
+                params: queryString,
             });
 
             const mappedResults = [
@@ -205,7 +196,7 @@ describe("RestrictedWordApiClient", function () {
                     superRestricted: false,
                     deletedAt: "-",
                     deleted: false,
-                    superRestrictedAuditLog: []
+                    superRestrictedAuditLog: [],
                 },
                 {
                     id: "2",
@@ -216,8 +207,8 @@ describe("RestrictedWordApiClient", function () {
                     superRestricted: true,
                     deletedAt: "21 Feb 20",
                     deleted: true,
-                    superRestrictedAuditLog: []
-                }
+                    superRestrictedAuditLog: [],
+                },
             ];
 
             expect(mappedResults).to.deep.equal(results);
@@ -226,7 +217,7 @@ describe("RestrictedWordApiClient", function () {
         it("successfully maps results with NO words", async function () {
 
             const emptyResults = {
-                data: []
+                data: [],
             };
 
             mockAxiosInstance.get.resolves(emptyResults);
@@ -237,7 +228,7 @@ describe("RestrictedWordApiClient", function () {
             const results = await apiClient.getAllRestrictedWords(options);
 
             expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
-                params: queryString
+                params: queryString,
             });
 
             const mappedResults: RestrictedWordViewModel[] = [];
@@ -256,7 +247,7 @@ describe("RestrictedWordApiClient", function () {
             await apiClient.getAllRestrictedWords(options);
 
             expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
-                params: queryString
+                params: queryString,
             });
 
         });
@@ -266,17 +257,17 @@ describe("RestrictedWordApiClient", function () {
             mockAxiosInstance.get.resolves(testResults);
 
             const options: RestrictedWordQueryOptions = {
-                contains: "Flower"
+                contains: "Flower",
             };
 
             const queryString: RestrictedWordFilterDto = {
-                contains: "Flower"
+                contains: "Flower",
             };
 
             await apiClient.getAllRestrictedWords(options);
 
             expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
-                params: queryString
+                params: queryString,
             });
 
         });
@@ -286,17 +277,17 @@ describe("RestrictedWordApiClient", function () {
             mockAxiosInstance.get.resolves(testResults);
 
             const options: RestrictedWordQueryOptions = {
-                deleted: true
+                deleted: true,
             };
 
             const queryString: RestrictedWordFilterDto = {
-                deleted: true
+                deleted: true,
             };
 
             await apiClient.getAllRestrictedWords(options);
 
             expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
-                params: queryString
+                params: queryString,
             });
 
         });
@@ -315,7 +306,7 @@ describe("RestrictedWordApiClient", function () {
                 created_by: testUser,
                 full_word: testWord,
                 super_restricted: true,
-                delete_conflicting: false
+                delete_conflicting: false,
             });
         });
 
@@ -340,7 +331,7 @@ describe("RestrictedWordApiClient", function () {
                     "DOG",
                     "CAT",
                     "MONKEY",
-                    "SEALION"
+                    "SEALION",
                 ]);
         });
 
@@ -354,8 +345,8 @@ describe("RestrictedWordApiClient", function () {
 
             expect(mockAxiosInstance.delete).to.have.been.calledWithExactly(`/word/${testId}`, {
                 data: {
-                    deleted_by: "test@user.com"
-                }
+                    deleted_by: "test@user.com",
+                },
             });
         });
 
