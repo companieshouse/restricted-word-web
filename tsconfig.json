@@ -11,7 +11,7 @@
         "pretty": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "strictNullChecks": false,
+        "strictNullChecks": true,
         "sourceMap": true,
         "noImplicitAny": false,
         "typeRoots": [
