@@ -14,7 +14,11 @@ import path from "path";
 
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
-const cookieConfig: CookieConfig = { cookieName: config.session.cookieName, cookieSecret: config.session.cookieSecret, cookieDomain: config.session.cookieDomain };
+const cookieConfig: CookieConfig = {
+    cookieName: config.session.cookieName,
+    cookieSecret: config.session.cookieSecret,
+    cookieDomain: config.session.cookieDomain,
+};
 const sessionMiddleware = SessionMiddleware(cookieConfig, sessionStore);
 
 const app = express();
@@ -47,7 +51,7 @@ app.use(createLoggerMiddleware(config.applicationNamespace));
 app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use(helmet({
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: !(config.env === "development"),
 }));
 app.use(express.urlencoded({ extended: true }));
 

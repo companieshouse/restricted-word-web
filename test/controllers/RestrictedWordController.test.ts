@@ -14,6 +14,7 @@ import { expect } from "chai";
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordController", function () {
+
     const testNamespace = "test-namespace";
 
     const mockConfig = {
@@ -29,6 +30,7 @@ describe("RestrictedWordController", function () {
     let restrictedWordController: any;
 
     const requireController = function () {
+
         return proxyquire("../../src/controllers/RestrictedWordController", {
             "../clients/RestrictedWordApiClient": function () {
                 return mockApiClient;
@@ -86,6 +88,7 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#getWord", function () {
+
         const getWordViewName = "word";
 
         it("returns the correct view", async function () {
@@ -187,11 +190,13 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#postSuperRestrictedWord", function () {
+
         const viewName = "word";
         const testId = "abc123";
         const testUser = "test@test.com";
 
         it("redirects after successful patch", async function () {
+
             mockRequest.body.returns({
                 id: testId,
                 superRestricted: "true",
@@ -210,6 +215,7 @@ describe("RestrictedWordController", function () {
         });
 
         it("renders the word page if there is an error", async function () {
+
             mockApiClient.patchSuperRestrictedStatus(Arg.any()).returns(PromiseRejector.rejectWith({
                 messages: [exampleError]
             }));
@@ -231,6 +237,7 @@ describe("RestrictedWordController", function () {
     });
 
     describe("#getAllWords", function () {
+
         const getAllWordsViewName = "all";
 
         it("returns the correct view", async function () {
@@ -419,6 +426,7 @@ describe("RestrictedWordController", function () {
             mockLogger
                 .received()
                 .errorRequest(mockRequest, Arg.is(message => {
+
                     expect(message).to.include(exampleError);
 
                     return true;
@@ -492,6 +500,7 @@ describe("RestrictedWordController", function () {
             mockLogger
                 .received()
                 .errorRequest(mockRequest, Arg.is(message => {
+
                     expect(message)
                         .to.include(exampleError)
                         .to.include(exampleWord1);
@@ -706,6 +715,7 @@ describe("RestrictedWordController", function () {
         });
 
         it("calls the api with the word ID provided and succesfully redirects if no errors", async function () {
+
             mockRequest.body.returns({
                 id: exampleId,
                 word: exampleWord1
@@ -723,6 +733,7 @@ describe("RestrictedWordController", function () {
         });
 
         it("returns and logs an error and the word/ID if the api throws an error", async function () {
+
             mockRequest.body.returns({
                 id: exampleId,
                 word: exampleWord1
@@ -741,6 +752,7 @@ describe("RestrictedWordController", function () {
             mockLogger
                 .received()
                 .errorRequest(mockRequest, Arg.is(message => {
+
                     expect(message)
                         .to.include(exampleError)
                         .to.include(exampleId)

@@ -2,6 +2,7 @@ import Pager from "../../src/pagination/Pager";
 import { expect } from "chai";
 
 describe("Pager", function () {
+
     const createResults = function (numResults: number): string[] {
         const results: any = [];
 
