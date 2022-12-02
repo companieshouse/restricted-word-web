@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
-import AuditEntryViewModel from "../clients/AuditEntryViewModel";
+import AuditEntryViewModel from "@clients/AuditEntryViewModel";
 import Pager from "../pagination/Pager";
-import RestrictedWordApiClient from "../clients/RestrictedWordApiClient";
-import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
-import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
+import RestrictedWordApiClient from "@clients/RestrictedWordApiClient";
+import RestrictedWordQueryOptions from "@clients/RestrictedWordQueryOptions";
+import RestrictedWordViewModel from "@clients/RestrictedWordViewModel";
 import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
 

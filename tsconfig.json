@@ -4,7 +4,7 @@
         "module": "commonjs",
         "declaration": true,
         "outDir": "./dist",
-        "baseUrl": "./src",
+        "baseUrl": "./",
         "strict": true,
         "esModuleInterop": true,
         "pretty": true,
@@ -14,7 +14,11 @@
         "sourceMap": true,
         "typeRoots": [
             "./node_modules/@types"
-        ]
+        ],
+        "paths": {
+            "@clients/*": ["src/clients/*"],
+            "@middleware/*": ["src/middleware/*"]
+        }
     },
     "include": [
         "./src/**/*"
@@ -22,5 +26,15 @@
     "exclude": [
         "node_modules",
         "**/__tests__/*"
-    ]
+    ],
+    "ts-node": {
+        "files": true,
+        "require": [
+            "tsconfig-paths/register"
+        ]
+    },
+    "tsc-alias": {
+        "verbose": false,
+        "resolveFullPaths": true
+    }
 }
