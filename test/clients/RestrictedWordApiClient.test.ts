@@ -3,12 +3,12 @@ import sinon, { SinonStubbedInstance } from "sinon";
 
 import ApplicationLogger from "@companieshouse/structured-logging-node/lib/ApplicationLogger";
 import { AxiosInstance } from "axios";
-import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
-import RestrictedWordDto from "../../src/clients/RestrictedWordDto";
-import RestrictedWordFilterDto from "../../src/clients/RestrictedWordFilterDto";
-import RestrictedWordQueryOptions from "../../src/clients/RestrictedWordQueryOptions";
-import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
-import axiosInstance from "../../src/clients/axiosInstance";
+import RestrictedWordApiClient from "@clients/RestrictedWordApiClient";
+import RestrictedWordDto from "@clients/RestrictedWordDto";
+import RestrictedWordFilterDto from "@clients/RestrictedWordFilterDto";
+import RestrictedWordQueryOptions from "@clients/RestrictedWordQueryOptions";
+import RestrictedWordViewModel from "@clients/RestrictedWordViewModel";
+import axiosInstance from "@clients/axiosInstance";
 import chaiAsPromised from "chai-as-promised";
 import sinonChai from "sinon-chai";
 
@@ -25,8 +25,7 @@ describe("RestrictedWordApiClient", function () {
     let apiClient: RestrictedWordApiClient;
 
     const requireApiClient = function () {
-
-        const client = proxyquire("../../src/clients/RestrictedWordApiClient", {
+        const client = proxyquire("@clients/RestrictedWordApiClient", {
             "./axiosInstance": mockAxiosInstance,
             "../config": {
                 applicationNamespace: "testNamespace"

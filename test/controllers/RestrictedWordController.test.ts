@@ -6,8 +6,8 @@ import Pager from "../../src/pagination/Pager";
 import PaginationOptions from "../../src/pagination/PaginationOptions";
 import PromiseRejector from "../PromiseRejector";
 import PromiseResolver from "../PromiseResolver";
-import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
-import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
+import RestrictedWordApiClient from "@clients/RestrictedWordApiClient";
+import RestrictedWordViewModel from "@clients/RestrictedWordViewModel";
 import SubstituteFactory from "../SubstituteFactory";
 import { expect } from "chai";
 
@@ -32,7 +32,7 @@ describe("RestrictedWordController", function () {
     const requireController = function () {
 
         return proxyquire("../../src/controllers/RestrictedWordController", {
-            "../clients/RestrictedWordApiClient": function () {
+            "@clients/RestrictedWordApiClient": function () {
                 return mockApiClient;
             },
             "../pagination/Pager": function () {
