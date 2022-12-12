@@ -33,7 +33,7 @@
     "axios": "~0.21.1",
     "chokidar": "^3.3.0",
     "cookie-parser": "~1.4.4",
-    "express": "~4.17.1",
+    "express": "~4.17.3",
     "govuk-frontend": "~3.6.0",
     "helmet": "~3.21.2",
     "ioredis": "~4.16.0",
