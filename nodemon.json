@@ -1,5 +1,8 @@
 {
     "exec": "ts-node ./src/app.ts",
-    "ext": "ts",
-    "watch": ["./src"]
+    "ext": "ts, html",
+    "watch": [
+        "./src",
+        "./views"
+    ]
 }

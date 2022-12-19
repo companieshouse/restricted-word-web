@@ -14,7 +14,11 @@ import path from "path";
 
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
-const cookieConfig: CookieConfig = { cookieName: config.session.cookieName, cookieSecret: config.session.cookieSecret, cookieDomain: config.session.cookieDomain };
+const cookieConfig: CookieConfig = {
+    cookieName: config.session.cookieName,
+    cookieSecret: config.session.cookieSecret,
+    cookieDomain: config.session.cookieDomain,
+};
 const sessionMiddleware = SessionMiddleware(cookieConfig, sessionStore);
 
 const app = express();
@@ -22,7 +26,7 @@ const app = express();
 const nunjucksConfig: ConfigureOptions = {
     autoescape: true,
     noCache: false,
-    express: app
+    express: app,
 };
 
 if (config.env === "development") {
@@ -35,17 +39,20 @@ nunjucks
     .configure([
         "views",
         "node_modules/govuk-frontend/",
-        "node_modules/govuk-frontend/components/"
+        "node_modules/govuk-frontend/components/",
     ], nunjucksConfig)
     .addGlobal("urlPrefix", config.urlPrefix);
 
 app.set("view engine", "html");
+
 app.use(`/${config.urlPrefix}/public`, express.static(path.join(__dirname, "../dist")));
 
 app.use(createLoggerMiddleware(config.applicationNamespace));
 app.use(cookieParser());
 app.use(sessionMiddleware);
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: !(config.env === "development"),
+}));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(createAuthenticationMiddleware());
