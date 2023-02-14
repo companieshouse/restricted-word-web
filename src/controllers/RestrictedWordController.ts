@@ -189,13 +189,12 @@ class RestrictedWordController {
             await restrictedWordApiClient.createRestrictedWord(newWord, superRestricted, deleteConflicting);
 
         } catch (unknownError) {
-
-            if (unknownError.conflictingWords) {
+            if ((unknownError as any).conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),
                     superRestricted: superRestricted,
                     hasConflicting: true,
-                    conflictingWords: unknownError.conflictingWords
+                    conflictingWords: (unknownError as any).conflictingWords,
                 });
             }
 

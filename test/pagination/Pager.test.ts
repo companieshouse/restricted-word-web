@@ -4,8 +4,7 @@ import { expect } from "chai";
 describe("Pager", function () {
 
     const createResults = function (numResults: number): string[] {
-
-        const results = [];
+        const results: any = [];
 
         for (let i = 0; i < numResults; i++) {
             results.push(`Result ${i + 1}`);

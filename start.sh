@@ -26,7 +26,8 @@ else
     source "${APP_DIR}/private_env"
     source "${APP_DIR}/global_env"
     source "${APP_DIR}/app_env"
-fi
 
+    NODE_ENV=production node_16 "${APP_DIR}/dist/bin/www.js" -- "${PORT}"
+fi
 
 node dist/app

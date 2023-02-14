@@ -1,26 +1,27 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "declaration": true,
-        "outDir": "./dist",
-        "baseUrl": "./src",
-        "strict": true,
-        "esModuleInterop": true,
-        "pretty": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "strictNullChecks": true,
-        "sourceMap": true,
-        "typeRoots": [
-            "./node_modules/@types"
-        ]
-    },
-    "include": [
-        "./src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/__tests__/*"
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "pretty": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "typeRoots": [
+      "./node_modules/@types"
     ]
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*"
+  ],
+  "ts-node": {
+    "files": true,
+  }
 }
