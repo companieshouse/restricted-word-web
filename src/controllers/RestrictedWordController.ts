@@ -104,6 +104,11 @@ class RestrictedWordController {
         });
     }
 
+    private static isValidId(id:string) {
+        // Returns true if the 'id' is valid, otherwise false
+        return /^[a-zA-Z0-9\-]+$/.test(id);
+    }
+
     public static async postSuperRestrictedWord(request: Request, response: Response) {
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
@@ -112,18 +117,20 @@ class RestrictedWordController {
         const superRestricted = request.body.superRestricted === "true";
         const redirectToUrl = `/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
 
+        const idValid = this.isValidId(id);
+
+        if(!idValid) {
+            throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
+        }
+
         try {
             await restrictedWordApiClient.patchSuperRestrictedStatus({
                 id: id,
                 superRestricted: superRestricted,
                 patchedBy: request.body.loggedInUserEmail
             });
-
-            if(redirectToUrl.startsWith('/${config.urlPrefix}')) {
-                return response.redirect(redirectToUrl);
-            } else {
-                throw Error("URL to redirect to (" + redirectToUrl + ") was not valid");
-            }
+            
+            return response.redirect(redirectToUrl);
 
         } catch (unknownError) {
 

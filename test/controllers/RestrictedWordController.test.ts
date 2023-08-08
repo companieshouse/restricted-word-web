@@ -223,7 +223,11 @@ describe("RestrictedWordController", function () {
             mockApiClient.patchSuperRestrictedStatus(Arg.any()).returns(PromiseRejector.rejectWith({
                 messages: [exampleError]
             }));
-
+            
+            mockRequest.body.returns({
+                id: testId
+            });
+       
             await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
 
             mockResponse
