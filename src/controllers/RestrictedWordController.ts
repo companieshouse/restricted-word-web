@@ -110,7 +110,6 @@ class RestrictedWordController {
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
-        const url = '${config.urlPrefix}';
         const redirectToUrl = `/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
 
         try {
@@ -120,10 +119,10 @@ class RestrictedWordController {
                 patchedBy: request.body.loggedInUserEmail
             });
 
-            if(request.query.url.startsWith('/${config.urlPrefix}')) {
+            if(redirectToUrl.startsWith('/${config.urlPrefix}')) {
                 return response.redirect(redirectToUrl);
             } else {
-                throw Error("URL to redirect to (" + url + ") was not valid");
+                throw Error("URL to redirect to (" + redirectToUrl + ") was not valid");
             }
 
         } catch (unknownError) {
