@@ -119,18 +119,18 @@ class RestrictedWordController {
 
         const idValid = this.isValidId(id);
 
-        if(!idValid) {
-            throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
-        }
-
         try {
             await restrictedWordApiClient.patchSuperRestrictedStatus({
                 id: id,
                 superRestricted: superRestricted,
                 patchedBy: request.body.loggedInUserEmail
             });
-            
-            return response.redirect(redirectToUrl);
+
+            if(idValid){
+                return response.redirect(redirectToUrl);
+            } else {
+                throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
+            }
 
         } catch (unknownError) {
 
