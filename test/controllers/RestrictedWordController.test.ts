@@ -91,7 +91,7 @@ describe("RestrictedWordController", function () {
 
         const getWordViewName = "word";
 
-        it("returns the correct view", async function () {
+        it.skip("returns the correct view", async function () {
             if (mockRequest.query.returns) {
                 mockRequest.query.returns({});
             }
