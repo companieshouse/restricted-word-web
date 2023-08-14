@@ -211,8 +211,7 @@ describe("RestrictedWordController", function () {
             mockResponse
                 .received()
                 .redirect(Arg.is(options => {
-
-                    expect(options).to.equal(`/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
+                    expect(options).to.equal(`${process.env.CHS_URL}/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
 
                     return true;
                 }));

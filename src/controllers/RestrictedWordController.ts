@@ -115,7 +115,7 @@ class RestrictedWordController {
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
-        const redirectToUrl = `/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
+        const redirectToUrl = `${process.env.CHS_URL}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
 
         const idValid = this.isValidId(id);
 
@@ -126,7 +126,7 @@ class RestrictedWordController {
                 patchedBy: request.body.loggedInUserEmail
             });
 
-            if(idValid && redirectToUrl.startsWith(`/${config.urlPrefix}/word`)){
+            if(idValid){
                 return response.redirect(redirectToUrl);
             } else {
                 throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
