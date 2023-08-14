@@ -14,7 +14,6 @@ import { expect } from "chai";
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordController", function () {
-    this.timeout(10000);
 
     const testNamespace = "test-namespace";
 
