@@ -126,7 +126,7 @@ class RestrictedWordController {
                 patchedBy: request.body.loggedInUserEmail
             });
 
-            if(idValid && redirectToUrl.startsWith(`${config.urlPrefix}/word`)){
+            if(idValid && redirectToUrl.startsWith(`/${config.urlPrefix}/word`)){
                 return response.redirect(redirectToUrl);
             } else {
                 throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
