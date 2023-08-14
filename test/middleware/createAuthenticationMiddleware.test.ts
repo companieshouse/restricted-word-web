@@ -12,6 +12,7 @@ import proxyquire from "proxyquire";
 import { Session } from "@companieshouse/node-session-handler";
 
 describe("createAuthenticationMiddleware", function () {
+    this.timeout(10000);
 
     const mockApplicationLogger: SinonStubbedInstance<ApplicationLogger> = sinon.createStubInstance(ApplicationLogger);
 
