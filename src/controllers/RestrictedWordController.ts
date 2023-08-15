@@ -117,11 +117,11 @@ class RestrictedWordController {
     public static async postSuperRestrictedWord(request: Request, response: Response) {
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
-        const baseUrl = process.env.CHS_URL ?? "http://chs.local";
+        const baseUrl = <string>request.query.url;
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
-        const redirectToUrl = `${baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
+        const redirectToUrl = `${process.env.CHS_URL}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
 
         const idValid = this.isValidId(baseUrl, id);
 
