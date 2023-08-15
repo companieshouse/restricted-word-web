@@ -104,20 +104,26 @@ class RestrictedWordController {
         });
     }
 
-    private static isValidId(id:string) {
+    private static isValidId(url:string, id:string) {
         // Returns true if the 'id' is valid, otherwise false
-        return /^[a-zA-Z0-9\-]+$/.test(id);
+        if(url.startsWith(url)) {
+            return /^[a-zA-Z0-9\-]+$/.test(id);
+        } 
+        else {
+            return false
+        }  
     }
 
     public static async postSuperRestrictedWord(request: Request, response: Response) {
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
+        const baseUrl = process.env.CHS_URL ?? "http://chs.local";
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
-        const redirectToUrl = `${process.env.CHS_URL}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
+        const redirectToUrl = `${baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
 
-        const idValid = this.isValidId(id);
+        const idValid = this.isValidId(baseUrl, id);
 
         try {
             await restrictedWordApiClient.patchSuperRestrictedStatus({
