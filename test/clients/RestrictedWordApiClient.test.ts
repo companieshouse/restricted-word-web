@@ -29,7 +29,8 @@ describe("RestrictedWordApiClient", function () {
         const client = proxyquire("../../src/clients/RestrictedWordApiClient", {
             "./axiosInstance": mockAxiosInstance,
             "../config": {
-                applicationNamespace: "testNamespace"
+                applicationNamespace: "testNamespace",
+                baseUrl: "testUrl"
             },
             "@companieshouse/structured-logging-node": {
                 createLogger: function () {

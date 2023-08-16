@@ -10,16 +10,19 @@ import RestrictedWordApiClient from "../../src/clients/RestrictedWordApiClient";
 import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import SubstituteFactory from "../SubstituteFactory";
 import { expect } from "chai";
+import config from "../../src/config";
 
 const proxyquire = require("proxyquire").noCallThru();
 
 describe("RestrictedWordController", function () {
 
     const testNamespace = "test-namespace";
+    const testUrl = "test-url";
 
     const mockConfig = {
         urlPrefix: "restricted-word",
-        namespace: testNamespace
+        namespace: testNamespace,
+        baseUrl: testUrl
     };
 
     let mockRequest: SubstituteOf<Request>;
@@ -207,11 +210,54 @@ describe("RestrictedWordController", function () {
             });
 
             await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
-
             mockResponse
                 .received()
                 .redirect(Arg.is(options => {
-                    expect(options).to.equal(`${process.env.CHS_URL}/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
+                    expect(options).to.equal(`${mockConfig.baseUrl}/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
+                    return true;
+                }));
+        });
+
+        it("should redirect successfully with default base url for no CHS_URL env variable", async function () {
+            const temp = process.env.CHS_URL;
+            process.env.CHS_URL = undefined;
+            mockConfig.baseUrl = config.baseUrl;
+
+            mockRequest.body.returns({
+                id: testId,
+                superRestricted: "true",
+                loggedInUserEmail: testUser
+            });
+
+            await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
+            mockResponse
+                .received()
+                .redirect(Arg.is(options => {
+                    expect(options).to.equal(`${mockConfig.baseUrl}/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
+                    return true;
+                }));
+            expect(mockConfig.baseUrl).to.equal("https://chs.local");
+            process.env.CHS_URL = temp;
+        });
+
+        it("should throw an error with invalid id", async function () {
+            const invalidId = '$$';
+            mockRequest.body.returns({
+                id: invalidId,
+                superRestricted: "true",
+                loggedInUserEmail: testUser
+            });
+
+            await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
+            mockResponse
+                .received()
+                .render(viewName, Arg.is(options => {
+
+                    const expectedErrors = [{
+                        text: `Provided id: (${invalidId}) is not valid. Must be alpha numeric.`
+                    }];
+
+                    expect(options.errors).to.deep.equal(expectedErrors);
 
                     return true;
                 }));
@@ -222,11 +268,11 @@ describe("RestrictedWordController", function () {
             mockApiClient.patchSuperRestrictedStatus(Arg.any()).returns(PromiseRejector.rejectWith({
                 messages: [exampleError]
             }));
-            
+
             mockRequest.body.returns({
                 id: testId
             });
-       
+
             await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
 
             mockResponse

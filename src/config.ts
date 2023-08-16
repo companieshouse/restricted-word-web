@@ -12,7 +12,8 @@ const config: ApplicationConfiguration = {
         cookieDomain: process.env.COOKIE_DOMAIN as string,
         cacheServer: process.env.CACHE_SERVER as string
     },
-    applicationNamespace: "restricted-word-web"
+    applicationNamespace: "restricted-word-web",
+    baseUrl: process.env.CHS_URL ?? "https://chs.local"
 };
 
 const httpsProxy = process.env.HTTPS_PROXY;

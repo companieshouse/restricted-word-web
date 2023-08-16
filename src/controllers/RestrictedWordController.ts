@@ -104,9 +104,17 @@ class RestrictedWordController {
         });
     }
 
+    private static isValidUrl(url: string, response: Response) {
+        if (url?.startsWith(config.baseUrl)) { 
+            return response.redirect(url); 
+        } else { 
+            return false; 
+        }
+    }
+
     private static isValidId(id:string) {
-        // Returns true if the 'id' is valid, otherwise false
-        return /^[a-zA-Z0-9\-]+$/.test(id);
+        // Returns true if the 'id' is valid
+        return /^[a-zA-Z0-9-]+$/.test(id);
     }
 
     public static async postSuperRestrictedWord(request: Request, response: Response) {
@@ -115,9 +123,10 @@ class RestrictedWordController {
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
-        const redirectToUrl = `${process.env.CHS_URL}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
 
-        const idValid = this.isValidId(id);
+        const redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
+
+        const isValid = this.isValidId(id) && this.isValidUrl(redirectToUrl, response);
 
         try {
             await restrictedWordApiClient.patchSuperRestrictedStatus({
@@ -126,9 +135,7 @@ class RestrictedWordController {
                 patchedBy: request.body.loggedInUserEmail
             });
 
-            if(idValid){
-                return response.redirect(redirectToUrl);
-            } else {
+            if (!isValid) {
                 throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
             }
 
