@@ -104,6 +104,7 @@ class RestrictedWordController {
         });
     }
 
+    // Added the following method to fix sonar security vulnerability
     private static isValidUrl(url: string, response: Response) {
         if (url?.startsWith(config.baseUrl)) {
             return response.redirect(url);
