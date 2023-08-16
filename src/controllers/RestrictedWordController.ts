@@ -105,10 +105,10 @@ class RestrictedWordController {
     }
 
     private static isValidUrl(url: string, response: Response) {
-        if (url?.startsWith(config.baseUrl)) { 
-            return response.redirect(url); 
-        } else { 
-            return false; 
+        if (url?.startsWith(config.baseUrl)) {
+            return response.redirect(url);
+        } else {
+            return false;
         }
     }
 
@@ -207,8 +207,7 @@ class RestrictedWordController {
 
             await restrictedWordApiClient.createRestrictedWord(newWord, superRestricted, deleteConflicting);
 
-        } catch (unknownError) {
-
+        } catch (unknownError:any) {
             if (unknownError.conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),

@@ -241,7 +241,7 @@ describe("RestrictedWordController", function () {
         });
 
         it("should throw an error with invalid id", async function () {
-            const invalidId = '$$';
+            const invalidId = "$$";
             mockRequest.body.returns({
                 id: invalidId,
                 superRestricted: "true",
