@@ -15,6 +15,7 @@ interface ApplicationConfiguration {
         host: string;
         port: number;
     };
+    baseUrl: string;
 }
 
 export default ApplicationConfiguration;

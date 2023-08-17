@@ -104,12 +104,29 @@ class RestrictedWordController {
         });
     }
 
+    private static isValidUrl(url: string, response: Response) {
+        if (url?.startsWith(config.baseUrl)) {
+            return response.redirect(url);
+        } else {
+            return false;
+        }
+    }
+
+    private static isValidId(id:string) {
+        // Returns true if the 'id' is valid
+        return /^[a-zA-Z0-9-]+$/.test(id);
+    }
+
     public static async postSuperRestrictedWord(request: Request, response: Response) {
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
+
+        const redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
+
+        const isValid = this.isValidId(id) && this.isValidUrl(redirectToUrl, response);
 
         try {
             await restrictedWordApiClient.patchSuperRestrictedStatus({
@@ -118,7 +135,9 @@ class RestrictedWordController {
                 patchedBy: request.body.loggedInUserEmail
             });
 
-            return response.redirect(`/${config.urlPrefix}/word/${id}?setSuperRestricted=true`);
+            if (!isValid) {
+                throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
+            }
 
         } catch (unknownError) {
 
@@ -189,7 +208,6 @@ class RestrictedWordController {
             await restrictedWordApiClient.createRestrictedWord(newWord, superRestricted, deleteConflicting);
 
         } catch (unknownError) {
-
             if (unknownError.conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),
