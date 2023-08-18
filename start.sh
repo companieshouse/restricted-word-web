@@ -16,6 +16,7 @@ else
     CONFIG_URL="$2"
     ENVIRONMENT="$3"
     APP_NAME="$4"
+    export DISABLE_AUTO_SIGNIN=1
 
     source /etc/profile
 
