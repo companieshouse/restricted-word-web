@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/companieshouse/restricted-word-web#readme",
   "dependencies": {
-    "@companieshouse/node-session-handler": "^4.1.6",
+    "@companieshouse/node-session-handler": "^4.1.7",
     "@companieshouse/structured-logging-node": "^1.0.4",
     "axios": "~0.21.1",
     "chokidar": "^3.3.0",
