@@ -54,7 +54,7 @@ Run `npm run test` or `npm run test:coverage` (to get a coverage report).
 
 ### Local
 
-1. Have the restricted word api running on your same machine.
+1. Have the restricted word api running on your same machine
 2. In project home directory `npm start`
 3. In browser go to <http://localhost:3001>
 
