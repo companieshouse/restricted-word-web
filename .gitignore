@@ -210,3 +210,5 @@ dist
 .tern-port
 
 /app
+
+.DS_Store
