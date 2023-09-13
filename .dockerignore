@@ -1,4 +1,7 @@
 *
+!dist
+!docker_start.sh
+!routes.yaml
 !src
 !views
 !package.json
