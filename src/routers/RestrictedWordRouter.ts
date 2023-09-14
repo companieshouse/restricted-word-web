@@ -1,3 +1,4 @@
+import * as healthcheck from "../controllers/healthcheck.controller";
 import RestrictedWordController from "../controllers/RestrictedWordController";
 import express from "express";
 
@@ -15,6 +16,7 @@ class RestrictedWordRouter {
         router.post("/add-new-word", RestrictedWordController.postCreateNewWord);
         router.get("/delete", RestrictedWordController.getDeleteWord);
         router.post("/delete", RestrictedWordController.postDeleteWord);
+        router.get("/healthcheck", healthcheck.get);
 
         return router;
     }
