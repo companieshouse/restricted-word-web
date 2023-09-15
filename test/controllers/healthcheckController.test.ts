@@ -1,7 +1,7 @@
 import { Arg, SubstituteOf } from "@fluffy-spoon/substitute";
 import { Request, Response } from "express";
 import SubstituteFactory from "../SubstituteFactory";
-import * as healthcheckController from "../../src/controllers/healthcheck.controller";
+import * as healthcheckController from "../../src/controllers/healthcheckController";
 
 let mockRequest: SubstituteOf<Request>;
 let mockResponse: SubstituteOf<Response>;

@@ -1,4 +1,4 @@
-import * as healthcheck from "../controllers/healthcheck.controller";
+import * as healthcheck from "../controllers/healthcheckController";
 import RestrictedWordController from "../controllers/RestrictedWordController";
 import express from "express";
 
