@@ -236,7 +236,7 @@ describe("RestrictedWordController", function () {
                     expect(options).to.equal(`${mockConfig.baseUrl}/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
                     return true;
                 }));
-            expect(mockConfig.baseUrl).to.equal("https://chs.local");
+            expect(mockConfig.baseUrl).to.equal("http://chs.local");
             process.env.CHS_URL = temp;
         });
 
