@@ -12,6 +12,11 @@ const createAuthenticationMiddleware = function (): RequestHandler {
 
     return (request: Request, response: Response, next : NextFunction) => {
 
+        if (request.originalUrl === "/healthcheck") {
+            logger.debug("/healthcheck endpoint called, skipping authentication.");
+            return next();
+        }
+
         const signInInfo: ISignInInfo | undefined = request.session?.data[SessionKey.SignInInfo];
 
         if (signInInfo !== undefined) {
