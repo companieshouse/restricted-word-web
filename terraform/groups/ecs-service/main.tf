@@ -21,7 +21,7 @@ terraform {
 }
 
 module "secrets" {
-  source = "git@github.com:companieshouse/terraform-modules//aws/ecs/secrets?ref=1.0.191"
+  source = "git@github.com:companieshouse/terraform-modules//aws/ecs/secrets?ref=1.0.192"
 
   name_prefix = "${local.service_name}-${var.environment}"
   environment = var.environment
@@ -30,8 +30,8 @@ module "secrets" {
 }
 
 module "ecs-service" {
-  source = "git::git@github.com:companieshouse/terraform-library-ecs-service.git?ref=1.0.2"
-
+  source = "git@github.com:companieshouse/terraform-modules//aws/ecs/ecs-service?ref=1.0.192"
+            
   # Environmental configuration
   environment             = var.environment
   aws_region              = var.aws_region
