@@ -40,7 +40,7 @@ module "ecs-service" {
   task_execution_role_arn = data.aws_iam_role.ecs_cluster_iam_role.arn
 
   # Load balancer configuration
-  lb_listener_arn           = data.aws_lb_listener.search_lb_listener.arn
+  lb_listener_arn           = data.aws_lb_listener.search_service_lb_listener.arn
   lb_listener_rule_priority = local.lb_listener_rule_priority
   lb_listener_paths         = local.lb_listener_paths
   healthcheck_path          = local.healthcheck_path
