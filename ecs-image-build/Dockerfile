@@ -6,6 +6,4 @@ WORKDIR /opt
 COPY /app .
 COPY docker_start.sh .
 
-RUN npm i
-
 CMD ["./docker_start.sh"]
