@@ -6,7 +6,7 @@ locals {
   container_port            = "3000" # default node port required here until prod docker container is built allowing port change via env var
   docker_repo               = "restricted-word-web"
   lb_listener_rule_priority = 96
-  lb_listener_paths         = ["/admin/restricted-word","/admin/restricted-word/.*%"]
+  lb_listener_paths         = ["/admin/restricted-word","/admin/restricted-word/*"]
   healthcheck_path          = "/admin/restricted-word/healthcheck" #healthcheck path for restricted word web
   healthcheck_matcher       = "200"
 
