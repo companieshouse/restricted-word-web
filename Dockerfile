@@ -5,8 +5,6 @@ COPY dist ./dist
 COPY ./package.json ./package-lock.json docker_start.sh routes.yaml ./
 COPY ./dist/views ./views
 
-RUN npm i
-
 CMD ["./docker_start.sh"]
 
 EXPOSE 3000
