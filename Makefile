@@ -15,9 +15,8 @@ test:
 	npm run test:coverage
 
 .PHONY: test-unit
-test-unit: clean
-	# 'ECS pipeline calls test-unit so need to run sonar-test here'
-	npm run sonar-test
+test-unit:
+	npm run test
 
 .PHONY: sonar
 sonar:
