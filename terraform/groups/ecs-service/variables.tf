@@ -66,7 +66,3 @@ variable "secure_cookie" {
   type        = string
   default     = "0"
 }
-variable "restricted_word_web_port" {
-  type        = string
-  default     = "3000"
-}
