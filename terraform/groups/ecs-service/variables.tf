@@ -51,10 +51,6 @@ variable "log_level" {
   type        = string
   description = "The log level for services to use: trace, debug, info or error"
 }
-variable "restricted_word_web_version" {
-  type        = string
-  description = "The version of the restricted word web container to run."
-}
 variable "cookie_domain" {
   type        = string
 }
@@ -65,8 +61,4 @@ variable "cookie_name" {
 variable "secure_cookie" {
   type        = string
   default     = "0"
-}
-variable "restricted_word_web_port" {
-  type        = string
-  default     = "3000"
 }
