@@ -6,6 +6,6 @@ desired_task_count = 2 # use multi instance in staging
 
 # service configs
 log_level = "debug"
-cookie_domain = "cidev.aws.chdev.org"
+cookie_domain = "company-information.service.gov.uk"
 cookie_name = "__SID"
 secure_cookie = "0"
