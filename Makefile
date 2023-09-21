@@ -26,6 +26,10 @@ sonar:
 lint:
 	npm run lint
 
+.PHONY: security-check
+security-check:
+	npm audit --audit-level=high
+
 .PHONY: package
 package: init build 
 ifndef version
