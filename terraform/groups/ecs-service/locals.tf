@@ -8,7 +8,7 @@ locals {
   lb_listener_rule_priority = 96
   lb_listener_paths         = ["/admin/restricted-word","/admin/restricted-word/*"]
   healthcheck_path          = "/admin/restricted-word/healthcheck" #healthcheck path for restricted word web
-  healthcheck_matcher       = "200"
+  healthcheck_matcher       = "302"
 
   kms_alias                 = "alias/${var.aws_profile}/environment-services-kms"
   service_secrets           = jsondecode(data.vault_generic_secret.service_secrets.data_json)
