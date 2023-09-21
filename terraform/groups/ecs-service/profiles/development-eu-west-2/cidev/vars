@@ -2,7 +2,9 @@ environment = "cidev"
 aws_profile = "development-eu-west-2"
 
 # service configs
-log_level = "debug"
+chs_url = "https://cidev.aws.chdev.org"
 cookie_domain = "cidev.aws.chdev.org"
 cookie_name = "__SID"
+log_level = "debug"
+restricted_word_web_port = "3000"
 secure_cookie = "0"

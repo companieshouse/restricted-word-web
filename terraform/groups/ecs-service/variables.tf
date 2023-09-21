@@ -51,14 +51,8 @@ variable "use_fargate" {
 # ------------------------------------------------------------------------------
 # Service environment variable configs
 # ------------------------------------------------------------------------------
-variable "log_level" {
-  default     = "info"
+variable "chs_url" {
   type        = string
-  description = "The log level for services to use: trace, debug, info or error"
-}
-variable "restricted_word_web_version" {
-  type        = string
-  description = "The version of the restricted word web container to run."
 }
 variable "cookie_domain" {
   type        = string
@@ -67,7 +61,22 @@ variable "cookie_name" {
   type        = string
   default     = "__SID"
 }
+variable "log_level" {
+  default     = "info"
+  type        = string
+  description = "The log level for services to use: trace, debug, info or error"
+}
 variable "secure_cookie" {
   type        = string
   default     = "0"
 }
+
+variable "restricted_word_web_port" {
+  type        = string
+  default     = "3000"
+}
+variable "restricted_word_web_version" {
+  type        = string
+  description = "The version of the restricted word web container to run."
+}
+
