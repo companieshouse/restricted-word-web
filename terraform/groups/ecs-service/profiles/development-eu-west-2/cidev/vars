@@ -1,0 +1,8 @@
+environment = "cidev"
+aws_profile = "development-eu-west-2"
+
+# service configs
+log_level = "debug"
+cookie_domain = "cidev.aws.chdev.org"
+cookie_name = "__SID"
+secure_cookie = "0"

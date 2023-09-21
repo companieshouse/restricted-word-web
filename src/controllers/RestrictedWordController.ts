@@ -126,7 +126,7 @@ class RestrictedWordController {
         const redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
 
         try {
-            if(!(RestrictedWordController.isValidId(id))){
+            if (!(RestrictedWordController.isValidId(id))) {
                 throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
             }
 
