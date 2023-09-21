@@ -22,6 +22,10 @@ test-unit:
 sonar:
 	npm run analyse-code
 
+.PHONY: lint
+lint:
+	npm run lint
+
 .PHONY: package
 package: init build 
 ifndef version
