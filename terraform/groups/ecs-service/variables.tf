@@ -42,6 +42,11 @@ variable "required_memory" {
   description = "The required memory for this service"
   default = 256 # defaulted low for node service in dev environments, override for production
 }
+variable "use_fargate" {
+  type        = bool
+  description = "If true, sets the required capabilities for all containers in the task definition to use FARGATE, false uses EC2"
+  default     = false
+}
 
 # ------------------------------------------------------------------------------
 # Service environment variable configs
