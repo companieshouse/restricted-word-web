@@ -179,4 +179,22 @@ describe("createAuthenticationMiddleware", function () {
         expect(mockResponse.render)
             .to.have.been.calledOnceWithExactly("404");
     });
+
+    it("calls next and skips authentication if request is for the healthcheck url", function () {
+
+        const mockRequest: any = {
+            originalUrl: "/healthcheck"
+        };
+
+        middleware(mockRequest, mockResponse, mockNext);
+
+        expect(mockNext)
+            .to.have.been.called.calledOnce;
+
+        expect(mockResponse.redirect)
+            .not.to.have.been.called;
+
+        expect(mockResponse.render)
+            .not.to.have.been.called;
+    });
 });
