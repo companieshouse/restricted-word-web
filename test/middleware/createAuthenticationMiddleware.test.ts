@@ -183,7 +183,7 @@ describe("createAuthenticationMiddleware", function () {
     it("calls next and skips authentication if request is for the healthcheck url", function () {
 
         const mockRequest: any = {
-            originalUrl: "/healthcheck"
+            originalUrl: `/${mockConfig.urlPrefix}/healthcheck`
         };
 
         middleware(mockRequest, mockResponse, mockNext);
