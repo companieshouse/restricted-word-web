@@ -66,6 +66,9 @@ variable "log_level" {
   type        = string
   description = "The log level for services to use: trace, debug, info or error"
 }
+variable "node_env" {
+  type        = string
+}
 variable "secure_cookie" {
   type        = string
   default     = "0"
