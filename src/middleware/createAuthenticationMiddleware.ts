@@ -12,7 +12,7 @@ const createAuthenticationMiddleware = function (): RequestHandler {
 
     return (request: Request, response: Response, next : NextFunction) => {
 
-        if (request.originalUrl === "/healthcheck") {
+        if (request.originalUrl === `/${config.urlPrefix}/healthcheck`) {
             logger.debug("/healthcheck endpoint called, skipping authentication.");
             return next();
         }
