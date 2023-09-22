@@ -73,10 +73,6 @@ variable "secure_cookie" {
   type        = string
   default     = "0"
 }
-variable "restricted_word_web_port" {
-  type        = string
-  default     = "3000"
-}
 variable "restricted_word_web_version" {
   type        = string
   description = "The version of the restricted word web container to run."

@@ -5,7 +5,9 @@ aws_profile = "staging-eu-west-2"
 desired_task_count = 2 # use multi instance in staging
 
 # service configs
-log_level = "debug"
+chs_url = "https://staging.company-information.service.gov.uk"
 cookie_domain = "company-information.service.gov.uk"
 cookie_name = "__SID"
+log_level = "debug"
+node_env = "staging"
 secure_cookie = "0"
