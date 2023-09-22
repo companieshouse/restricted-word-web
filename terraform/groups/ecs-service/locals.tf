@@ -51,6 +51,7 @@ locals {
     { "name": "COOKIE_NAME", "value": "${var.cookie_name}" },
     { "name": "LOG_LEVEL", "value": "${var.log_level}" },
     { "name": "NODE_ENV", "value": "${var.node_env}" },
+    { "name": "RESTRICTED_WORD_WEB_PORT", "value": "${local.container_port}" },
     { "name": "SECURE_COOKIE", "value": "${var.secure_cookie}" }
   ]
 }
