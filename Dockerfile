@@ -7,6 +7,10 @@ COPY ./dist/views ./views
 
 RUN npm i
 
+RUN dnf update -y && \
+        dnf install -y \
+        tar
+
 CMD ["./docker_start.sh"]
 
 EXPOSE 3000
