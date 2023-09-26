@@ -29,6 +29,15 @@
       <form method="POST" action="/{{urlPrefix}}/delete">
         <input type="hidden" name="id" value="{{ id }}" />
         <input type="hidden" name="word" value="{{ word }}" />
+        {{ govukTextarea({
+          name: "justification",
+          id: "justification",
+          label: {
+            text: "What is the justification to delete this word?",
+            classes: "govuk-body-l"
+          },
+          maxlength: 200
+        }) }}
         {{ govukButton({
           text: "Delete word",
           classes: "govuk-!-margin-right-1",
