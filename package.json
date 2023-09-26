@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc && cp -r views dist/ && gulp build",
+    "build:compile": "tsc",
+    "build:copy-views": "cp -r views dist/",
     "build-scss": "gulp build",
     "build-js": "webpack --mode production",
     "start": "node ./dist/app",
