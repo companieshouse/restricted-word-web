@@ -33,7 +33,7 @@ if (config.env === "development") {
 
 nunjucks
     .configure([
-        "views",
+        "dist/views",
         "node_modules/govuk-frontend/",
         "node_modules/govuk-frontend/components/"
     ], nunjucksConfig)
