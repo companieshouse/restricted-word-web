@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Restricted words - Add New Word
+  Restricted words - Add New Wordasd
 {% endblock %}
 
 {% block beforeContent %}
@@ -59,6 +59,16 @@
             id: "event-name",
             name: "word",
             value: word
+          }) }}
+          {{ govukInput({
+            label: {
+              text: "Why is this a restricted word?",
+              isPageHeading: false,
+              classes: "govuk-label--m"
+            },
+            id: "created-reason",
+            name: "createdReason",
+            value: createdReason
           }) }}
           {% set superChecked = superRestricted == true %}
           {{ govukRadios({

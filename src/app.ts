@@ -31,6 +31,8 @@ if (config.env === "development") {
     nunjucksConfig.noCache = true;
 }
 
+console.log('aaa');
+
 nunjucks
     .configure([
         "dist/views",

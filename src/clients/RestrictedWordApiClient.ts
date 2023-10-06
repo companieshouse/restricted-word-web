@@ -123,12 +123,13 @@ class RestrictedWordApiClient {
         }
     }
 
-    public async createRestrictedWord(word: string, superRestricted: boolean, deleteConflicting: boolean) {
+    public async createRestrictedWord(word: string, createdReason: string, superRestricted: boolean, deleteConflicting: boolean) {
 
         try {
 
             await axiosInstance.post("/word", {
                 full_word: word,
+                created_reason: createdReason,
                 super_restricted: superRestricted,
                 delete_conflicting: deleteConflicting,
                 created_by: this._username
