@@ -20,6 +20,9 @@ class RestrictedWordController {
         if (error instanceof RestrictedWordError) {
 
             errorMessages = error.errors;
+            for (let errorMessage of errorMessages) {
+                logger.errorRequest(request, errorMessage);
+            }
 
         } else if (errorMessages === undefined) {
 
@@ -213,7 +216,7 @@ class RestrictedWordController {
             }
 
             if (!createdReason) {
-                errorMessages.push("A justification reason is required");
+                errorMessages.push("A reason for creating the word is required");
             }
 
             if (errorMessages.length > 0) {
@@ -226,6 +229,7 @@ class RestrictedWordController {
             if (unknownError.conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),
+                    createdReason: createdReason,
                     superRestricted: superRestricted,
                     hasConflicting: true,
                     conflictingWords: unknownError.conflictingWords
@@ -236,6 +240,7 @@ class RestrictedWordController {
 
             return response.render("add-new-word", {
                 word: newWord,
+                createdReason: createdReason,
                 superRestricted: superRestricted,
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });

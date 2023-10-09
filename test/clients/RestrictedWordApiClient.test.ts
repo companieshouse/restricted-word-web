@@ -66,6 +66,7 @@ describe("RestrictedWordApiClient", function () {
     const testUser = "test@user.com";
     const testWord = "Test word";
     const testId = "abc123";
+    const testCreatedReason = "Test reason";
 
     beforeEach(function () {
 
@@ -310,10 +311,11 @@ describe("RestrictedWordApiClient", function () {
 
         it("creates a word successfully", async function () {
 
-            await apiClient.createRestrictedWord(testWord, true, false);
+            await apiClient.createRestrictedWord(testWord, testCreatedReason, true, false);
 
             expect(mockAxiosInstance.post).to.have.been.calledWithExactly("/word", {
                 created_by: testUser,
+                created_reason: testCreatedReason,
                 full_word: testWord,
                 super_restricted: true,
                 delete_conflicting: false
@@ -324,7 +326,7 @@ describe("RestrictedWordApiClient", function () {
 
             mockAxiosInstance.post.rejects(testErrorResponse);
 
-            await expect(apiClient.createRestrictedWord(testWord, false, false))
+            await expect(apiClient.createRestrictedWord(testWord, testCreatedReason, false, false))
                 .to.eventually.be.rejected
                 .and.have.property("messages")
                 .with.lengthOf(1);
@@ -334,7 +336,7 @@ describe("RestrictedWordApiClient", function () {
 
             mockAxiosInstance.post.rejects(testForceRequiredResponse);
 
-            await expect(apiClient.createRestrictedWord(testWord, false, false))
+            await expect(apiClient.createRestrictedWord(testWord, testCreatedReason, false, false))
                 .to.eventually.be.rejectedWith()
                 .and.have.property("conflictingWords")
                 .which.deep.equals([
