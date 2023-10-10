@@ -286,6 +286,7 @@ class RestrictedWordController {
             return response.render("delete-word", {
                 id: wordId,
                 word: word,
+                deletedReason: deletedReason,
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
