@@ -1,11 +1,11 @@
 class RestrictedWordError extends Error {
 
-  errors: string[];
+    errors: string[];
 
-  constructor(message: string, errors: string[]) {
-    super(message);
-    this.errors = errors;
-  }
+    constructor(message: string, errors: string[]) {
+        super(message);
+        this.errors = errors;
+    }
 }
 
 export default RestrictedWordError;

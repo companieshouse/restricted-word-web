@@ -20,7 +20,7 @@ class RestrictedWordController {
         if (error instanceof RestrictedWordError) {
 
             errorMessages = error.errors;
-            for (let errorMessage of errorMessages) {
+            for (const errorMessage of errorMessages) {
                 logger.errorRequest(request, errorMessage);
             }
 
@@ -209,7 +209,7 @@ class RestrictedWordController {
 
         try {
 
-            let errorMessages = [];
+            const errorMessages = [];
 
             if (!newWord) {
                 errorMessages.push("A word is required to create a new word");
