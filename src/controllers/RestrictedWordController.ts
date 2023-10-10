@@ -257,7 +257,7 @@ class RestrictedWordController {
 
         const wordId = request.body.id;
         const word = request.body.word;
-        const deletedReason = request.body.deletedReason
+        const deletedReason = request.body.deletedReason;
 
         logger.infoRequest(request, `Attempting to delete "${word}" with id "${wordId}"`);
 
@@ -274,7 +274,7 @@ class RestrictedWordController {
             }
 
             if (!deletedReason) {
-                throw new Error("Justification required to delete word")
+                throw new Error("Justification required to delete word");
             }
 
             await restrictedWordApiClient.deleteRestrictedWord(wordId, deletedReason);

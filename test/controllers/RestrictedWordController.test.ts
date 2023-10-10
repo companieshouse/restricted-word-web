@@ -787,6 +787,32 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
+        it("logs and returns errors if delete reason is not supplied", async function () {
+
+            mockRequest.body.returns({
+                id: exampleId,
+                word: exampleWord1
+            });
+
+            const missingReasonError = "Justification required to delete word";
+            const expectedError = [{ text: missingReasonError }];
+
+            await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .errorRequest(mockRequest, missingReasonError);
+
+            mockResponse
+                .received()
+                .render(deleteWordViewName, Arg.is(options => {
+
+                    expect(options.errors).to.deep.equal(expectedError);
+
+                    return true;
+                }));
+        });
+
         it("calls the api with the word ID provided and succesfully redirects if no errors", async function () {
 
             mockRequest.body.returns({
