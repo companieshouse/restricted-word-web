@@ -58,6 +58,7 @@ describe("RestrictedWordController", function () {
             deletedBy: "deletedBy",
             createdAt: "createdAt",
             deletedAt: "deletedAt",
+            deletedReason: "deletedReason",
             deleted: false,
             superRestricted: false,
             superRestrictedAuditLog: []
@@ -80,6 +81,7 @@ describe("RestrictedWordController", function () {
     const exampleWord2 = "Example word 2";
     const exampleError = "Test message";
     const exampleId = "abc123";
+    const exampleDelReason = "reason";
 
     beforeEach(function () {
         mockRequest = SubstituteFactory.create<Request>();
@@ -789,14 +791,15 @@ describe("RestrictedWordController", function () {
 
             mockRequest.body.returns({
                 id: exampleId,
-                word: exampleWord1
+                word: exampleWord1,
+                deletedReason: exampleDelReason
             });
 
             await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
 
             mockApiClient
                 .received()
-                .deleteRestrictedWord(exampleId);
+                .deleteRestrictedWord(exampleId, exampleDelReason);
 
             mockResponse
                 .received()
@@ -807,13 +810,14 @@ describe("RestrictedWordController", function () {
 
             mockRequest.body.returns({
                 id: exampleId,
-                word: exampleWord1
+                word: exampleWord1,
+                deletedReason: exampleDelReason
             });
 
             const expectedError = [{ text: exampleError }];
 
             mockApiClient
-                .deleteRestrictedWord(Arg.any())
+                .deleteRestrictedWord(Arg.any(), Arg.any())
                 .returns(PromiseRejector.rejectWith({
                     messages: [exampleError]
                 }));
