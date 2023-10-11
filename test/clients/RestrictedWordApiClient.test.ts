@@ -67,6 +67,7 @@ describe("RestrictedWordApiClient", function () {
     const testWord = "Test word";
     const testId = "abc123";
     const testCreatedReason = "Test reason";
+    const testDelReason = "reason";
 
     beforeEach(function () {
 
@@ -86,6 +87,7 @@ describe("RestrictedWordApiClient", function () {
             created_at: "2020-01-23T12:05:08.096",
             super_restricted: false,
             deleted: false,
+            deleted_reason: "",
             deleted_by: "",
             deleted_at: "",
             super_restricted_audit_log: [{
@@ -118,6 +120,7 @@ describe("RestrictedWordApiClient", function () {
                 deletedBy: undefined,
                 createdAt: "23 Jan 20",
                 superRestricted: false,
+                deletedReason: undefined,
                 deletedAt: "-",
                 deleted: false,
                 superRestrictedAuditLog: [{
@@ -178,6 +181,7 @@ describe("RestrictedWordApiClient", function () {
                     super_restricted: true,
                     deleted_by: "Ben.Gun@anotheremail.net",
                     deleted_at: "2020-02-21T11:03:04.019",
+                    deleted_reason: "reason",
                     deleted: true,
                     super_restricted_audit_log: []
                 }
@@ -203,6 +207,7 @@ describe("RestrictedWordApiClient", function () {
                     word: "FIRST",
                     createdBy: "FredJones",
                     deletedBy: undefined,
+                    deletedReason: undefined,
                     createdAt: "23 Jan 20",
                     superRestricted: false,
                     deletedAt: "-",
@@ -217,6 +222,7 @@ describe("RestrictedWordApiClient", function () {
                     createdAt: "24 Jan 20",
                     superRestricted: true,
                     deletedAt: "21 Feb 20",
+                    deletedReason: "reason",
                     deleted: true,
                     superRestrictedAuditLog: []
                 }
@@ -353,11 +359,12 @@ describe("RestrictedWordApiClient", function () {
 
         it("deletes a word successfully", async function () {
 
-            await apiClient.deleteRestrictedWord(testId);
+            await apiClient.deleteRestrictedWord(testId, testDelReason);
 
             expect(mockAxiosInstance.delete).to.have.been.calledWithExactly(`/word/${testId}`, {
                 data: {
-                    deleted_by: "test@user.com"
+                    deleted_by: "test@user.com",
+                    deleted_reason: "reason"
                 }
             });
         });
@@ -366,7 +373,7 @@ describe("RestrictedWordApiClient", function () {
 
             mockAxiosInstance.delete.rejects(testErrorResponse);
 
-            await expect(apiClient.deleteRestrictedWord(testId))
+            await expect(apiClient.deleteRestrictedWord(testId, testDelReason))
                 .to.eventually.rejectedWith()
                 .and.have.property("messages")
                 .with.lengthOf(1);

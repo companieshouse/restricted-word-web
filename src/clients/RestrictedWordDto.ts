@@ -6,6 +6,7 @@ interface RestrictedWordDto {
     full_word: string;
     created_by: string;
     deleted_by: string;
+    deleted_reason: string;
     created_at: string;
     super_restricted: boolean;
     deleted_at: string;
