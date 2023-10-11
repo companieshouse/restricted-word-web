@@ -257,6 +257,7 @@ class RestrictedWordController {
 
         const wordId = request.body.id;
         const word = request.body.word;
+        const deletedReason = request.body.deletedReason;
 
         logger.infoRequest(request, `Attempting to delete "${word}" with id "${wordId}"`);
 
@@ -272,7 +273,11 @@ class RestrictedWordController {
                 throw new Error("Word required to delete word");
             }
 
-            await restrictedWordApiClient.deleteRestrictedWord(wordId);
+            if (!deletedReason) {
+                throw new Error("Justification required to delete word");
+            }
+
+            await restrictedWordApiClient.deleteRestrictedWord(wordId, deletedReason);
 
         } catch (unknownError) {
 
@@ -281,6 +286,7 @@ class RestrictedWordController {
             return response.render("delete-word", {
                 id: wordId,
                 word: word,
+                deletedReason: deletedReason,
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }

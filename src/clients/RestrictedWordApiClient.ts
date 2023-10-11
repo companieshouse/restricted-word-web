@@ -50,6 +50,7 @@ class RestrictedWordApiClient {
             deletedBy: serverObject.deleted_by ?
                 RestrictedWordApiClient.getUsernameFromEmail(serverObject.deleted_by) :
                 undefined,
+            deletedReason: serverObject.deleted_reason ? serverObject.deleted_reason : undefined,
             createdAt: moment(serverObject.created_at).format("DD MMM YY"),
             deletedAt: serverObject.deleted_at ?
                 moment(serverObject.deleted_at).format("DD MMM YY") :
@@ -139,13 +140,14 @@ class RestrictedWordApiClient {
         }
     }
 
-    public async deleteRestrictedWord(id: string) {
+    public async deleteRestrictedWord(id: string, deletedReason: string) {
 
         try {
 
             await axiosInstance.delete(`/word/${id}`, {
                 data: {
-                    deleted_by: this._username
+                    deleted_by: this._username,
+                    deleted_reason: deletedReason
                 }
             });
 

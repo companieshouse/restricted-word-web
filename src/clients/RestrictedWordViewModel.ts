@@ -5,6 +5,7 @@ interface RestrictedWordViewModel {
     word: string;
     createdBy: string;
     deletedBy?: string;
+    deletedReason?: string;
     createdAt: string;
     superRestricted: boolean;
     deletedAt?: string;

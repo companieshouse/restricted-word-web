@@ -58,6 +58,7 @@ describe("RestrictedWordController", function () {
             deletedBy: "deletedBy",
             createdAt: "createdAt",
             deletedAt: "deletedAt",
+            deletedReason: "deletedReason",
             deleted: false,
             superRestricted: false,
             superRestrictedAuditLog: []
@@ -80,6 +81,7 @@ describe("RestrictedWordController", function () {
     const exampleWord2 = "Example word 2";
     const exampleError = "Test message";
     const exampleId = "abc123";
+    const exampleDelReason = "reason";
 
     beforeEach(function () {
         mockRequest = SubstituteFactory.create<Request>();
@@ -785,18 +787,45 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("calls the api with the word ID provided and succesfully redirects if no errors", async function () {
+        it("logs and returns errors if delete reason is not supplied", async function () {
 
             mockRequest.body.returns({
                 id: exampleId,
                 word: exampleWord1
             });
 
+            const missingReasonError = "Justification required to delete word";
+            const expectedError = [{ text: missingReasonError }];
+
+            await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .errorRequest(mockRequest, missingReasonError);
+
+            mockResponse
+                .received()
+                .render(deleteWordViewName, Arg.is(options => {
+
+                    expect(options.errors).to.deep.equal(expectedError);
+
+                    return true;
+                }));
+        });
+
+        it("calls the api with the word ID provided and succesfully redirects if no errors", async function () {
+
+            mockRequest.body.returns({
+                id: exampleId,
+                word: exampleWord1,
+                deletedReason: exampleDelReason
+            });
+
             await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
 
             mockApiClient
                 .received()
-                .deleteRestrictedWord(exampleId);
+                .deleteRestrictedWord(exampleId, exampleDelReason);
 
             mockResponse
                 .received()
@@ -807,13 +836,14 @@ describe("RestrictedWordController", function () {
 
             mockRequest.body.returns({
                 id: exampleId,
-                word: exampleWord1
+                word: exampleWord1,
+                deletedReason: exampleDelReason
             });
 
             const expectedError = [{ text: exampleError }];
 
             mockApiClient
-                .deleteRestrictedWord(Arg.any())
+                .deleteRestrictedWord(Arg.any(), Arg.any())
                 .returns(PromiseRejector.rejectWith({
                     messages: [exampleError]
                 }));
