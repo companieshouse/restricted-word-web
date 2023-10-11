@@ -60,6 +60,16 @@
             name: "word",
             value: word
           }) }}
+          {{ govukInput({
+            label: {
+              text: "What is the reason for adding this word?",
+              isPageHeading: false,
+              classes: "govuk-label--m"
+            },
+            id: "created-reason",
+            name: "createdReason",
+            value: createdReason
+          }) }}
           {% set superChecked = superRestricted == true %}
           {{ govukRadios({
             classes: "govuk-radios--inline",

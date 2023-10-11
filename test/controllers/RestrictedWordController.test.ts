@@ -81,6 +81,7 @@ describe("RestrictedWordController", function () {
     const exampleWord2 = "Example word 2";
     const exampleError = "Test message";
     const exampleId = "abc123";
+    const exampleCreatedReason = "Example created reason";
     const exampleDelReason = "reason";
 
     beforeEach(function () {
@@ -530,7 +531,8 @@ describe("RestrictedWordController", function () {
         it("calls the api with the word from the body with no errors, and redirects successfully", async function () {
 
             mockRequest.body.returns({
-                word: exampleWord1
+                word: exampleWord1,
+                createdReason: exampleCreatedReason
             });
 
             const expectedRedirectUrl = `/${mockConfig.urlPrefix}/?addedWord=${encodeURIComponent(exampleWord1)}`;
@@ -539,7 +541,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .createRestrictedWord(exampleWord1, false, false);
+                .createRestrictedWord(exampleWord1, exampleCreatedReason, false, false);
 
             mockResponse
                 .received()
@@ -549,13 +551,14 @@ describe("RestrictedWordController", function () {
         it("renders the create view with errors and the word, if the api raises errors, and logs error", async function () {
 
             mockRequest.body.returns({
-                word: exampleWord1
+                word: exampleWord1,
+                createdReason: exampleCreatedReason
             });
 
             const expectedError = [{ text: exampleError }];
 
             mockApiClient
-                .createRestrictedWord(exampleWord1, false, false)
+                .createRestrictedWord(exampleWord1, exampleCreatedReason, false, false)
                 .returns(PromiseRejector.rejectWith({
                     messages: [exampleError]
                 }));
@@ -591,7 +594,8 @@ describe("RestrictedWordController", function () {
         it("sends back and logs error if word is not provided", async function () {
 
             mockRequest.body.returns({
-                word: ""
+                word: "",
+                createdReason: exampleCreatedReason
             });
 
             const wordRequiredError = "A word is required to create a new word";
@@ -615,14 +619,43 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
+        it("sends back and logs error if created reason is not provided", async function () {
+
+            mockRequest.body.returns({
+                word: exampleWord1,
+                createdReason: ""
+            });
+
+            const createdReasonRequiredError = "A reason for creating the word is required";
+            const expectedError = [{ text: createdReasonRequiredError }];
+
+            await restrictedWordController.postCreateNewWord(mockRequest, mockResponse);
+
+            mockLogger
+                .received()
+                .errorRequest(mockRequest, createdReasonRequiredError);
+
+            mockResponse
+                .received()
+                .render(createNewWordViewName, Arg.is(options => {
+
+                    expect(options.errors)
+                        .to.have.length(1)
+                        .to.deep.equal(expectedError);
+
+                    return true;
+                }));
+        });
+
         it("returns appropriate information if word needs forcing", async function () {
 
             mockRequest.body.returns({
-                word: exampleWord1
+                word: exampleWord1,
+                createdReason: exampleCreatedReason
             });
 
             mockApiClient
-                .createRestrictedWord(exampleWord1, false, false)
+                .createRestrictedWord(exampleWord1, exampleCreatedReason, false, false)
                 .returns(Promise.reject({ // eslint-disable-line prefer-promise-reject-errors
                     conflictingWords: ["DOG", "CAT"]
                 }));
@@ -631,7 +664,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .createRestrictedWord(exampleWord1, false, false);
+                .createRestrictedWord(exampleWord1, exampleCreatedReason, false, false);
 
             mockResponse
                 .received()
@@ -640,6 +673,7 @@ describe("RestrictedWordController", function () {
                     expect(options)
                         .to.deep.equal({
                             word: exampleWord1.toUpperCase(),
+                            createdReason: exampleCreatedReason,
                             superRestricted: false,
                             hasConflicting: true,
                             conflictingWords: [

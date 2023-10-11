@@ -7,6 +7,7 @@ import RestrictedWordQueryOptions from "../clients/RestrictedWordQueryOptions";
 import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
 import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
+import RestrictedWordError from "../error/RestrictedWordError";
 
 const logger = createLogger(config.applicationNamespace);
 
@@ -16,7 +17,14 @@ class RestrictedWordController {
 
         let errorMessages = error.messages;
 
-        if (errorMessages === undefined) {
+        if (error instanceof RestrictedWordError) {
+
+            errorMessages = error.errors;
+            for (const errorMessage of errorMessages) {
+                logger.errorRequest(request, errorMessage);
+            }
+
+        } else if (errorMessages === undefined) {
 
             errorMessages = [error.message];
             logger.errorRequest(request, error.message);
@@ -191,6 +199,7 @@ class RestrictedWordController {
     public static async postCreateNewWord(request: Request, response: Response) {
 
         const newWord = request.body.word;
+        const createdReason = request.body.createdReason;
         const superRestricted = request.body.superRestricted === "true";
         const deleteConflicting = request.body.deleteConflicting === "true";
 
@@ -200,16 +209,27 @@ class RestrictedWordController {
 
         try {
 
+            const errorMessages = [];
+
             if (!newWord) {
-                throw new Error("A word is required to create a new word");
+                errorMessages.push("A word is required to create a new word");
             }
 
-            await restrictedWordApiClient.createRestrictedWord(newWord, superRestricted, deleteConflicting);
+            if (!createdReason) {
+                errorMessages.push("A reason for creating the word is required");
+            }
+
+            if (errorMessages.length > 0) {
+                throw new RestrictedWordError("Validation error when creating a word", errorMessages);
+            }
+
+            await restrictedWordApiClient.createRestrictedWord(newWord, createdReason, superRestricted, deleteConflicting);
 
         } catch (unknownError) {
             if (unknownError.conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),
+                    createdReason: createdReason,
                     superRestricted: superRestricted,
                     hasConflicting: true,
                     conflictingWords: unknownError.conflictingWords
@@ -220,6 +240,7 @@ class RestrictedWordController {
 
             return response.render("add-new-word", {
                 word: newWord,
+                createdReason: createdReason,
                 superRestricted: superRestricted,
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
