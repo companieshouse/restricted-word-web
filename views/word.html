@@ -43,6 +43,13 @@
             value: {
               text: word.createdAt
             }
+          },{
+            key: {
+              text: "Created reason"
+            },
+            value: {
+              html: word.createdReason if word.createdReason else "-"
+            }
           }, {
             key: {
               text: "Removed by"
@@ -58,6 +65,14 @@
               html: word.deletedAt
             }
           }, {
+            key: {
+              text: "Deletion reason"
+            },
+            value: {
+              html: word.deletedReason if word.deletedReason else "-"
+            }
+          },
+           {
             key: {
               text: "Super restricted"
             },

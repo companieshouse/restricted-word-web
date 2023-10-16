@@ -4,6 +4,7 @@ interface RestrictedWordViewModel {
     id: string;
     word: string;
     createdBy: string;
+    createdReason?: string;
     deletedBy?: string;
     deletedReason?: string;
     createdAt: string;
