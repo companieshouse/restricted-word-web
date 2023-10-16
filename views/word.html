@@ -27,67 +27,124 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters-from-desktop">
       <h1 class="govuk-heading-xl">{{word.word}}</h1>
-      {{ govukSummaryList({
-        rows: [
-          {
-            key: {
-              text: "Added by"
-            },
-            value: {
-              text: word.createdBy
-            }
-          }, {
-            key: {
-              text: "Date added"
-            },
-            value: {
-              text: word.createdAt
-            }
-          },{
-            key: {
-              text: "Created reason"
-            },
-            value: {
-              html: word.createdReason if word.createdReason else "-"
-            }
-          }, {
-            key: {
-              text: "Removed by"
-            },
-            value: {
-              html: word.deletedBy if word.deleted else "-"
-            }
-          }, {
-            key: {
-              text: "Date removed"
-            },
-            value: {
-              html: word.deletedAt
-            }
-          }, {
-            key: {
-              text: "Deletion reason"
-            },
-            value: {
-              html: word.deletedReason if word.deletedReason else "-"
-            }
-          },
-           {
-            key: {
-              text: "Super restricted"
-            },
-            value: {
-              html: "Yes" if word.superRestricted else "No"
-            }
-          }
-        ]
-      }) }}
       {% if not word.deleted %}
-        {{ govukButton({
-          text: "Delete word",
-          href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
-          classes: "govuk-button--warning"
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Added by"
+              },
+              value: {
+                text: word.createdBy
+              }
+            }, {
+              key: {
+                text: "Date added"
+              },
+              value: {
+                text: word.createdAt
+              }
+            }, {
+              key: {
+                text: "Created reason"
+              },
+              value: {
+                html: word.createdReason if word.createdReason.length <= 200 else 
+                '<details class="govuk-details" data-module="govuk-details">
+                  <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">'
+                      + word.createdReason.substring(0, 15) + '...' +
+                    '</span>
+                  </summary>
+                  <div class="govuk-details__text">'
+                    + word.createdReason + 
+                  '</div></details>'
+              }
+            }, {
+              key: {
+                text: "Super restricted"
+              },
+              value: {
+                html: "Yes" if word.superRestricted else "No"
+              }
+            }
+          ]
         }) }}
+      {% endif %}
+      {% if word.deleted %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Added by"
+              },
+              value: {
+                text: word.createdBy
+              }
+            }, {
+              key: {
+                text: "Date added"
+              },
+              value: {
+                text: word.createdAt
+              }
+            }, {
+              key: {
+                text: "Created reason"
+              },
+              value: {
+                html: word.createdReason if word.createdReason.length < 200 else 
+                '<details class="govuk-details" data-module="govuk-details">
+                  <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">'
+                      + word.createdReason.substring(0, 15) + '...' +
+                    '</span>
+                  </summary>
+                  <div class="govuk-details__text">'
+                    + word.createdReason + 
+                  '</div></details>'
+              }
+            }, {
+              key: {
+                text: "Removed by"
+              },
+              value: {
+                html: word.deletedBy if word.deleted else "-"
+              }
+            }, {
+              key: {
+                text: "Date removed"
+              },
+              value: {
+                html: word.deletedAt
+              }
+            }, {
+              key: {
+                text: "Deletion reason"
+              },
+              value: {
+                html: word.deletedReason if word.deletedReason.length <= 200 else 
+                '<details class="govuk-details" data-module="govuk-details">
+                  <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">'
+                      + word.deletedReason.substring(0, 15) + '...' +
+                    '</span>
+                  </summary>
+                  <div class="govuk-details__text">'
+                    + word.deletedReason + 
+                  '</div></details>'
+              }
+            }, {
+              key: {
+                text: "Super restricted"
+              },
+              value: {
+                html: "Yes" if word.superRestricted else "No"
+              }
+            }
+          ]
+        }) }}
+      {% endif %}
 
         <h2 class="govuk-heading-l">Super restricted word</h2>
         <form action="/{{ urlPrefix }}/set-super-restricted" method="POST">
@@ -118,8 +175,15 @@
             ]
           }) }}
           {{ govukButton({
-            text: "Update"
+            text: "Update",
+            classes: "govuk-!-margin-right-1"
           }) }}
+      {% if not word.deleted %}
+        {{ govukButton({
+          text: "Delete word",
+          href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
+          classes: "govuk-button--warning"
+        }) }}
         </form>
       {% endif %}
       {{ govukTable({
