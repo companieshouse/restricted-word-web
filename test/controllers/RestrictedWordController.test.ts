@@ -83,6 +83,8 @@ describe("RestrictedWordController", function () {
     const exampleError = "Test message";
     const exampleId = "abc123";
     const exampleCategories = ["prev-subjected-to-direction-to-change", "criminal-fraudulent-purposes"];
+    const exampleCategories2String = "restricted";
+    const exampleCategories2Array = ["restricted"];
     const exampleCreatedReason = "Example created reason";
     const exampleDelReason = "reason";
 
