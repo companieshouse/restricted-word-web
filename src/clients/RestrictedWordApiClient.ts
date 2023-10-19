@@ -52,6 +52,7 @@ class RestrictedWordApiClient {
                 undefined,
             deletedReason: serverObject.deleted_reason ? serverObject.deleted_reason : undefined,
             createdAt: moment(serverObject.created_at).format("DD MMM YY"),
+            createdReason: serverObject.created_reason,
             deletedAt: serverObject.deleted_at ?
                 moment(serverObject.deleted_at).format("DD MMM YY") :
                 "-",
