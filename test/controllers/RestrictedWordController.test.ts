@@ -537,7 +537,7 @@ describe("RestrictedWordController", function () {
             mockRequest.body.returns({
                 word: exampleWord1,
                 createdReason: exampleCreatedReason,
-                categories: exampleCategories
+                categories: exampleCategories2String
             });
 
             const expectedRedirectUrl = `/${mockConfig.urlPrefix}/?addedWord=${encodeURIComponent(exampleWord1)}`;
@@ -546,7 +546,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .createRestrictedWord(exampleWord1, exampleCreatedReason, exampleCategories, false, false);
+                .createRestrictedWord(exampleWord1, exampleCreatedReason, exampleCategories2Array, false, false);
 
             mockResponse
                 .received()
