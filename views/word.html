@@ -83,11 +83,12 @@
         text: "Deletion reason"
       },
       value: {
-        html: word.deletedReason if word.deletedReason.length <= 200 else 
+        html: "-" if not word.deletedReason else 
+        (word.deletedReason if word.deletedReason.length < 200 else 
         govukDetails({
           summaryText: word.deletedReason.substring(0, 15) + '...',
           text: word.deletedReason
-        })
+        }))
       }
     }%}
 ​
