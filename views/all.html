@@ -42,6 +42,7 @@
   {% if words.length > 0 %}
     <div class="govuk-grid-row">
       {% include "includes/filters.html" %}
+      <h1>{{ filterParams.categories is string }}</h1>
       <div class="govuk-grid-column-three-quarters column-results column-results--active">
         <table class="govuk-table" id="all-words-table">
           <thead class="govuk-table__head">
@@ -50,6 +51,7 @@
               <th class="govuk-table__header" scope="col">Date Added</th>
               <th class="govuk-table__header" scope="col">Date Removed</th>
               <th class="govuk-table__header" scope="col">Super restricted?</th>
+              <th class="govuk-table__header" scope="col">Categories</th>
             </tr>
           </thead>
           <tbody class="govuk-table__body">
@@ -73,7 +75,13 @@
                 <td class="govuk-table__cell">
                   {{ "Yes" if word.superRestricted else "No" }}
                 </td>
-              </tr>
+                <td class="govuk-table__cell">
+                  <td class="govuk-table__cell">
+
+                        {{ word.categories }}
+      
+                </td>
+
             {% endfor %}
           </tbody>
         </table>

@@ -90,13 +90,55 @@
           ]
         }) }}
     </div>
+    <div role="widget" class="filter open">
+      <div class="govuk-body filters-heading" role="button" aria-controls="filter-categories" aria-expanded="true" tabindex="0">
+        <span id="filter-label-cat">
+          <span class="govuk-visually-hidden">Filter by
+          </span>Categories</span>
+        <div class="toggle"></div>
+      </div>
+      {{ govukCheckboxes({
+          idPrefix: "filter-categories",
+          name: "categorySelection",
+          fieldset: {
+            legend: {
+              text: "Which categories do you want to see?",
+              isPageHeading: false,
+              classes: "govuk-visually-hidden"
+            },
+            classes: "filters-wrapper"
+          },
+          items: [
+            {
+              value: "restricted",
+              text: "Restricted"
+             
+            },
+            {
+              value: "international-orgs-foreign-gov-depts",
+              text: "International orgs/ govts"
+           
+            },
+            {
+              value: "criminal-fraudulent-purposes",
+              text: "Names for crime/ fraud"
+             
+            },
+            {
+              value: "prev-subjected-to-direction-to-change",
+              text: "Names direction to change"
+             
+            }
+          ]
+        }) }}
+    </div>
     {{ govukButton({
       text: "Search",
       classes: "govuk-!-margin-right-1",
       attributes: { id: "filter-button" }
     }) }}
     {{ govukButton({
-      text: "Clear Search",
+      text: "Clear",
       classes: "govuk-button--secondary link filter-reset",
       href: "/" + urlPrefix,
       attributes: { id: "clear-filter-button" }

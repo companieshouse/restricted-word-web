@@ -4,6 +4,7 @@ interface RestrictedWordFilterDto {
     contains?: string;
     deleted?: boolean;
     super_restricted?: boolean;
+    categories?: string;
 }
 
 export default RestrictedWordFilterDto;

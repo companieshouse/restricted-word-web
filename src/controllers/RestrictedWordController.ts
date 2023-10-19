@@ -47,7 +47,7 @@ class RestrictedWordController {
 
         const queryOptions: RestrictedWordQueryOptions = {
             startsWith: undefined,
-            contains: filterWord || undefined
+            contains: filterWord || undefined,
         };
 
         const superRestrictedStatus = request.query.filterSuperRestricted;
@@ -59,13 +59,20 @@ class RestrictedWordController {
         }
 
         const deletedStatus = request.query.deletedStatus;
+        console.log("deleted: "+ deletedStatus );
 
         if (deletedStatus === "Active") {
             queryOptions.deleted = false;
         } else if (deletedStatus === "Deleted") {
             queryOptions.deleted = true;
         }
-
+        //if it is a singular category, it is string, if it multiple, it an array
+        const categorySelection = request.query.categorySelection;
+        if (typeof categorySelection === 'string' ) {
+            queryOptions.categories = [categorySelection];
+        } else {
+            queryOptions.categories = categorySelection as string[];
+        }
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         let results: RestrictedWordViewModel[];
@@ -94,6 +101,10 @@ class RestrictedWordController {
             urlParams.push(`deletedStatus=${deletedStatus}`);
         }
 
+        if (categorySelection) {
+            urlParams.push(`categories=${categorySelection}`);
+        }
+
         if (filterWord) {
             urlParams.push(`filterWord=${encodeURIComponent(filterWord)}`);
         }
@@ -103,10 +114,12 @@ class RestrictedWordController {
             words: pager.pageResults(),
             deletedWord: request.query.deletedWord,
             addedWord: request.query.addedWord,
+            categories: request.query.categories,
             filterParams: {
                 word: filterWord,
                 superRestricted: superRestrictedStatus,
-                status: deletedStatus
+                status: deletedStatus,
+                categories: categorySelection
             },
             pagination: pager.getPaginationOptions()
         });
