@@ -70,6 +70,38 @@
             name: "createdReason",
             value: createdReason
           }) }}
+          {{ govukCheckboxes({
+            name: "categories",
+            fieldset: {
+              legend: {
+                text: "Which types of waste do you transport?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+              }
+            },
+            items: [
+              {
+                value: "restricted",
+                text: "Restricted",
+                id: "restricted"
+              },
+              {
+                value: "criminal-fraudulent-purposes",
+                text: "International organisations and foreign government departments",
+                id: "criminal-fraudulent-purposes"
+              },
+              {
+                value: "international-orgs-foreign-gov-depts",
+                text: "Names for criminal / fraudulent purposes",
+                id: "international-orgs-foreign-gov-depts"
+              },
+              {
+                value: "prev-subjected-to-direction-to-change",
+                text: "Names previously subjected to a direction to change them",
+                id: "prev-subjected-to-direction-to-change"
+              }
+            ]
+          }) }}
           {% set superChecked = superRestricted == true %}
           {{ govukRadios({
             classes: "govuk-radios--inline",

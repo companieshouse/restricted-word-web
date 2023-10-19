@@ -46,6 +46,7 @@ class RestrictedWordApiClient {
         return {
             id: serverObject.id,
             word: serverObject.full_word,
+            categories: serverObject.categories,
             createdBy: RestrictedWordApiClient.getUsernameFromEmail(serverObject.created_by),
             deletedBy: serverObject.deleted_by ?
                 RestrictedWordApiClient.getUsernameFromEmail(serverObject.deleted_by) :
@@ -124,13 +125,14 @@ class RestrictedWordApiClient {
         }
     }
 
-    public async createRestrictedWord(word: string, createdReason: string, superRestricted: boolean, deleteConflicting: boolean) {
+    public async createRestrictedWord(word: string, createdReason: string, categories: Array<string>, superRestricted: boolean, deleteConflicting: boolean) {
 
         try {
 
             await axiosInstance.post("/word", {
                 full_word: word,
                 created_reason: createdReason,
+                categories: categories,
                 super_restricted: superRestricted,
                 delete_conflicting: deleteConflicting,
                 created_by: this._username
