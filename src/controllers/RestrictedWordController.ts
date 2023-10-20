@@ -66,7 +66,7 @@ class RestrictedWordController {
         } else if (deletedStatus === "Deleted") {
             queryOptions.deleted = true;
         }
-        //if it is a singular category, it is string, if it multiple, it an array
+        //if it is a singular category, it is string, if it multiple, it's an array
         const categorySelection = request.query.categorySelection;
         if (typeof categorySelection === 'string' ) {
             queryOptions.categories = [categorySelection];
