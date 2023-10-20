@@ -828,7 +828,7 @@ describe("RestrictedWordController", function () {
                 word: exampleWord1
             });
 
-            const missingReasonError = "Justification required to delete word";
+            const missingReasonError = "A reason for deleting the word is required";
             const expectedError = [{ text: missingReasonError }];
 
             await restrictedWordController.postDeleteWord(mockRequest, mockResponse);
