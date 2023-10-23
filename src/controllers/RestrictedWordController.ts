@@ -8,6 +8,7 @@ import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
 import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
 import RestrictedWordError from "../error/RestrictedWordError";
+import { getCategoriesListHtml } from "../helpers/word";
 
 const logger = createLogger(config.applicationNamespace);
 
@@ -160,7 +161,6 @@ class RestrictedWordController {
     }
 
     public static async getWord(request: Request, response: Response) {
-
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
@@ -169,6 +169,7 @@ class RestrictedWordController {
 
             return response.render("word", {
                 word: word,
+                categoriesListHtml: getCategoriesListHtml(word.categories),
                 setSuperRestricted: request.query.setSuperRestricted,
                 wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog)
             });
