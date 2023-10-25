@@ -70,6 +70,38 @@
             name: "createdReason",
             value: createdReason
           }) }}
+          {{ govukCheckboxes({
+            name: "categories",
+            fieldset: {
+              legend: {
+                text: "Which category or catergories are associated with this word?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+              }
+            },
+            items: [
+              {
+                value: "restricted",
+                text: "Restricted",
+                id: "restricted"
+              },
+              {
+                value: "criminal-fraudulent-purposes",
+                text: "Names for criminal / fraudulent purposes",
+                id: "criminal-fraudulent-purposes"
+              },
+              {
+                value: "international-orgs-foreign-gov-depts",
+                text: "International organisations and foreign government departments",
+                id: "international-orgs-foreign-gov-depts"
+              },
+              {
+                value: "prev-subjected-to-direction-to-change",
+                text: "Names previously subjected to a direction to change them",
+                id: "prev-subjected-to-direction-to-change"
+              }
+            ]
+          }) }}
           {% set superChecked = superRestricted == true %}
           {{ govukRadios({
             classes: "govuk-radios--inline",

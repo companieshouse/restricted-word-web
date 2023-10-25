@@ -203,6 +203,10 @@ class RestrictedWordController {
         const createdReason = request.body.createdReason;
         const superRestricted = request.body.superRestricted === "true";
         const deleteConflicting = request.body.deleteConflicting === "true";
+        if (typeof request.body.categories === 'string'){
+            request.body.categories = [request.body.categories];
+        } 
+        const categories = request.body.categories;
 
         logger.infoRequest(request, `Attempting to create new word "${newWord}" with super restricted "${superRestricted}".`);
 
@@ -220,17 +224,22 @@ class RestrictedWordController {
                 errorMessages.push("A reason for creating the word is required");
             }
 
+            if (!categories) {
+                errorMessages.push("A category for the new word is required");
+            }
+
             if (errorMessages.length > 0) {
                 throw new RestrictedWordError("Validation error when creating a word", errorMessages);
             }
 
-            await restrictedWordApiClient.createRestrictedWord(newWord, createdReason, superRestricted, deleteConflicting);
+            await restrictedWordApiClient.createRestrictedWord(newWord, createdReason, categories, superRestricted, deleteConflicting);
 
         } catch (unknownError) {
             if (unknownError.conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),
                     createdReason: createdReason,
+                    categories: categories,
                     superRestricted: superRestricted,
                     hasConflicting: true,
                     conflictingWords: unknownError.conflictingWords
