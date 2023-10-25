@@ -3,6 +3,7 @@ import AuditEntryViewModel from "./AuditEntryViewModel";
 interface RestrictedWordViewModel {
     id: string;
     word: string;
+    categories: string[],
     createdBy: string;
     createdReason?: string;
     deletedBy?: string;

@@ -66,6 +66,7 @@ describe("RestrictedWordApiClient", function () {
     const testUser = "test@user.com";
     const testWord = "Test word";
     const testId = "abc123";
+    const testCategories = ["prev-subjected-to-direction-to-change", "criminal-fraudulent-purposes"];
     const testCreatedReason = "Test reason";
     const testDelReason = "reason";
 
@@ -83,6 +84,7 @@ describe("RestrictedWordApiClient", function () {
         const data: RestrictedWordDto = {
             id: testId,
             full_word: "FIRST",
+            categories: ["prev-subjected-to-direction-to-change", "criminal-fraudulent-purposes"],
             created_by: "FredJones@domain.other.tld",
             created_at: "2020-01-23T12:05:08.096",
             created_reason: "test created reason",
@@ -117,6 +119,7 @@ describe("RestrictedWordApiClient", function () {
             const mappedResult: RestrictedWordViewModel = {
                 id: testId,
                 word: "FIRST",
+                categories: ["prev-subjected-to-direction-to-change", "criminal-fraudulent-purposes"],
                 createdBy: "FredJones",
                 createdReason: "test created reason",
                 deletedBy: undefined,
@@ -169,6 +172,7 @@ describe("RestrictedWordApiClient", function () {
                 {
                     id: "1",
                     full_word: "FIRST",
+                    categories: ["prev-subjected-to-direction-to-change", "criminal-fraudulent-purposes"],
                     created_by: "FredJones@domain.other.tld",
                     created_at: "2020-01-23T12:05:08.096",
                     created_reason: "test created reason",
@@ -179,6 +183,7 @@ describe("RestrictedWordApiClient", function () {
                 {
                     id: "2",
                     full_word: "Second",
+                    categories: ["prev-subjected-to-direction-to-change"],
                     created_by: "Jill+Jones@email",
                     created_at: "2020-01-24T12:05:08.096",
                     created_reason: "test created reason",
@@ -209,6 +214,7 @@ describe("RestrictedWordApiClient", function () {
                 {
                     id: "1",
                     word: "FIRST",
+                    categories: ["prev-subjected-to-direction-to-change", "criminal-fraudulent-purposes"],
                     createdBy: "FredJones",
                     createdReason: "test created reason",
                     deletedBy: undefined,
@@ -222,6 +228,7 @@ describe("RestrictedWordApiClient", function () {
                 {
                     id: "2",
                     word: "Second",
+                    categories: ["prev-subjected-to-direction-to-change"],
                     createdBy: "Jill+Jones",
                     createdReason: "test created reason",
                     deletedBy: "Ben.Gun",
@@ -323,11 +330,12 @@ describe("RestrictedWordApiClient", function () {
 
         it("creates a word successfully", async function () {
 
-            await apiClient.createRestrictedWord(testWord, testCreatedReason, true, false);
+            await apiClient.createRestrictedWord(testWord, testCreatedReason, testCategories, true, false);
 
             expect(mockAxiosInstance.post).to.have.been.calledWithExactly("/word", {
                 created_by: testUser,
                 created_reason: testCreatedReason,
+                categories: testCategories,
                 full_word: testWord,
                 super_restricted: true,
                 delete_conflicting: false
@@ -338,7 +346,7 @@ describe("RestrictedWordApiClient", function () {
 
             mockAxiosInstance.post.rejects(testErrorResponse);
 
-            await expect(apiClient.createRestrictedWord(testWord, testCreatedReason, false, false))
+            await expect(apiClient.createRestrictedWord(testWord, testCreatedReason, testCategories, false, false))
                 .to.eventually.be.rejected
                 .and.have.property("messages")
                 .with.lengthOf(1);
@@ -348,7 +356,7 @@ describe("RestrictedWordApiClient", function () {
 
             mockAxiosInstance.post.rejects(testForceRequiredResponse);
 
-            await expect(apiClient.createRestrictedWord(testWord, testCreatedReason, false, false))
+            await expect(apiClient.createRestrictedWord(testWord, testCreatedReason, testCategories, false, false))
                 .to.eventually.be.rejectedWith()
                 .and.have.property("conflictingWords")
                 .which.deep.equals([
