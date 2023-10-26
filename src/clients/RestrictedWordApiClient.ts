@@ -64,17 +64,40 @@ class RestrictedWordApiClient {
                     changedBy: RestrictedWordApiClient.getUsernameFromEmail(auditEntry.changed_by),
                     newValue: auditEntry.new_value
                 };
-            })
+            }),
+            categoriesAuditLog: serverObject.categories_audit_log.map(function (auditEntry) {
+                return {
+                    changedAt: moment(auditEntry.changed_at).format("DD MMM YY"),
+                    changedBy: RestrictedWordApiClient.getUsernameFromEmail(auditEntry.changed_by),
+                    changedReason: auditEntry.changed_reason,
+                    categories: auditEntry.categories
+                };
+            }),
         };
     }
 
-    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest) {
+    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest, whichCall: string) {
 
         try {
-            await axiosInstance.patch(`/word/${options.id}`, {
-                patched_by: options.patchedBy,
-                super_restricted: options.superRestricted
-            });
+            if (whichCall === "onlySuper") {
+                await axiosInstance.patch(`/word/${options.id}`, {
+                    patched_by: options.patchedBy,
+                    super_restricted: options.superRestricted
+                });
+            } else if (whichCall === "onlyCategories") {
+                await axiosInstance.patch(`/word/${options.id}`, {
+                    patched_by: options.patchedBy,
+                    categories: options.categories,
+                    changed_reason: options.categoryChangeReason
+                });
+            } else if (whichCall === "both") {
+                await axiosInstance.patch(`/word/${options.id}`, {
+                    patched_by: options.patchedBy,
+                    super_restricted: options.superRestricted,
+                    categories: options.categories,
+                    changed_reason: options.categoryChangeReason
+                });
+            }
         } catch (error) {
             throw this.handleErrors(error);
         }

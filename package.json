@@ -36,7 +36,7 @@
     "chokidar": "^3.5.3",
     "cookie-parser": "~1.4.4",
     "express": "~4.17.1",
-    "govuk-frontend": "~3.6.0",
+    "govuk-frontend": "~4.7.0",
     "helmet": "~3.21.2",
     "ioredis": "~4.16.0",
     "moment": "^2.29.4",
