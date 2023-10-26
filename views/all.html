@@ -46,36 +46,84 @@
         <table class="govuk-table" id="all-words-table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">Restricted Word</th>
-              <th class="govuk-table__header" scope="col">Date Added</th>
-              <th class="govuk-table__header" scope="col">Date Removed</th>
-              <th class="govuk-table__header" scope="col">Super restricted?</th>
-              <th class="govuk-table__header" scope="col">Categories</th>
+              <th class="govuk-table__header word-col-header" scope="col">Restricted Word</th>
+              <th class="govuk-table__header standard-col-header" scope="col">Date Added</th>
+              <th class="govuk-table__header standard-col-header" scope="col">Date Removed</th>
+              <th class="govuk-table__header standard-col-header" scope="col">Super restricted?</th>
+              <th class="govuk-table__header categories-col-header" scope="col">Categories</th>
             </tr>
           </thead>
-          <tbody class="govuk-table__body">
+          <tbody class="govuk-table__body" id="all-words-table-body">
             {% for word in words %}
               <tr id="word-{{word.id}}" class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">
                   <a href="/{{ urlPrefix }}/word/{{ word.id }}" class="govuk-link govuk-link--no-visited-state">{{ word.word }}</a>
                 </th>
                 <td class="govuk-table__cell">
-                  {{ word.createdAt }}<br />
-                  <span class="govuk-body-s">By {{ word.createdBy }}</span>
+                  <div class="date-col">
+                    {{ word.createdAt }}<br />
+                    <span class="govuk-body-s">By {{ word.createdBy }}</span>
+                  </div>
                 </td>
                 <td class="govuk-table__cell">
-                  {% if word.deleted %}
-                    {{ word.deletedAt }}<br />
-                    <span class="govuk-body-s">By {{ word.deletedBy }}</span>
-                  {% else %}
-                    -
-                  {% endif %}
+                  <div class="date-col">
+                    {% if word.deleted %}
+                      {{ word.deletedAt }}<br />
+                      <span class="govuk-body-s">By {{ word.deletedBy }}</span>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </div>
+                  
                 </td>
                 <td class="govuk-table__cell">
                   {{ "Yes" if word.superRestricted else "No" }}
                 </td>
                 <td class="govuk-table__cell">
-                    {{ word.categories }}<br />
+                  <div id="categories-grid-container">
+                    {% for categories in word.categories %}
+                    {% if categories === "restricted" %}
+                      <div class="tooltip">
+                        {{govukTag({
+                          text: "Restricted",
+                          classes: "govuk-tag--red"
+                        })}}
+                        <span class="tooltip-text">Restricted</span>
+                      </div>
+                      
+                    {% endif %}
+                    {% if categories === "criminal-fraudulent-purposes" %}
+                      <div class="tooltip">
+                        {{govukTag({
+                          text: "Crimes/Fraud",
+                          classes: "govuk-tag--blue"
+                        })}}
+                        <span class="tooltip-text">Names for criminal/fraudulent purposes</span>
+                      </div>
+                    {% endif %}
+                    {% if categories === "international-orgs-foreign-gov-depts" %}
+                      <span class="tooltip">
+                        {{govukTag({
+                          text: "Int'l orgs/govts",
+                          classes: "govuk-tag--green"
+                        })}}
+                        <span class="tooltip-text">International organisations and foreign government departments</span>
+                      </span>
+                    {% endif %}
+                    {% if categories === "prev-subjected-to-direction-to-change" %}
+                      <div class="tooltip">
+                        {{govukTag({
+                          text: "Dir. to change",
+                          classes: "govuk-tag--yellow"
+                        })}}
+                        <span class="tooltip-text">Names previously subjected to a direction to change them</span>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                  {% if not word.categories %}
+                      -
+                  {% endif %}
+                  </div>
                 </td>
             {% endfor %}
           </tbody>

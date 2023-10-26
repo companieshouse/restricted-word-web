@@ -54,3 +54,53 @@ tr:nth-child(even) {
   padding: .5em 0;
 }
 
+.govuk-tag {
+  font-size: 12px;
+  letter-spacing: 0px;
+}
+
+.filters .govuk-checkboxes__label:after {
+  box-sizing: unset;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  max-width: 200px;
+  font-size: 14px;
+  background-color: rgb(230, 230, 230);
+  color:	#0b0c0c;
+  text-align: center;
+  padding: 7px;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip {
+  display: inline-block;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
+.standard-col-header {
+  width: 17%;
+}
+
+.categories-col-header {
+  width: 20%;
+}
+
+#all-words-table-body {
+  overflow-wrap: break-word;
+}
+
+#all-words-table {
+  table-layout: auto;
+  width: 100%;
+}
+
+.word-col-header {
+  max-width: 29%;
+}
