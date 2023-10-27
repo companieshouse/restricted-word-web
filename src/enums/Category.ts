@@ -5,7 +5,7 @@ export enum Category {
     PREV_SUBJECTED_TO_DIRECTION_CHANGE = "prev-subjected-to-direction-to-change"
 };
 
- export function getCategoryName(categoryId: string): string {
+export function getCategoryName(categoryId: string): string {
     switch (categoryId) {
         case Category.RESTRICTED: {
             return 'Restricted';

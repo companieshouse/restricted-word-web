@@ -1,8 +1,8 @@
 interface CategoryAuditEntryViewModel {
     changedBy: string;
     changedAt: string;
-    changedReason: string;
     categories: string[];
+    changedReason: string;
 }
 
 export default CategoryAuditEntryViewModel;

@@ -102,32 +102,45 @@
       {{ govukInput({
         label: {
           text: "What is the reason for changing the categories for this word?",
-          isPageHeading: false,
-          classes: "govuk-label--s"
+          isPageHeading: false
         },
         id: "changed-reason",
         name: "changedReason",
         value: changedReason
       }) }}
     {% endif %}
-    {{ govukTable({
-        head: [
-          {
-            text: "Date"
-          },
-          {
-            text: "Updated by"
-          },
-          {
-            text: "Categories"
-          },
-          {
-            text: "Change reason",
-            colspan: 2
-          }
-        ],
-        rows: wordCategoryHistory
-      }) }}
+    <table class="govuk-table" id="categories-audit-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Date</th>
+          <th class="govuk-table__header" scope="col">Updated by</th>
+          <th class="govuk-table__header" scope="col">Categories</th>
+          <th class="govuk-table__header" scope="col">Changed Reason</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for auditEntry in wordCategoryHistory %}
+          <tr id="word-{{word.id}}" class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{ auditEntry.changedAt }}
+            </td>
+            <td class="govuk-table__cell">
+              {{ auditEntry.changedBy }}
+            </td>
+            <td class="govuk-table__cell">
+              {{ auditEntry.categories }}
+            </td>
+            <td class="govuk-table__cell">
+              {{ (auditEntry.changedReason if auditEntry.changedReason.length < 200 else 
+                govukDetails({
+                  summaryText: auditEntry.changedReason.substring(0, 15) + '...',
+                  text: auditEntry.changedReason
+                })) }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% endset -%}
 
   {% set superRestrictedTabHtml %}
@@ -175,13 +188,13 @@
   {% endset -%}
 
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters-from-desktop">
+    <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-xl">{{word.word}}</h1>
       {{ govukSummaryList({
         rows: wordRows
       }) }}
 
-      <form action="/{{ urlPrefix }}/set-super-restricted" method="POST">
+      <form action="/{{ urlPrefix }}/update" method="POST">
         <input type="hidden" name="id" value="{{ word.id }}" />
         {{ govukTabs({
           items: [

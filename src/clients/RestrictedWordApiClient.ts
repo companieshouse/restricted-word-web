@@ -8,6 +8,7 @@ import axiosInstance from "./axiosInstance";
 import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
 import moment from "moment";
+import { UpdateFields } from "../enums";
 
 class RestrictedWordApiClient {
 
@@ -76,21 +77,21 @@ class RestrictedWordApiClient {
         };
     }
 
-    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest, whichCall: string) {
+    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest, fieldsToUpdate: string) {
 
         try {
-            if (whichCall === "onlySuper") {
+            if (fieldsToUpdate === UpdateFields.SUPER_RESTRICTED) {
                 await axiosInstance.patch(`/word/${options.id}`, {
                     patched_by: options.patchedBy,
                     super_restricted: options.superRestricted
                 });
-            } else if (whichCall === "onlyCategories") {
+            } else if (fieldsToUpdate === UpdateFields.CATEGORIES) {
                 await axiosInstance.patch(`/word/${options.id}`, {
                     patched_by: options.patchedBy,
                     categories: options.categories,
                     changed_reason: options.categoryChangeReason
                 });
-            } else if (whichCall === "both") {
+            } else if (fieldsToUpdate === UpdateFields.BOTH) {
                 await axiosInstance.patch(`/word/${options.id}`, {
                     patched_by: options.patchedBy,
                     super_restricted: options.superRestricted,

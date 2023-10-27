@@ -202,7 +202,7 @@ describe("RestrictedWordController", function () {
         });
     });
 
-    describe("#postSuperRestrictedWord", function () {
+    describe("#postUpdateWord", function () {
 
         const viewName = "word";
         const testId = "abc123";
@@ -216,7 +216,7 @@ describe("RestrictedWordController", function () {
                 loggedInUserEmail: testUser
             });
 
-            await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
+            await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
             mockResponse
                 .received()
                 .redirect(Arg.is(options => {
@@ -236,7 +236,7 @@ describe("RestrictedWordController", function () {
                 loggedInUserEmail: testUser
             });
 
-            await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
+            await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
             mockResponse
                 .received()
                 .redirect(Arg.is(options => {
@@ -255,7 +255,7 @@ describe("RestrictedWordController", function () {
                 loggedInUserEmail: testUser
             });
 
-            await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
+            await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
             mockResponse
                 .received()
                 .render(viewName, Arg.is(options => {
@@ -280,7 +280,7 @@ describe("RestrictedWordController", function () {
                 id: testId
             });
 
-            await restrictedWordController.postSuperRestrictedWord(mockRequest, mockResponse);
+            await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
 
             mockResponse
                 .received()
