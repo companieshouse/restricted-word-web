@@ -63,7 +63,7 @@
         text: "Categories"
       },
       value: {
-        html: "-" if not word.categories else categoriesListHtml
+        html: "-" if not word.categories else getCategoriesListHtml(word.categories)
       }
     }
   ] %}
@@ -135,7 +135,7 @@
               {{ auditEntry.changedBy }}
             </td>
             <td class="govuk-table__cell">
-              {{ auditEntry.categories }}
+              {{ getCategoriesListHtml(auditEntry.categories)|safe }}
             </td>
             <td class="govuk-table__cell">
               {{ (auditEntry.changedReason if auditEntry.changedReason.length < 200 else 
