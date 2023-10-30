@@ -220,7 +220,6 @@ class RestrictedWordController {
             return response.render("word", {
                 word: word,
                 categoriesListHtml: getCategoriesListHtml(word.categories),
-                categories: word.categories,
                 setSuperRestricted: request.query.setSuperRestricted,
                 wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
                 wordCategoryHistory: word.categoriesAuditLog

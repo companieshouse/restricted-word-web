@@ -17,7 +17,6 @@ function getCategoriesListHtml (categories: string[]): string {
                     </strong>
                     <span class=\"tooltip-text\">${categoryDetails[0]}</span>
                 </div>
-                <br>
             `
         }
     }
