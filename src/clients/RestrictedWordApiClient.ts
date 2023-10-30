@@ -78,7 +78,7 @@ class RestrictedWordApiClient {
         };
     }
 
-    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest, fieldsToUpdate: string) {
+    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest, fieldsToUpdate: string | undefined) {
 
         try {
             if (fieldsToUpdate === UpdateFields.SUPER_RESTRICTED) {

@@ -166,12 +166,23 @@ class RestrictedWordController {
                 }
     
                 if (errorMessages.length > 0) {
-                    throw new RestrictedWordError("Validation error when creating a word", errorMessages);
+                    throw new RestrictedWordError("Validation error", errorMessages);
                 }
                 redirectToUrl += '?setCategories=true';
+            } else if (superRestricted !== originalWord.superRestricted &&
+                RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
+                    whichFieldUpdate = UpdateFields.BOTH;
+                    redirectToUrl += '?setSuperRestricted=true&setCategories=true';
             } else {
-                whichFieldUpdate = UpdateFields.BOTH;
-                redirectToUrl += '?setSuperRestricted=true&setCategories=true';
+                if (categoryChangeReason) {
+                    throw new RestrictedWordError("Validation error",
+                        ["No data to update provided in the request, a new super restricted value and/or categories is required."]
+                    );
+                } else {
+                    throw new RestrictedWordError("Validation error",
+                        [originalWord.word + " already has these categories assigned"]
+                    );
+                }
             }
             
             await restrictedWordApiClient.patchSuperRestrictedStatus(
