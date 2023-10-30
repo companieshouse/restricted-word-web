@@ -108,27 +108,30 @@
             },
             classes: "filters-wrapper"
           },
-          values: filterParams.categories,
           items: [
             {
+              id: "restricted",
               value: "restricted",
-              text: "Restricted"
-             
+              text: "Restricted",
+              checked: false if not filterParams.categories else filterParams.categories.includes("restricted")
             },
             {
+              id: "international-orgs-foreign-gov-depts",
               value: "international-orgs-foreign-gov-depts",
-              text: "International orgs/ govts"
-           
+              text: "International orgs/ govts",
+              checked: false if not filterParams.categories else filterParams.categories.includes("international-orgs-foreign-gov-depts")
             },
             {
+              id: "criminal-fraudulent-purposes",
               value: "criminal-fraudulent-purposes",
-              text: "Names for crime/ fraud"
-             
+              text: "Names for crime/ fraud",
+              checked: false if not filterParams.categories else filterParams.categories.includes("criminal-fraudulent-purposes")
             },
             {
+              id: "prev-subjected-to-direction-to-change",
               value: "prev-subjected-to-direction-to-change",
-              text: "Names direction to change"
-             
+              text: "Names direction to change",
+              checked: false if not filterParams.categories else filterParams.categories.includes("prev-subjected-to-direction-to-change")
             }
           ]
         }) }}

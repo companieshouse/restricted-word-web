@@ -59,14 +59,14 @@ class RestrictedWordController {
         }
 
         const deletedStatus = request.query.deletedStatus;
-        console.log("deleted: "+ deletedStatus );
 
         if (deletedStatus === "Active") {
             queryOptions.deleted = false;
         } else if (deletedStatus === "Deleted") {
             queryOptions.deleted = true;
         }
-        //if it is a singular category, it is string, if it multiple, it's an array
+
+        // If it's a singular category, it's a string. If it's multiple, it's an array
         const categorySelection = request.query.categorySelection;
         if (typeof categorySelection === 'string' ) {
             queryOptions.categories = [categorySelection];
@@ -102,7 +102,9 @@ class RestrictedWordController {
         }
 
         if (categorySelection) {
-            urlParams.push(`categories=${categorySelection}`);
+            for (const category of queryOptions.categories) {
+                urlParams.push(`categorySelection=${category}`);
+            }
         }
 
         if (filterWord) {
