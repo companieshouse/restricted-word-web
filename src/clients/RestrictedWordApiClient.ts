@@ -113,6 +113,10 @@ class RestrictedWordApiClient {
             queryString.super_restricted = options.superRestricted;
         }
 
+        if (options.categories !== undefined) {
+            queryString.categories = options.categories.join(",");
+        }
+
         try {
 
             const response = await axiosInstance.get("/word", {

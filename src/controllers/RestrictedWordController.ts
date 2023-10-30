@@ -66,6 +66,13 @@ class RestrictedWordController {
             queryOptions.deleted = true;
         }
 
+        // If it's a singular category, it's a string. If it's multiple, it's an array
+        const categorySelection = request.query.categorySelection;
+        if (typeof categorySelection === "string") {
+            queryOptions.categories = [categorySelection];
+        } else {
+            queryOptions.categories = categorySelection as string[];
+        }
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         let results: RestrictedWordViewModel[];
@@ -94,6 +101,12 @@ class RestrictedWordController {
             urlParams.push(`deletedStatus=${deletedStatus}`);
         }
 
+        if (categorySelection) {
+            for (const category of queryOptions.categories) {
+                urlParams.push(`categorySelection=${category}`);
+            }
+        }
+
         if (filterWord) {
             urlParams.push(`filterWord=${encodeURIComponent(filterWord)}`);
         }
@@ -103,10 +116,12 @@ class RestrictedWordController {
             words: pager.pageResults(),
             deletedWord: request.query.deletedWord,
             addedWord: request.query.addedWord,
+            categories: request.query.categories,
             filterParams: {
                 word: filterWord,
                 superRestricted: superRestrictedStatus,
-                status: deletedStatus
+                status: deletedStatus,
+                categories: queryOptions.categories
             },
             pagination: pager.getPaginationOptions()
         });
@@ -202,9 +217,9 @@ class RestrictedWordController {
         const createdReason = request.body.createdReason;
         const superRestricted = request.body.superRestricted === "true";
         const deleteConflicting = request.body.deleteConflicting === "true";
-        if (typeof request.body.categories === 'string'){
+        if (typeof request.body.categories === "string") {
             request.body.categories = [request.body.categories];
-        } 
+        }
         const categories = request.body.categories;
 
         logger.infoRequest(request, `Attempting to create new word "${newWord}" with super restricted "${superRestricted}".`);

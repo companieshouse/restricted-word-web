@@ -441,6 +441,100 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
+        it("handles selecting a single category correctly", async function () {
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    categorySelection: "restricted"
+                });
+            }
+
+            const expectedFilterUrl = "?categorySelection=restricted";
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockApiClient
+                .received()
+                .getAllRestrictedWords(Arg.is(options => {
+                    expect(options.startsWith).to.not.exist;
+                    expect(options.contains).to.not.exist;
+                    expect(options.categories).to.be.eql(["restricted"]);
+                    return true;
+                }));
+
+            mockResponse
+                .received()
+                .render(getAllWordsViewName, Arg.is(options => {
+                    expect(options.filterParams.categories).to.be.eql(["restricted"]);
+                    expect(options.filterParams.status).to.not.exist;
+                    expect(options.filterParams.superRestricted).to.not.exist;
+                    expect(options.filterParams.word).to.not.exist;
+                    expect(options.filterUrl).to.equal(expectedFilterUrl);
+                    return true;
+                }));
+        });
+
+        it("handles selecting multiple cateogories correctly", async function () {
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    categorySelection: ["restricted", "international-orgs-foreign-gov-depts"]
+                });
+            }
+
+            const expectedFilterUrl = "?categorySelection=restricted&categorySelection=international-orgs-foreign-gov-depts";
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockApiClient
+                .received()
+                .getAllRestrictedWords(Arg.is(options => {
+                    expect(options.startsWith).to.not.exist;
+                    expect(options.contains).to.not.exist;
+                    expect(options.categories).to.be.eql(["restricted", "international-orgs-foreign-gov-depts"]);
+                    return true;
+                }));
+
+            mockResponse
+                .received()
+                .render(getAllWordsViewName, Arg.is(options => {
+                    expect(options.filterParams.categories).to.be.eql(["restricted", "international-orgs-foreign-gov-depts"]);
+                    expect(options.filterParams.status).to.not.exist;
+                    expect(options.filterParams.superRestricted).to.not.exist;
+                    expect(options.filterParams.word).to.not.exist;
+                    expect(options.filterUrl).to.equal(expectedFilterUrl);
+                    return true;
+                }));
+        });
+
+        it("passes undefined to the API and render when no category is selected", async function () {
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({});
+            }
+
+            const expectedFilterUrl = "?";
+
+            await restrictedWordController.getAllWords(mockRequest, mockResponse);
+
+            mockApiClient
+                .received()
+                .getAllRestrictedWords(Arg.is(options => {
+                    expect(options.startsWith).to.not.exist;
+                    expect(options.contains).to.not.exist;
+                    expect(options.categories).to.not.exist;
+                    return true;
+                }));
+
+            mockResponse
+                .received()
+                .render(getAllWordsViewName, Arg.is(options => {
+                    expect(options.filterParams.categories).to.not.exist;
+                    expect(options.filterParams.status).to.not.exist;
+                    expect(options.filterParams.superRestricted).to.not.exist;
+                    expect(options.filterParams.word).to.not.exist;
+                    expect(options.filterUrl).to.equal(expectedFilterUrl);
+                    return true;
+                }));
+        });
+
         it("puts the results of 'pageResults' in 'words', and results of 'getPaginationOptions' in 'pagination' on the render options", async function () {
             if (mockRequest.query.returns) {
                 mockRequest.query.returns({});

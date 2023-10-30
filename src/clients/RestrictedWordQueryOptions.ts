@@ -3,6 +3,7 @@ interface RestrictedWordQueryOptions {
     contains?: string;
     deleted?: boolean;
     superRestricted?: boolean;
+    categories?: string[];
 }
 
 export default RestrictedWordQueryOptions;
