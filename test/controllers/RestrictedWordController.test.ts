@@ -505,7 +505,7 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("passes undefined to the API and passes an empty array to render when no category is selected", async function () {
+        it("passes undefined to the API and render when no category is selected", async function () {
             if (mockRequest.query.returns) {
                 mockRequest.query.returns({});
             }
@@ -526,7 +526,7 @@ describe("RestrictedWordController", function () {
             mockResponse
                 .received()
                 .render(getAllWordsViewName, Arg.is(options => {
-                    expect(options.filterParams.categories).to.be.eql([]);
+                    expect(options.filterParams.categories).to.not.exist;
                     expect(options.filterParams.status).to.not.exist;
                     expect(options.filterParams.superRestricted).to.not.exist;
                     expect(options.filterParams.word).to.not.exist;

@@ -121,7 +121,7 @@ class RestrictedWordController {
                 word: filterWord,
                 superRestricted: superRestrictedStatus,
                 status: deletedStatus,
-                categories: categorySelection
+                categories: queryOptions.categories
             },
             pagination: pager.getPaginationOptions()
         });
