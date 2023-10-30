@@ -322,6 +322,26 @@ describe("RestrictedWordApiClient", function () {
 
         });
 
+        it("passes filter options for categories", async function () {
+
+            mockAxiosInstance.get.resolves(testResults);
+
+            const options: RestrictedWordQueryOptions = {
+                categories: ["restricted", "international-orgs-foreign-gov-depts"]
+            };
+
+            const queryString: RestrictedWordFilterDto = {
+                categories: "restricted,international-orgs-foreign-gov-depts"
+            };
+
+            await apiClient.getAllRestrictedWords(options);
+
+            expect(mockAxiosInstance.get).to.have.been.calledWithExactly("/word", {
+                params: queryString
+            });
+
+        });
+
         it("handles errors from the API");
 
     });
