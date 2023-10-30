@@ -9,6 +9,8 @@ import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
 import RestrictedWordError from "../error/RestrictedWordError";
 import { getCategoriesListHtml } from "../helpers/word";
+import CategoryAuditEntryViewModel from "clients/CategoryAuditEntryViewModel";
+import { getCategoryName, UpdateFields } from "../enums";
 
 const logger = createLogger(config.applicationNamespace);
 
@@ -125,25 +127,61 @@ class RestrictedWordController {
         return /^[a-zA-Z0-9-]+$/.test(id);
     }
 
-    public static async postSuperRestrictedWord(request: Request, response: Response) {
+    public static async postUpdateWord(request: Request, response: Response) {
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
+        const categories = request.body.categories;
+        const categoryChangeReason = request.body.changedReason;
 
-        const redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
+        let redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
 
         try {
             if (!(RestrictedWordController.isValidId(id))) {
                 throw Error(`Provided id: (${id}) is not valid. Must be alpha numeric.`);
             }
 
-            await restrictedWordApiClient.patchSuperRestrictedStatus({
-                id: id,
-                superRestricted: superRestricted,
-                patchedBy: request.body.loggedInUserEmail
-            });
+            let whichFieldUpdate;
+
+            const originalWord = await restrictedWordApiClient.getSingleRestrictedWord(id);
+
+            if (superRestricted !== originalWord.superRestricted &&
+                !RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
+                whichFieldUpdate = UpdateFields.SUPER_RESTRICTED;
+            } else if (superRestricted === originalWord.superRestricted &&
+                RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
+                whichFieldUpdate = UpdateFields.CATEGORIES;
+
+                const errorMessages = [];
+
+                if (!categoryChangeReason ) {
+                    errorMessages.push("A changed reason is required when updating categories.");
+                }
+    
+                if (!categories) {
+                    errorMessages.push("A category for the word is required");
+                }
+    
+                if (errorMessages.length > 0) {
+                    throw new RestrictedWordError("Validation error when creating a word", errorMessages);
+                }
+                redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=false`;
+            } else {
+                whichFieldUpdate = UpdateFields.BOTH;
+            }
+
+            await restrictedWordApiClient.patchSuperRestrictedStatus(
+                {
+                    id: id,
+                    superRestricted: superRestricted,
+                    categories: categories,
+                    categoryChangeReason: categoryChangeReason,
+                    patchedBy: request.body.loggedInUserEmail
+                },
+                whichFieldUpdate
+            );
 
             return RestrictedWordController.safeRedirect(redirectToUrl, response);
 
@@ -154,11 +192,23 @@ class RestrictedWordController {
 
             return response.render("word", {
                 word: word,
+                categories: word.categories,
+                categoriesAuditLog: RestrictedWordController.mapWordCategoryHistory(word.categoriesAuditLog),
                 wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
     }
+
+    private static haveCategoriesChanged(categories: string[], originalCategories: string[]) {
+        return categories.length !== originalCategories.length ||
+            categories.find(element => {
+                if (!originalCategories.includes(element)) {
+                    return true;
+                }
+                return false;
+            });
+    };
 
     public static async getWord(request: Request, response: Response) {
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
@@ -170,8 +220,10 @@ class RestrictedWordController {
             return response.render("word", {
                 word: word,
                 categoriesListHtml: getCategoriesListHtml(word.categories),
+                categories: word.categories,
                 setSuperRestricted: request.query.setSuperRestricted,
-                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog)
+                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
+                wordCategoryHistory: word.categoriesAuditLog
             });
 
         } catch (unknownError) {
@@ -191,6 +243,27 @@ class RestrictedWordController {
         }, {
             text: auditEntry.newValue ? "Yes" : "No"
         }]);
+    }
+
+    private static mapWordCategoryHistory(auditLog: CategoryAuditEntryViewModel[]) {
+        return auditLog.map(auditEntry => [{
+            text: auditEntry.changedAt
+        }, {
+            text: auditEntry.changedBy
+        }, {
+            text: RestrictedWordController.mapCategories(auditEntry.categories)
+        }, {
+            text: auditEntry.changedReason
+        }]);
+    }
+
+    private static mapCategories(categories: string[]) {
+        let categoryList: string[];
+        categoryList = [];
+        categories.forEach((element) => {
+            categoryList.push(getCategoryName(element));
+        });
+        return categoryList;
     }
 
     public static getCreateNewWord(_request: Request, response: Response) {

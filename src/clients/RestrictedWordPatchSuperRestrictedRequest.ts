@@ -1,7 +1,9 @@
 interface RestrictedWordPatchSuperRestrictedRequest {
     id: string;
     patchedBy: string;
-    superRestricted: boolean;
+    superRestricted?: boolean;
+    categories?: string[]
+    categoryChangeReason?: string
 }
 
 export default RestrictedWordPatchSuperRestrictedRequest;

@@ -11,7 +11,7 @@ class RestrictedWordRouter {
 
         router.get("/", RestrictedWordController.getAllWords);
         router.get("/word/:wordId", RestrictedWordController.getWord);
-        router.post("/set-super-restricted", RestrictedWordController.postSuperRestrictedWord);
+        router.post("/update", RestrictedWordController.postUpdateWord);
         router.get("/add-new-word", RestrictedWordController.getCreateNewWord);
         router.post("/add-new-word", RestrictedWordController.postCreateNewWord);
         router.get("/delete", RestrictedWordController.getDeleteWord);
