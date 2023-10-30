@@ -136,7 +136,7 @@ class RestrictedWordController {
         const categories = request.body.categories;
         const categoryChangeReason = request.body.changedReason;
 
-        let redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=true`;
+        let redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}`;
 
         try {
             if (!(RestrictedWordController.isValidId(id))) {
@@ -150,6 +150,7 @@ class RestrictedWordController {
             if (superRestricted !== originalWord.superRestricted &&
                 !RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
                 whichFieldUpdate = UpdateFields.SUPER_RESTRICTED;
+                redirectToUrl += `?setSuperRestricted=${superRestricted}`
             } else if (superRestricted === originalWord.superRestricted &&
                 RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
                 whichFieldUpdate = UpdateFields.CATEGORIES;
@@ -167,11 +168,12 @@ class RestrictedWordController {
                 if (errorMessages.length > 0) {
                     throw new RestrictedWordError("Validation error when creating a word", errorMessages);
                 }
-                redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}?setSuperRestricted=false`;
+                redirectToUrl += '?setCategories=true';
             } else {
                 whichFieldUpdate = UpdateFields.BOTH;
+                redirectToUrl += '?setSuperRestricted=true&setCategories=true';
             }
-
+            
             await restrictedWordApiClient.patchSuperRestrictedStatus(
                 {
                     id: id,
@@ -189,11 +191,12 @@ class RestrictedWordController {
 
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
             const word = await restrictedWordApiClient.getSingleRestrictedWord(id);
-
+            
             return response.render("word", {
                 word: word,
                 categories: word.categories,
                 categoriesAuditLog: RestrictedWordController.mapWordCategoryHistory(word.categoriesAuditLog),
+                getCategoriesListHtml: getCategoriesListHtml,
                 wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
@@ -221,6 +224,7 @@ class RestrictedWordController {
                 word: word,
                 getCategoriesListHtml: getCategoriesListHtml,
                 setSuperRestricted: request.query.setSuperRestricted,
+                setCategories: request.query.setCategories,
                 wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
                 wordCategoryHistory: word.categoriesAuditLog
             });
