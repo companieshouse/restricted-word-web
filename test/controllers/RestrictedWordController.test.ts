@@ -83,6 +83,8 @@ describe("RestrictedWordController", function () {
     const exampleError = "Test message";
     const exampleId = "abc123";
     const exampleCategories = ["prev-subjected-to-direction-to-change", "criminal-fraudulent-purposes"];
+    const exampleCategories2String = "restricted";
+    const exampleCategories2Array = ["restricted"];
     const exampleCreatedReason = "Example created reason";
     const exampleDelReason = "reason";
 
@@ -629,7 +631,7 @@ describe("RestrictedWordController", function () {
             mockRequest.body.returns({
                 word: exampleWord1,
                 createdReason: exampleCreatedReason,
-                categories: exampleCategories
+                categories: exampleCategories2String
             });
 
             const expectedRedirectUrl = `/${mockConfig.urlPrefix}/?addedWord=${encodeURIComponent(exampleWord1)}`;
@@ -638,7 +640,7 @@ describe("RestrictedWordController", function () {
 
             mockApiClient
                 .received()
-                .createRestrictedWord(exampleWord1, exampleCreatedReason, exampleCategories, false, false);
+                .createRestrictedWord(exampleWord1, exampleCreatedReason, exampleCategories2Array, false, false);
 
             mockResponse
                 .received()
@@ -958,7 +960,7 @@ describe("RestrictedWordController", function () {
                 word: exampleWord1
             });
 
-            const missingReasonError = "Justification required to delete word";
+            const missingReasonError = "A reason for deleting the word is required";
             const expectedError = [{ text: missingReasonError }];
 
             await restrictedWordController.postDeleteWord(mockRequest, mockResponse);

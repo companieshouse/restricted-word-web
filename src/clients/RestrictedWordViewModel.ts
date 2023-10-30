@@ -5,6 +5,7 @@ interface RestrictedWordViewModel {
     word: string;
     categories: string[],
     createdBy: string;
+    createdReason?: string;
     deletedBy?: string;
     deletedReason?: string;
     createdAt: string;

@@ -319,7 +319,7 @@ class RestrictedWordController {
             }
 
             if (!deletedReason) {
-                throw new Error("Justification required to delete word");
+                throw new Error("A reason for deleting the word is required");
             }
 
             await restrictedWordApiClient.deleteRestrictedWord(wordId, deletedReason);

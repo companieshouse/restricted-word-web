@@ -24,86 +24,121 @@
       errorList: errors
     }) }}
   {% endif %}
+  {% set wordRows = [
+    {
+      key: {
+        text: "Added by"
+      },
+      value: {
+        text: word.createdBy
+      }
+    }, {
+      key: {
+        text: "Date added"
+      },
+      value: {
+        text: word.createdAt
+      }
+    }, {
+      key: {
+        text: "Created reason"
+      },
+      value: {
+        html: "-" if not word.createdReason else 
+        (word.createdReason if word.createdReason.length < 200 else 
+        govukDetails({
+          summaryText: word.createdReason.substring(0, 15) + '...',
+          text: word.createdReason
+        }))
+      }
+    }, {
+      key: {
+        text: "Super restricted"
+      },
+      value: {
+        html: "Yes" if word.superRestricted else "No"
+      }
+    }
+  ] %}
+
+  {% if word.deleted %}
+    {% set removedByRow = {
+      key: {
+        text: "Removed by"
+      },
+      value: {
+        html: word.deletedBy if word.deleted else "-"
+      }
+    }%}
+    {% set deletedAtRow = {
+      key: {
+        text: "Date removed"
+      },
+      value: {
+        html: word.deletedAt
+      }
+    }%}
+    {% set deletedReasonRow = {
+      key: {
+        text: "Deletion reason"
+      },
+      value: {
+        html: "-" if not word.deletedReason else 
+        (word.deletedReason if word.deletedReason.length < 200 else 
+        govukDetails({
+          summaryText: word.deletedReason.substring(0, 15) + '...',
+          text: word.deletedReason
+        }))
+      }
+    }%}
+​
+    {% set wordRows = (wordRows.splice(3, 0, removedByRow), wordRows) %}
+    {% set wordRows = (wordRows.splice(4, 0, deletedAtRow), wordRows) %}
+    {% set wordRows = (wordRows.splice(5, 0, deletedReasonRow), wordRows) %}
+  {% endif %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters-from-desktop">
       <h1 class="govuk-heading-xl">{{word.word}}</h1>
-      {{ govukSummaryList({
-        rows: [
-          {
-            key: {
-              text: "Added by"
-            },
-            value: {
-              text: word.createdBy
-            }
-          }, {
-            key: {
-              text: "Date added"
-            },
-            value: {
-              text: word.createdAt
-            }
-          }, {
-            key: {
-              text: "Removed by"
-            },
-            value: {
-              html: word.deletedBy if word.deleted else "-"
-            }
-          }, {
-            key: {
-              text: "Date removed"
-            },
-            value: {
-              html: word.deletedAt
-            }
-          }, {
-            key: {
-              text: "Super restricted"
-            },
-            value: {
-              html: "Yes" if word.superRestricted else "No"
-            }
-          }
-        ]
-      }) }}
-      {% if not word.deleted %}
-        {{ govukButton({
-          text: "Delete word",
-          href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
-          classes: "govuk-button--warning"
+        {{ govukSummaryList({
+          rows: wordRows
         }) }}
-
+      {% if not word.deleted %}
         <h2 class="govuk-heading-l">Super restricted word</h2>
         <form action="/{{ urlPrefix }}/set-super-restricted" method="POST">
           <input type="hidden" name="id" value="{{ word.id }}" />
-          {{ govukRadios({
-            classes: "govuk-radios--inline",
-            idPrefix: "super-restricted-word",
-            name: "superRestricted",
-            fieldset: {
-              legend: {
-                text: "Is this a super restricted word?"
-              }
-            },
-            hint: {
-              text: "This is an exceptionally offensive word which will be checked in documents."
-            },
-            items: [
-              {
-                value: true,
-                text: "Yes",
-                checked: word.superRestricted
+            {{ govukRadios({
+              classes: "govuk-radios--inline",
+              idPrefix: "super-restricted-word",
+              name: "superRestricted",
+              fieldset: {
+                legend: {
+                  text: "Is this a super restricted word?"
+                }
               },
-              {
-                value: false,
-                text: "No",
-                checked: not word.superRestricted
-              }
-            ]
-          }) }}
+              hint: {
+                text: "This is an exceptionally offensive word which will be checked in documents."
+              },
+              items: [
+                {
+                  value: true,
+                  text: "Yes",
+                  checked: word.superRestricted
+                },
+                {
+                  value: false,
+                  text: "No",
+                  checked: not word.superRestricted
+                }
+              ]
+            }) }}
+            {{ govukButton({
+              text: "Update",
+              classes: "govuk-!-margin-right-1"
+            }) }}
           {{ govukButton({
-            text: "Update"
+            text: "Delete word",
+            href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
+            classes: "govuk-button--warning"
           }) }}
         </form>
       {% endif %}
