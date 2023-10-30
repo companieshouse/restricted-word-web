@@ -205,10 +205,10 @@ class RestrictedWordController {
             
             return response.render("word", {
                 word: word,
-                categories: word.categories,
                 categoriesAuditLog: RestrictedWordController.mapWordCategoryHistory(word.categoriesAuditLog),
                 getCategoriesListHtml: getCategoriesListHtml,
                 wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
+                wordCategoryHistory: word.categoriesAuditLog,
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
