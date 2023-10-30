@@ -111,9 +111,9 @@ class RestrictedWordApiClient {
         if (options.superRestricted !== undefined) {
             queryString.super_restricted = options.superRestricted;
         }
-        
+
         if (options.categories !== undefined) {
-            queryString.categories = options.categories.join(',');
+            queryString.categories = options.categories.join(",");
         }
 
         try {

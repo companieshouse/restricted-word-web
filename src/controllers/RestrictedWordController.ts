@@ -47,7 +47,7 @@ class RestrictedWordController {
 
         const queryOptions: RestrictedWordQueryOptions = {
             startsWith: undefined,
-            contains: filterWord || undefined,
+            contains: filterWord || undefined
         };
 
         const superRestrictedStatus = request.query.filterSuperRestricted;
@@ -68,7 +68,7 @@ class RestrictedWordController {
 
         // If it's a singular category, it's a string. If it's multiple, it's an array
         const categorySelection = request.query.categorySelection;
-        if (typeof categorySelection === 'string' ) {
+        if (typeof categorySelection === "string") {
             queryOptions.categories = [categorySelection];
         } else {
             queryOptions.categories = categorySelection as string[];
@@ -217,9 +217,9 @@ class RestrictedWordController {
         const createdReason = request.body.createdReason;
         const superRestricted = request.body.superRestricted === "true";
         const deleteConflicting = request.body.deleteConflicting === "true";
-        if (typeof request.body.categories === 'string'){
+        if (typeof request.body.categories === "string") {
             request.body.categories = [request.body.categories];
-        } 
+        }
         const categories = request.body.categories;
 
         logger.infoRequest(request, `Attempting to create new word "${newWord}" with super restricted "${superRestricted}".`);

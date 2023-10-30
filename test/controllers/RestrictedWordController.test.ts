@@ -455,7 +455,7 @@ describe("RestrictedWordController", function () {
                 .getAllRestrictedWords(Arg.is(options => {
                     expect(options.startsWith).to.not.exist;
                     expect(options.contains).to.not.exist;
-                    expect(options.categories).to.be.eql(["restricted"])
+                    expect(options.categories).to.be.eql(["restricted"]);
                     return true;
                 }));
 
@@ -487,14 +487,14 @@ describe("RestrictedWordController", function () {
                 .getAllRestrictedWords(Arg.is(options => {
                     expect(options.startsWith).to.not.exist;
                     expect(options.contains).to.not.exist;
-                    expect(options.categories).to.be.eql(["restricted","international-orgs-foreign-gov-depts"])
+                    expect(options.categories).to.be.eql(["restricted", "international-orgs-foreign-gov-depts"]);
                     return true;
                 }));
 
             mockResponse
                 .received()
                 .render(getAllWordsViewName, Arg.is(options => {
-                    expect(options.filterParams.categories).to.be.eql(["restricted","international-orgs-foreign-gov-depts"]);
+                    expect(options.filterParams.categories).to.be.eql(["restricted", "international-orgs-foreign-gov-depts"]);
                     expect(options.filterParams.status).to.not.exist;
                     expect(options.filterParams.superRestricted).to.not.exist;
                     expect(options.filterParams.word).to.not.exist;
