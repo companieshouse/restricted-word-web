@@ -133,7 +133,7 @@ class RestrictedWordController {
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
-        const categories = request.body.categories;
+        const categories = request?.body?.categories ?? [];
         const categoryChangeReason = request.body.changedReason;
 
         let redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}`;
@@ -147,7 +147,11 @@ class RestrictedWordController {
 
             const originalWord = await restrictedWordApiClient.getSingleRestrictedWord(id);
 
-            if (superRestricted !== originalWord.superRestricted &&
+            if (categories.length === 0) {
+                throw new RestrictedWordError("Validation error",
+                    ["No data to update provided in the request, a new super restricted value and/or categories is required."]
+                );
+            } else if (superRestricted !== originalWord.superRestricted &&
                 !RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
                 whichFieldUpdate = UpdateFields.SUPER_RESTRICTED;
                 redirectToUrl += `?setSuperRestricted=${superRestricted}`
@@ -174,15 +178,9 @@ class RestrictedWordController {
                     whichFieldUpdate = UpdateFields.BOTH;
                     redirectToUrl += '?setSuperRestricted=true&setCategories=true';
             } else {
-                if (categoryChangeReason) {
-                    throw new RestrictedWordError("Validation error",
-                        ["No data to update provided in the request, a new super restricted value and/or categories is required."]
-                    );
-                } else {
-                    throw new RestrictedWordError("Validation error",
-                        [originalWord.word + " already has these categories assigned"]
-                    );
-                }
+                throw new RestrictedWordError("Validation error",
+                    [originalWord.word + " already has these categories assigned"]
+                );
             }
             
             await restrictedWordApiClient.patchSuperRestrictedStatus(
