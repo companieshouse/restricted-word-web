@@ -154,6 +154,7 @@ describe("RestrictedWordController", function () {
         it("maps the audit correctly", async function () {
 
             const databaseWord = {
+                categories: ['restricted'],
                 superRestrictedAuditLog: [{
                     changedAt: "18 May 2020",
                     changedBy: "todd",

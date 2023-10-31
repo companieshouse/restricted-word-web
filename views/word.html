@@ -58,6 +58,13 @@
       value: {
         html: "Yes" if word.superRestricted else "No"
       }
+    }, {
+      key: {
+        text: "Categories"
+      },
+      value: {
+        html: "-" if not word.categories else categoriesListHtml
+      }
     }
   ] %}
 
