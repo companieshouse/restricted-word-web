@@ -166,7 +166,7 @@ class RestrictedWordController {
                 }
     
                 if (!categories) {
-                    errorMessages.push("A category for the word is required");
+                    errorMessages.push("A category for the word is required.");
                 }
     
                 if (errorMessages.length > 0) {
@@ -179,7 +179,7 @@ class RestrictedWordController {
                     redirectToUrl += '?setSuperRestricted=true&setCategories=true';
             } else {
                 throw new RestrictedWordError("Validation error",
-                    [originalWord.word + " already has these categories assigned"]
+                    [originalWord.word + " already has these categories assigned."]
                 );
             }
             
