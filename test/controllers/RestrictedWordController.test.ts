@@ -62,7 +62,8 @@ describe("RestrictedWordController", function () {
             deletedReason: "deletedReason",
             deleted: false,
             superRestricted: false,
-            superRestrictedAuditLog: []
+            superRestrictedAuditLog: [],
+            categoriesAuditLog: []
         };
     };
 
@@ -151,6 +152,25 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
+        it("renders the categories correctly", async function () {
+            if (mockRequest.query.returns) {
+                mockRequest.query.returns({
+                    setCategories: "true"
+                });
+            }
+
+            await restrictedWordController.getWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render(getWordViewName, Arg.is(options => {
+
+                    expect(options.setCategories).to.equal("true");
+
+                    return true;
+                }));
+        });
+
         it("maps the audit correctly", async function () {
 
             const databaseWord = {
@@ -163,10 +183,21 @@ describe("RestrictedWordController", function () {
                     changedAt: "19 June 2020",
                     changedBy: "kenneth",
                     newValue: false
+                }],
+                categoriesAuditLog: [{
+                    changedAt: "20 April 2020",
+                    changedBy: "lamer",
+                    categories: ["restricted"],
+                    changedReason: "sample change reason"
+                }, {
+                    changedAt: "11 June 2020",
+                    changedBy: "lamer2",
+                    categories: ["restricted", "international-orgs-foreign-gov-depts"],
+                    changedReason: "sample change reason2"
                 }]
             };
 
-            const expectedResult1 = [{
+            const expectedResultSuperRestricted2 = [{
                 text: "18 May 2020"
             }, {
                 text: "todd"
@@ -174,13 +205,27 @@ describe("RestrictedWordController", function () {
                 text: "Yes"
             }];
 
-            const expectedResult2 = [{
+            const expectedResultSuperRestricted1 = [{
                 text: "19 June 2020"
             }, {
                 text: "kenneth"
             }, {
                 text: "No"
             }];
+
+            const expectResultCategory2 = {
+                changedAt: "20 April 2020",
+                changedBy: "lamer",
+                categories: ["restricted"],
+                changedReason: "sample change reason"
+            }
+
+            const expectResultCategory1 = {
+                changedAt: "11 June 2020",
+                changedBy: "lamer2",
+                categories: ["restricted", "international-orgs-foreign-gov-depts"],
+                changedReason: "sample change reason2"
+            }
 
             mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
 
@@ -191,12 +236,19 @@ describe("RestrictedWordController", function () {
                 .render("word", Arg.is(options => {
 
                     expect(options.wordHistory.length).to.equal(2);
+                    expect(options.wordCategoryHistory.length).to.equal(2);
 
-                    const record1 = options.wordHistory[0];
-                    const record2 = options.wordHistory[1];
+                    const record1SuperRestricted = options.wordHistory[0];
+                    const record2SuperRestricted = options.wordHistory[1];
 
-                    expect(record1).to.deep.equal(expectedResult1);
-                    expect(record2).to.deep.equal(expectedResult2);
+                    const record1Categories = options.wordCategoryHistory[0];
+                    const record2Categories = options.wordCategoryHistory[1];
+
+                    expect(record1SuperRestricted).to.deep.equal(expectedResultSuperRestricted1);
+                    expect(record2SuperRestricted).to.deep.equal(expectedResultSuperRestricted2);
+
+                    expect(record1Categories).to.deep.equal(expectResultCategory1);
+                    expect(record2Categories).to.deep.equal(expectResultCategory2);
 
                     return true;
                 }));
