@@ -203,10 +203,9 @@ class RestrictedWordController {
             
             return response.render("word", {
                 word: word,
-                categoriesAuditLog: RestrictedWordController.mapWordCategoryHistory(word.categoriesAuditLog),
                 getCategoriesListHtml: getCategoriesListHtml,
-                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
-                wordCategoryHistory: word.categoriesAuditLog,
+                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog).reverse(),
+                wordCategoryHistory: word.categoriesAuditLog.reverse(),
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
@@ -234,8 +233,8 @@ class RestrictedWordController {
                 getCategoriesListHtml: getCategoriesListHtml,
                 setSuperRestricted: request.query.setSuperRestricted,
                 setCategories: request.query.setCategories,
-                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog),
-                wordCategoryHistory: word.categoriesAuditLog
+                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog).reverse(),
+                wordCategoryHistory: word.categoriesAuditLog.reverse()
             });
 
         } catch (unknownError) {
