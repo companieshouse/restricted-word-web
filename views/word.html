@@ -18,6 +18,15 @@
       </div>
     </div>
   {% endif %}
+  {%if setCategories %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ chNotification({
+          titleText: "Categories have been updated"
+        }) }}
+      </div>
+    </div>
+  {% endif %}
   {%if errors.length %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -58,6 +67,13 @@
       value: {
         html: "Yes" if word.superRestricted else "No"
       }
+    }, {
+      key: {
+        text: "Categories"
+      },
+      value: {
+        html: "-" if not word.categories else getCategoriesListHtml(word.categories)
+      }
     }
   ] %}
 
@@ -96,68 +112,137 @@
     {% set wordRows = (wordRows.splice(4, 0, deletedAtRow), wordRows) %}
     {% set wordRows = (wordRows.splice(5, 0, deletedReasonRow), wordRows) %}
   {% endif %}
+  {% set categoriesTabHtml %}
+    {% if not word.deleted %}
+      {% include "includes/categories.html" %}
+      {{ govukInput({
+        label: {
+          text: "What is the reason for changing the categories for this word?",
+          isPageHeading: false
+        },
+        id: "changed-reason",
+        name: "changedReason",
+        value: changedReason
+      }) }}
+    {% endif %}
+    <table class="govuk-table" id="categories-audit-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Date</th>
+          <th class="govuk-table__header" scope="col">Updated by</th>
+          <th class="govuk-table__header" scope="col">Categories</th>
+          <th class="govuk-table__header" scope="col">Changed Reason</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for auditEntry in wordCategoryHistory %}
+          <tr id="word-{{word.id}}" class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{ auditEntry.changedAt }}
+            </td>
+            <td class="govuk-table__cell">
+              {{ auditEntry.changedBy }}
+            </td>
+            <td class="govuk-table__cell">
+              {{ getCategoriesListHtml(auditEntry.categories)|safe }}
+            </td>
+            <td class="govuk-table__cell">
+              {{ (auditEntry.changedReason if auditEntry.changedReason.length <= 15 else 
+                govukDetails({
+                  summaryText: auditEntry.changedReason.substring(0, 15) + '...',
+                  text: auditEntry.changedReason
+                })) }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endset -%}
+
+  {% set superRestrictedTabHtml %}
+    {% if not word.deleted %}
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "super-restricted-word",
+        name: "superRestricted",
+        fieldset: {
+          legend: {
+            text: "Is this a super restricted word?"
+          }
+        },
+        hint: {
+          text: "This is an exceptionally offensive word which will be checked in documents."
+        },
+        items: [
+          {
+            value: true,
+            text: "Yes",
+            checked: word.superRestricted
+          },
+          {
+            value: false,
+            text: "No",
+            checked: not word.superRestricted
+          }
+        ]
+      }) }}
+    {% endif %}
+    {{ govukTable({
+      head: [
+        {
+          text: "Date"
+        },
+        {
+          text: "Updated by"
+        },
+        {
+          text: "Super restricted?"
+        }
+      ],
+      rows: wordHistory
+    }) }}
+  {% endset -%}
+
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters-from-desktop">
+    <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-xl">{{word.word}}</h1>
-        {{ govukSummaryList({
-          rows: wordRows
+      {{ govukSummaryList({
+        rows: wordRows
+      }) }}
+
+      <form action="/{{ urlPrefix }}/update" method="POST">
+        <input type="hidden" name="id" value="{{ word.id }}" />
+        {{ govukTabs({
+          items: [
+            {
+              label: "Categories",
+              id: "categories-tab",
+              panel: {
+                html: categoriesTabHtml
+              }
+            },
+            {
+              label: "Super restricted",
+              id: "super-restricted-tab",
+              panel: {
+                html: superRestrictedTabHtml
+              }
+            }
+          ]
         }) }}
-      {% if not word.deleted %}
-        <h2 class="govuk-heading-l">Super restricted word</h2>
-        <form action="/{{ urlPrefix }}/set-super-restricted" method="POST">
-          <input type="hidden" name="id" value="{{ word.id }}" />
-            {{ govukRadios({
-              classes: "govuk-radios--inline",
-              idPrefix: "super-restricted-word",
-              name: "superRestricted",
-              fieldset: {
-                legend: {
-                  text: "Is this a super restricted word?"
-                }
-              },
-              hint: {
-                text: "This is an exceptionally offensive word which will be checked in documents."
-              },
-              items: [
-                {
-                  value: true,
-                  text: "Yes",
-                  checked: word.superRestricted
-                },
-                {
-                  value: false,
-                  text: "No",
-                  checked: not word.superRestricted
-                }
-              ]
-            }) }}
-            {{ govukButton({
-              text: "Update",
-              classes: "govuk-!-margin-right-1"
-            }) }}
+
+        {% if not word.deleted %}
+          {{ govukButton({
+            text: "Update",
+            classes: "govuk-!-margin-right-1"
+          }) }}
           {{ govukButton({
             text: "Delete word",
             href: "/" + urlPrefix + "/delete?id=" + word.id + "&word=" + word.word,
             classes: "govuk-button--warning"
           }) }}
-        </form>
-      {% endif %}
-      {{ govukTable({
-        caption: "Super restricted history",
-        captionClasses: "govuk-table__caption--m",
-        head: [
-          {
-            text: "Date"
-          },
-          {
-            text: "Updated by"
-          },
-          {
-            text: "Super restricted?"
-          }
-        ],
-        rows: wordHistory
-      }) }}
+        {% endif %}
+      </form>
     </div>
   </div>
 {% endblock %}

@@ -1,0 +1,36 @@
+{{ govukCheckboxes({
+    idPrefix: "categories",
+    name: "categories",
+    fieldset: {
+      legend: {
+        text: "Are the categories for this restricted word correct?",
+        isPageHeading: false
+      }
+    },
+    items: [
+      {
+        value: "restricted",
+        id: "restricted",
+        text: "Restricted",
+        checked: false if not word.categories else word.categories.includes("restricted")
+      },
+      {
+        value: "international-orgs-foreign-gov-depts",
+        id: "international-orgs-foreign-gov-depts",
+        text: "International organisations and foreign government departments",
+        checked: false if not word.categories else word.categories.includes("international-orgs-foreign-gov-depts")
+      },
+      {
+        value: "criminal-fraudulent-purposes",
+        id: "criminal-fraudulent-purposes",
+        text: "Names for criminal / fraudulent purposes",
+        checked: false if not word.categories else word.categories.includes("criminal-fraudulent-purposes")
+      },
+      {
+        value: "prev-subjected-to-direction-to-change",
+        id: "prev-subjected-to-direction-to-change",
+        text: "Names previously subjected to a direction to change them",
+        checked: false if not word.categories else word.categories.includes("prev-subjected-to-direction-to-change")
+      }
+    ]
+}) }}
