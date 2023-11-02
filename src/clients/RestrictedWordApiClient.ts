@@ -74,7 +74,7 @@ class RestrictedWordApiClient {
                     changedReason: auditEntry.changed_reason,
                     categories: auditEntry.categories
                 };
-            }),
+            })
         };
     }
 

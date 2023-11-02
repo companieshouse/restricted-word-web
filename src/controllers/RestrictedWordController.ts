@@ -9,8 +9,7 @@ import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
 import RestrictedWordError from "../error/RestrictedWordError";
 import { getCategoriesListHtml } from "../helpers/word";
-import CategoryAuditEntryViewModel from "clients/CategoryAuditEntryViewModel";
-import { getCategoryName, UpdateFields } from "../enums";
+import { UpdateFields } from "../enums";
 
 const logger = createLogger(config.applicationNamespace);
 
@@ -169,35 +168,35 @@ class RestrictedWordController {
             } else if (superRestricted !== originalWord.superRestricted &&
                 !RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
                 whichFieldUpdate = UpdateFields.SUPER_RESTRICTED;
-                redirectToUrl += `?setSuperRestricted=${superRestricted}`
+                redirectToUrl += `?setSuperRestricted=${superRestricted}`;
             } else if (superRestricted === originalWord.superRestricted &&
                 RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
                 whichFieldUpdate = UpdateFields.CATEGORIES;
 
-                if (!categoryChangeReason ) {
-                    throw new RestrictedWordError("Validation error", 
+                if (!categoryChangeReason) {
+                    throw new RestrictedWordError("Validation error",
                         ["A changed reason is required when updating categories."]
                     );
                 }
-    
-                redirectToUrl += '?setCategories=true';
+
+                redirectToUrl += "?setCategories=true";
             } else if (superRestricted !== originalWord.superRestricted &&
                 RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
 
-                    if (!categoryChangeReason ) {
-                        throw new RestrictedWordError("Validation error", 
-                            ["A changed reason is required when updating categories."]
-                        );
-                    }
-    
-                    whichFieldUpdate = UpdateFields.BOTH;
-                    redirectToUrl += '?setSuperRestricted=true&setCategories=true';
+                if (!categoryChangeReason) {
+                    throw new RestrictedWordError("Validation error",
+                        ["A changed reason is required when updating categories."]
+                    );
+                }
+
+                whichFieldUpdate = UpdateFields.BOTH;
+                redirectToUrl += "?setSuperRestricted=true&setCategories=true";
             } else {
                 throw new RestrictedWordError("Validation error",
                     ["No changes have been made."]
                 );
             }
-            
+
             await restrictedWordApiClient.patchSuperRestrictedStatus(
                 {
                     id: id,
@@ -215,7 +214,7 @@ class RestrictedWordController {
 
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
             const word = await restrictedWordApiClient.getSingleRestrictedWord(id);
-            
+
             return response.render("word", {
                 word: word,
                 getCategoriesListHtml: getCategoriesListHtml,
@@ -234,7 +233,7 @@ class RestrictedWordController {
                 }
                 return false;
             });
-    };
+    }
 
     public static async getWord(request: Request, response: Response) {
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);

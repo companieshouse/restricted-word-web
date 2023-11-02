@@ -108,12 +108,12 @@ describe("RestrictedWordApiClient", function () {
                 changed_at: "2020-04-16T16:23:30",
                 changed_by: "testname",
                 changed_reason: "sample change reason",
-                categories: ['restricted', 'international-orgs-foreign-gov-depts']
+                categories: ["restricted", "international-orgs-foreign-gov-depts"]
             }, {
                 changed_at: "2021-05-16T16:23:30",
                 changed_by: "testname",
                 changed_reason: "sample change reason 2",
-                categories: ['international-orgs-foreign-gov-depts']
+                categories: ["international-orgs-foreign-gov-depts"]
             }]
         };
 
@@ -154,12 +154,12 @@ describe("RestrictedWordApiClient", function () {
                     changedAt: "16 Apr 20",
                     changedBy: "testname",
                     changedReason: "sample change reason",
-                    categories: ['restricted', 'international-orgs-foreign-gov-depts']
+                    categories: ["restricted", "international-orgs-foreign-gov-depts"]
                 }, {
                     changedAt: "16 May 21",
                     changedBy: "testname",
                     changedReason: "sample change reason 2",
-                    categories: ['international-orgs-foreign-gov-depts']
+                    categories: ["international-orgs-foreign-gov-depts"]
                 }]
             };
 
@@ -168,11 +168,11 @@ describe("RestrictedWordApiClient", function () {
     });
 
     describe("#patchSuperRestrictedStatus", function () {
-        
+
         const testOptions = {
             id: testId,
             patchedBy: testUser
-        }
+        };
 
         it("successfully calls the patch url for super restricted", async function () {
 
@@ -181,7 +181,7 @@ describe("RestrictedWordApiClient", function () {
                 super_restricted: true
             };
 
-            await apiClient.patchSuperRestrictedStatus({ ...testOptions, superRestricted: true } , UpdateFields.SUPER_RESTRICTED);
+            await apiClient.patchSuperRestrictedStatus({ ...testOptions, superRestricted: true }, UpdateFields.SUPER_RESTRICTED);
 
             expect(mockAxiosInstance.patch).to.have.been.calledWithExactly(`/word/${testId}`, expectedCallingObject);
 
