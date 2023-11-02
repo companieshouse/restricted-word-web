@@ -261,19 +261,99 @@ describe("RestrictedWordController", function () {
         const testId = "abc123";
         const testUser = "test@test.com";
 
-        it("redirects after successful patch", async function () {
+        const databaseWord = {
+            categories: ['restricted'],
+            superRestricted: false,
+            superRestrictedAuditLog: [{
+                changedAt: "18 May 2020",
+                changedBy: "todd",
+                newValue: true
+            }, {
+                changedAt: "19 June 2020",
+                changedBy: "kenneth",
+                newValue: false
+            }],
+            categoriesAuditLog: [{
+                changedAt: "20 April 2020",
+                changedBy: "lamer",
+                categories: ["restricted"],
+                changedReason: "sample change reason"
+            }, {
+                changedAt: "11 June 2020",
+                changedBy: "lamer2",
+                categories: ["restricted", "international-orgs-foreign-gov-depts"],
+                changedReason: "sample change reason2"
+            }]
+        };
+
+        it("redirects after successful with super restricted patch", async function () {
 
             mockRequest.body.returns({
                 id: testId,
                 superRestricted: "true",
-                loggedInUserEmail: testUser
+                loggedInUserEmail: testUser,
+                categories: ["restricted"],
+                changedReason: "test change reason"
             });
 
+            mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+            
+            mockApiClient.patchSuperRestrictedStatus(Arg.any(), Arg.any()).returns(PromiseResolver.resolveWith({}));
+            
             await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
+            
             mockResponse
                 .received()
                 .redirect(Arg.is(options => {
                     expect(options).to.equal(`${mockConfig.baseUrl}/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true`);
+                    return true;
+                }));
+        });
+
+        it("redirects after successful with categories patch", async function () {
+
+            mockRequest.body.returns({
+                id: testId,
+                superRestricted: "false",
+                loggedInUserEmail: testUser,
+                categories: ["restricted", "international-orgs-foreign-gov-depts"],
+                changedReason: "test change reason"
+            });
+
+            mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+            
+            mockApiClient.patchSuperRestrictedStatus(Arg.any(), Arg.any()).returns(PromiseResolver.resolveWith({}));
+            
+            await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
+            
+            mockResponse
+                .received()
+                .redirect(Arg.is(options => {
+                    expect(options).to.equal(`${mockConfig.baseUrl}/${mockConfig.urlPrefix}/word/${testId}?setCategories=true`);
+                    return true;
+                }));
+        });
+
+        it("redirects after successful with both categories and super restricted patch", async function () {
+
+            mockRequest.body.returns({
+                id: testId,
+                superRestricted: "true",
+                loggedInUserEmail: testUser,
+                categories: ["restricted", "international-orgs-foreign-gov-depts"],
+                changedReason: "test change reason"
+            });
+
+            mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+            
+            mockApiClient.patchSuperRestrictedStatus(Arg.any(), Arg.any()).returns(PromiseResolver.resolveWith({}));
+            
+            await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
+            
+            mockResponse
+                .received()
+                .redirect(Arg.is(options => {
+                    expect(options).to.equal(`${mockConfig.baseUrl}/${mockConfig.urlPrefix}/word/${testId}?setSuperRestricted=true&setCategories=true`);
                     return true;
                 }));
         });
@@ -286,8 +366,14 @@ describe("RestrictedWordController", function () {
             mockRequest.body.returns({
                 id: testId,
                 superRestricted: "true",
-                loggedInUserEmail: testUser
+                loggedInUserEmail: testUser,
+                categories: ["restricted"],
+                changedReason: "test change reason"
             });
+
+            mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+            
+            mockApiClient.patchSuperRestrictedStatus(Arg.any(), Arg.any()).returns(PromiseResolver.resolveWith({}));
 
             await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
             mockResponse
@@ -324,15 +410,21 @@ describe("RestrictedWordController", function () {
         });
 
         it("renders the word page if there is an error", async function () {
-
-            mockApiClient.patchSuperRestrictedStatus(Arg.any()).returns(PromiseRejector.rejectWith({
-                messages: [exampleError]
-            }));
-
+            
             mockRequest.body.returns({
-                id: testId
+                id: testId,
+                superRestricted: "true",
+                loggedInUserEmail: testUser,
+                categories: ["restricted"],
+                changedReason: "test change reason"
             });
 
+            mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+
+            mockApiClient.patchSuperRestrictedStatus(Arg.any(), Arg.any()).returns(PromiseRejector.rejectWith({
+                messages: [exampleError]
+            }));
+            
             await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
 
             mockResponse
@@ -341,6 +433,37 @@ describe("RestrictedWordController", function () {
 
                     const expectedErrors = [{
                         text: exampleError
+                    }];
+
+                    expect(options.errors).to.deep.equal(expectedErrors);
+
+                    return true;
+                }));
+        });
+
+        it("renders the word page if there is the categories are empty", async function () {
+            
+            mockRequest.body.returns({
+                id: testId,
+                superRestricted: "true",
+                loggedInUserEmail: testUser,
+                changedReason: "test change reason"
+            });
+
+            mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+
+            mockApiClient.patchSuperRestrictedStatus(Arg.any(), Arg.any()).returns(PromiseRejector.rejectWith({
+                messages: [exampleError]
+            }));
+            
+            await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
+
+            mockResponse
+                .received()
+                .render(viewName, Arg.is(options => {
+
+                    const expectedErrors = [{
+                        text: "No data to update provided in the request, a new super restricted value and/or categories is required."
                     }];
 
                     expect(options.errors).to.deep.equal(expectedErrors);

@@ -179,7 +179,7 @@ class RestrictedWordController {
                     redirectToUrl += '?setSuperRestricted=true&setCategories=true';
             } else {
                 throw new RestrictedWordError("Validation error",
-                    [originalWord.word + " already has these categories assigned."]
+                    ["No changes have been made."]
                 );
             }
             
