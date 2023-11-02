@@ -9,7 +9,7 @@ function getCategoriesListHtml(categories: string[]): string {
     let categoriesListHtml: string = "";
     if (categories.length > 0) {
         for (const category of categories) {
-            const categoryDetails: string[] = mapIdToCategory[category]
+            const categoryDetails: string[] = mapIdToCategory[category];
             categoriesListHtml += `
                 <div class="tooltip">
                     <strong class="${categoryDetails[2]}">

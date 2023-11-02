@@ -147,7 +147,7 @@ class RestrictedWordController {
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
-        const categories = typeof request?.body?.categories === 'string' ? [ request?.body?.categories ] : request?.body?.categories ?? [];
+        const categories = typeof request?.body?.categories === "string" ? [request?.body?.categories] : request?.body?.categories ?? [];
         const categoryChangeReason = request.body.changedReason;
 
         let redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}`;
@@ -218,8 +218,8 @@ class RestrictedWordController {
             return response.render("word", {
                 word: word,
                 getCategoriesListHtml: getCategoriesListHtml,
-                wordHistory: [ ...RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog) ].reverse() ,
-                wordCategoryHistory: [ ...word.categoriesAuditLog ].reverse(),
+                wordHistory: [...RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog)].reverse(),
+                wordCategoryHistory: [...word.categoriesAuditLog].reverse(),
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
@@ -247,8 +247,8 @@ class RestrictedWordController {
                 getCategoriesListHtml: getCategoriesListHtml,
                 setSuperRestricted: request.query.setSuperRestricted,
                 setCategories: request.query.setCategories,
-                wordHistory: [ ...RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog) ].reverse(),
-                wordCategoryHistory: [ ...word.categoriesAuditLog ].reverse()
+                wordHistory: [...RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog)].reverse(),
+                wordCategoryHistory: [...word.categoriesAuditLog].reverse()
             });
 
         } catch (unknownError) {
