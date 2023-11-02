@@ -271,27 +271,6 @@ class RestrictedWordController {
         }]);
     }
 
-    private static mapWordCategoryHistory(auditLog: CategoryAuditEntryViewModel[]) {
-        return auditLog.map(auditEntry => [{
-            text: auditEntry.changedAt
-        }, {
-            text: auditEntry.changedBy
-        }, {
-            text: RestrictedWordController.mapCategories(auditEntry.categories)
-        }, {
-            text: auditEntry.changedReason
-        }]);
-    }
-
-    private static mapCategories(categories: string[]) {
-        let categoryList: string[];
-        categoryList = [];
-        categories.forEach((element) => {
-            categoryList.push(getCategoryName(element));
-        });
-        return categoryList;
-    }
-
     public static getCreateNewWord(_request: Request, response: Response) {
         return response.render("add-new-word");
     }
