@@ -218,8 +218,8 @@ class RestrictedWordController {
             return response.render("word", {
                 word: word,
                 getCategoriesListHtml: getCategoriesListHtml,
-                wordHistory: [...RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog)].reverse(),
-                wordCategoryHistory: [...word.categoriesAuditLog].reverse(),
+                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog).slice().reverse(),
+                wordCategoryHistory: word.categoriesAuditLog.slice().reverse(),
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
@@ -247,11 +247,12 @@ class RestrictedWordController {
                 getCategoriesListHtml: getCategoriesListHtml,
                 setSuperRestricted: request.query.setSuperRestricted,
                 setCategories: request.query.setCategories,
-                wordHistory: [...RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog)].reverse(),
-                wordCategoryHistory: [...word.categoriesAuditLog].reverse()
+                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog).slice().reverse(),
+                wordCategoryHistory: word.categoriesAuditLog.slice().reverse()
             });
 
         } catch (unknownError) {
+
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
 
             return response.render("word", {
