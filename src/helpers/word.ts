@@ -8,8 +8,8 @@ const mapIdToCategory: any = {
 function getCategoriesListHtml(categories: string[]): string {
     let categoriesListHtml: string = "";
     if (categories.length > 0) {
-        for (let i = 0; i < categories.length; i++) {
-            const categoryDetails: string[] = mapIdToCategory[categories[i]];
+        for (const category of categories) {
+            const categoryDetails: string[] = mapIdToCategory[category]
             categoriesListHtml += `
                 <div class="tooltip">
                     <strong class="${categoryDetails[2]}">

@@ -215,11 +215,14 @@ class RestrictedWordController {
             const errorMessages = RestrictedWordController.getAndLogErrorList(request, "Error retrieving word list", unknownError);
             const word = await restrictedWordApiClient.getSingleRestrictedWord(id);
 
+            const wordHistoryDescending = RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog).reverse()
+            const wordCategoryHistoryDescending = word.categoriesAuditLog.reverse()
+
             return response.render("word", {
                 word: word,
                 getCategoriesListHtml: getCategoriesListHtml,
-                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog).reverse(),
-                wordCategoryHistory: word.categoriesAuditLog.reverse(),
+                wordHistory: wordHistoryDescending,
+                wordCategoryHistory: wordCategoryHistoryDescending,
                 errors: RestrictedWordController.mapErrors(errorMessages)
             });
         }
@@ -242,13 +245,16 @@ class RestrictedWordController {
 
             const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
 
+            const wordHistoryDescending = RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog).reverse()
+            const wordCategoryHistoryDescending = word.categoriesAuditLog.reverse()
+
             return response.render("word", {
                 word: word,
                 getCategoriesListHtml: getCategoriesListHtml,
                 setSuperRestricted: request.query.setSuperRestricted,
                 setCategories: request.query.setCategories,
-                wordHistory: RestrictedWordController.mapWordHistory(word.superRestrictedAuditLog).reverse(),
-                wordCategoryHistory: word.categoriesAuditLog.reverse()
+                wordHistory: wordHistoryDescending,
+                wordCategoryHistory: wordCategoryHistoryDescending
             });
 
         } catch (unknownError) {
