@@ -441,35 +441,89 @@ describe("RestrictedWordController", function () {
                 }));
         });
 
-        it("renders the word page if there is the categories are empty", async function () {
-            
-            mockRequest.body.returns({
-                id: testId,
-                superRestricted: "true",
-                loggedInUserEmail: testUser,
-                changedReason: "test change reason"
+        describe('errorHandlingCategory', function() {
+            beforeEach(function() {
+                mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+
+                mockApiClient.patchSuperRestrictedStatus(Arg.any(), Arg.any()).returns(PromiseRejector.rejectWith({
+                    messages: [exampleError]
+                }));
+            })
+
+            it("renders word page error if categories are empty", async function () {
+                
+                mockRequest.body.returns({
+                    id: testId,
+                    superRestricted: "false",
+                    loggedInUserEmail: testUser,
+                    changedReason: "test change reason"
+                });
+
+                await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
+
+                mockResponse
+                    .received()
+                    .render(viewName, Arg.is(options => {
+
+                        const expectedErrors = [{
+                            text: "No data to update provided in the request, a new super restricted value and/or categories is required."
+                        }];
+
+                        expect(options.errors).to.deep.equal(expectedErrors);
+
+                        return true;
+                    }));
             });
 
-            mockApiClient.getSingleRestrictedWord(Arg.any()).returns(PromiseResolver.resolveWith(databaseWord));
+            it("renders word page error if category change reason empty; categories changing ", async function () {
+                
+                mockRequest.body.returns({
+                    id: testId,
+                    superRestricted: "false",
+                    loggedInUserEmail: testUser,
+                    categories: ["restricted", "international-orgs-foreign-gov-depts"]
+                });
 
-            mockApiClient.patchSuperRestrictedStatus(Arg.any(), Arg.any()).returns(PromiseRejector.rejectWith({
-                messages: [exampleError]
-            }));
-            
-            await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
+                await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
 
-            mockResponse
-                .received()
-                .render(viewName, Arg.is(options => {
+                mockResponse
+                    .received()
+                    .render(viewName, Arg.is(options => {
 
-                    const expectedErrors = [{
-                        text: "No data to update provided in the request, a new super restricted value and/or categories is required."
-                    }];
+                        const expectedErrors = [{
+                            text: "A changed reason is required when updating categories."
+                        }];
 
-                    expect(options.errors).to.deep.equal(expectedErrors);
+                        expect(options.errors).to.deep.equal(expectedErrors);
 
-                    return true;
-                }));
+                        return true;
+                    }));
+            });
+
+            it("renders word page error if category change reason empty; both changing ", async function () {
+                
+                mockRequest.body.returns({
+                    id: testId,
+                    superRestricted: "true",
+                    loggedInUserEmail: testUser,
+                    categories: ["restricted", "international-orgs-foreign-gov-depts"]
+                });
+
+                await restrictedWordController.postUpdateWord(mockRequest, mockResponse);
+
+                mockResponse
+                    .received()
+                    .render(viewName, Arg.is(options => {
+
+                        const expectedErrors = [{
+                            text: "A changed reason is required when updating categories."
+                        }];
+
+                        expect(options.errors).to.deep.equal(expectedErrors);
+
+                        return true;
+                    }));
+            });
         });
     });
 

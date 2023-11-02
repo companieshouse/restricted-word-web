@@ -174,22 +174,22 @@ class RestrictedWordController {
                 RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
                 whichFieldUpdate = UpdateFields.CATEGORIES;
 
-                const errorMessages = [];
-
                 if (!categoryChangeReason ) {
-                    errorMessages.push("A changed reason is required when updating categories.");
+                    throw new RestrictedWordError("Validation error", 
+                        ["A changed reason is required when updating categories."]
+                    );
                 }
     
-                if (!categories) {
-                    errorMessages.push("A category for the word is required.");
-                }
-    
-                if (errorMessages.length > 0) {
-                    throw new RestrictedWordError("Validation error", errorMessages);
-                }
                 redirectToUrl += '?setCategories=true';
             } else if (superRestricted !== originalWord.superRestricted &&
                 RestrictedWordController.haveCategoriesChanged(categories, originalWord.categories)) {
+
+                    if (!categoryChangeReason ) {
+                        throw new RestrictedWordError("Validation error", 
+                            ["A changed reason is required when updating categories."]
+                        );
+                    }
+    
                     whichFieldUpdate = UpdateFields.BOTH;
                     redirectToUrl += '?setSuperRestricted=true&setCategories=true';
             } else {
