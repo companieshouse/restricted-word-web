@@ -8,7 +8,7 @@ import RestrictedWordViewModel from "../clients/RestrictedWordViewModel";
 import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
 import RestrictedWordError from "../error/RestrictedWordError";
-import { getCategoriesListHtml } from "../helpers/word";
+import { getCategoriesList, getCategoriesListHtml } from "../helpers/word";
 import { UpdateFields } from "../enums";
 
 const logger = createLogger(config.applicationNamespace);
@@ -147,7 +147,7 @@ class RestrictedWordController {
 
         const id = request.body.id;
         const superRestricted = request.body.superRestricted === "true";
-        const categories = typeof request?.body?.categories === "string" ? [request?.body?.categories] : request?.body?.categories ?? [];
+        const categories = getCategoriesList(request?.body?.categories);
         const categoryChangeReason = request.body.changedReason;
 
         let redirectToUrl = `${config.baseUrl}/${config.urlPrefix}/word/${id}`;

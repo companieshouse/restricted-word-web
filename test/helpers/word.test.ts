@@ -1,4 +1,4 @@
-import { getCategoriesListHtml } from "../../src/helpers/word";
+import { getCategoriesList, getCategoriesListHtml } from "../../src/helpers/word";
 import { expect } from "chai";
 
 describe("RestrictedWordHelper", function () {
@@ -54,6 +54,31 @@ describe("RestrictedWordHelper", function () {
                 </div>
                 <br>
             `);
+        });
+    });
+
+    describe("#getCategoriesList", function () {
+
+        it("returns list when a single category string is passed", async function () {
+            expect(getCategoriesList("criminal-fraudulent-purposes")).to.deep.equal(["criminal-fraudulent-purposes"]);
+        });
+
+        it("returns list when a category list is passed", async function () {
+            expect(getCategoriesList([
+                "criminal-fraudulent-purposes",
+                "restricted",
+                "prev-subjected-to-direction-to-change"
+            ]))
+                .to.deep.equal([
+                    "criminal-fraudulent-purposes",
+                    "restricted",
+                    "prev-subjected-to-direction-to-change"
+                ]);
+        });
+
+        it("returns empty array when a category is emppty", async function () {
+            expect(getCategoriesList(undefined))
+                .to.deep.equal([]);
         });
     });
 });

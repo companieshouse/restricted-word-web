@@ -24,4 +24,8 @@ function getCategoriesListHtml(categories: string[]): string {
     return categoriesListHtml;
 }
 
-export { getCategoriesListHtml };
+function getCategoriesList(categories: string | string[] | undefined) {
+    return typeof categories === "string" ? [categories] : categories ?? [];
+}
+
+export { getCategoriesListHtml, getCategoriesList };
