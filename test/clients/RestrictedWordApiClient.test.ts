@@ -11,6 +11,7 @@ import RestrictedWordViewModel from "../../src/clients/RestrictedWordViewModel";
 import axiosInstance from "../../src/clients/axiosInstance";
 import chaiAsPromised from "chai-as-promised";
 import sinonChai from "sinon-chai";
+import { UpdateFields } from "../../src/enums";
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -75,6 +76,7 @@ describe("RestrictedWordApiClient", function () {
         mockAxiosInstance.post = sinon.stub();
         mockAxiosInstance.delete = sinon.stub();
         mockAxiosInstance.get = sinon.stub();
+        mockAxiosInstance.patch = sinon.stub();
 
         apiClient = new (requireApiClient())(testUser);
     });
@@ -101,6 +103,17 @@ describe("RestrictedWordApiClient", function () {
                 changed_at: "2021-01-26T15:16:30",
                 changed_by: "testnom",
                 new_value: false
+            }],
+            categories_audit_log: [{
+                changed_at: "2020-04-16T16:23:30",
+                changed_by: "testname",
+                changed_reason: "sample change reason",
+                categories: ["restricted", "international-orgs-foreign-gov-depts"]
+            }, {
+                changed_at: "2021-05-16T16:23:30",
+                changed_by: "testname",
+                changed_reason: "sample change reason 2",
+                categories: ["international-orgs-foreign-gov-depts"]
             }]
         };
 
@@ -136,6 +149,17 @@ describe("RestrictedWordApiClient", function () {
                     changedAt: "26 Jan 21",
                     changedBy: "testnom",
                     newValue: false
+                }],
+                categoriesAuditLog: [{
+                    changedAt: "16 Apr 20",
+                    changedBy: "testname",
+                    changedReason: "sample change reason",
+                    categories: ["restricted", "international-orgs-foreign-gov-depts"]
+                }, {
+                    changedAt: "16 May 21",
+                    changedBy: "testname",
+                    changedReason: "sample change reason 2",
+                    categories: ["international-orgs-foreign-gov-depts"]
                 }]
             };
 
@@ -147,18 +171,55 @@ describe("RestrictedWordApiClient", function () {
 
         const testOptions = {
             id: testId,
-            patchedBy: testUser,
-            superRestricted: true
+            patchedBy: testUser
         };
 
-        it("successfully calls the patch url", async function () {
+        it("successfully calls the patch url for super restricted", async function () {
 
             const expectedCallingObject = {
                 patched_by: testUser,
                 super_restricted: true
             };
 
-            await apiClient.patchSuperRestrictedStatus(testOptions);
+            await apiClient.patchSuperRestrictedStatus({ ...testOptions, superRestricted: true }, UpdateFields.SUPER_RESTRICTED);
+
+            expect(mockAxiosInstance.patch).to.have.been.calledWithExactly(`/word/${testId}`, expectedCallingObject);
+
+        });
+
+        it("successfully calls the patch url for categories", async function () {
+
+            const expectedCallingObject = {
+                patched_by: testUser,
+                categories: ["restricted"],
+                changed_reason: "sample change reason"
+            };
+
+            await apiClient.patchSuperRestrictedStatus({
+                ...testOptions,
+                categories: ["restricted"],
+                categoryChangeReason: "sample change reason"
+            }, UpdateFields.CATEGORIES);
+
+            expect(mockAxiosInstance.patch).to.have.been.calledWithExactly(`/word/${testId}`, expectedCallingObject);
+
+        });
+
+        it("successfully calls the patch url for both", async function () {
+
+            const expectedCallingObject = {
+                patched_by: testUser,
+                super_restricted: true,
+                categories: ["restricted"],
+                changed_reason: "sample change reason"
+            };
+
+            await apiClient.patchSuperRestrictedStatus({
+                ...testOptions,
+                superRestricted: true,
+                categories: ["restricted"],
+                categoryChangeReason: "sample change reason"
+            }, UpdateFields.BOTH);
 
             expect(mockAxiosInstance.patch).to.have.been.calledWithExactly(`/word/${testId}`, expectedCallingObject);
 
@@ -178,7 +239,8 @@ describe("RestrictedWordApiClient", function () {
                     created_reason: "test created reason",
                     super_restricted: false,
                     deleted: false,
-                    super_restricted_audit_log: []
+                    super_restricted_audit_log: [],
+                    categories_audit_log: []
                 },
                 {
                     id: "2",
@@ -192,7 +254,8 @@ describe("RestrictedWordApiClient", function () {
                     deleted_at: "2020-02-21T11:03:04.019",
                     deleted_reason: "reason",
                     deleted: true,
-                    super_restricted_audit_log: []
+                    super_restricted_audit_log: [],
+                    categories_audit_log: []
                 }
             ]
         };
@@ -223,7 +286,8 @@ describe("RestrictedWordApiClient", function () {
                     superRestricted: false,
                     deletedAt: "-",
                     deleted: false,
-                    superRestrictedAuditLog: []
+                    superRestrictedAuditLog: [],
+                    categoriesAuditLog: []
                 },
                 {
                     id: "2",
@@ -237,7 +301,8 @@ describe("RestrictedWordApiClient", function () {
                     deletedAt: "21 Feb 20",
                     deletedReason: "reason",
                     deleted: true,
-                    superRestrictedAuditLog: []
+                    superRestrictedAuditLog: [],
+                    categoriesAuditLog: []
                 }
             ];
 

@@ -8,6 +8,7 @@ import axiosInstance from "./axiosInstance";
 import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
 import moment from "moment";
+import { UpdateFields } from "../enums";
 
 class RestrictedWordApiClient {
 
@@ -65,17 +66,40 @@ class RestrictedWordApiClient {
                     changedBy: RestrictedWordApiClient.getUsernameFromEmail(auditEntry.changed_by),
                     newValue: auditEntry.new_value
                 };
+            }),
+            categoriesAuditLog: serverObject.categories_audit_log.map(function (auditEntry) {
+                return {
+                    changedAt: moment(auditEntry.changed_at).format("DD MMM YY"),
+                    changedBy: RestrictedWordApiClient.getUsernameFromEmail(auditEntry.changed_by),
+                    changedReason: auditEntry.changed_reason,
+                    categories: auditEntry.categories
+                };
             })
         };
     }
 
-    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest) {
+    public async patchSuperRestrictedStatus(options: RestrictedWordPatchSuperRestrictedRequest, fieldsToUpdate: string | undefined) {
 
         try {
-            await axiosInstance.patch(`/word/${options.id}`, {
-                patched_by: options.patchedBy,
-                super_restricted: options.superRestricted
-            });
+            if (fieldsToUpdate === UpdateFields.SUPER_RESTRICTED) {
+                await axiosInstance.patch(`/word/${options.id}`, {
+                    patched_by: options.patchedBy,
+                    super_restricted: options.superRestricted
+                });
+            } else if (fieldsToUpdate === UpdateFields.CATEGORIES) {
+                await axiosInstance.patch(`/word/${options.id}`, {
+                    patched_by: options.patchedBy,
+                    categories: options.categories,
+                    changed_reason: options.categoryChangeReason
+                });
+            } else if (fieldsToUpdate === UpdateFields.BOTH) {
+                await axiosInstance.patch(`/word/${options.id}`, {
+                    patched_by: options.patchedBy,
+                    super_restricted: options.superRestricted,
+                    categories: options.categories,
+                    changed_reason: options.categoryChangeReason
+                });
+            }
         } catch (error) {
             throw this.handleErrors(error);
         }
