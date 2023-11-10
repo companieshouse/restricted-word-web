@@ -9,7 +9,15 @@
   }) }}
 {% endblock %}
 {% block content %}
-  {%if setSuperRestricted %}
+  {% if setSuperRestricted and setCategories %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ chNotification({
+          titleHtml: "You've set super restricted to " + ("Yes" if word.superRestricted else "No") + "<br>" + "Categories have been updated"
+        }) }}
+      </div>
+    </div>
+  {% elif setSuperRestricted %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         {{ chNotification({
@@ -17,8 +25,7 @@
         }) }}
       </div>
     </div>
-  {% endif %}
-  {%if setCategories %}
+  {% elif setCategories %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         {{ chNotification({
