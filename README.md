@@ -7,6 +7,11 @@ As part of ECCT economic crime bill, the web app has been enhanced to add suppor
 Restricted word matching can be filtered on the categories, which are `Restricted` (existing words that were added before this functionality was introduced will be classed as this), `International organisations and foreign government departments`,  `Names for criminal / fraudulent purposes` and `Names previously subjected to a direction to change them`.
 For more information regarding the architecture design and justifications of the enhancements, click [here](https://companieshouse.atlassian.net/wiki/spaces/PS/pages/4260626528/Enhancing+restricted+word+service)
 
+## Description (for branch)
+
+This is an internal system that a small (four or five) business users will use to maintain a list of restricted words.
+
+This application is part of the CHS Beta admin pages so the user needs to be given the CHS role that has permissions to access the page "/admin/restricted-word" (the role itself is names "restricted-word")
 
 ## Environment Variables
 
@@ -64,6 +69,19 @@ This project uses the node-base-image(https://github.com/companieshouse/node-bas
 
 ### Unit Tests
 Run `npm run test` or `npm run test:coverage` (to get a coverage report).
+
+### Local
+
+1. Have the restricted word api running on your same machine.
+2. In project home directory `npm start`
+3. In browser go to <http://localhost:3001>
+
+### Vagrant
+
+_remember to run `rm -rf node_modules && npm install` when you switch between mac and vagrant environments when developing._
+
+1. Start restricted-word-web via ubic (it is in the chs.chips group)
+2. In a browser go to <http://web.chs-dev.internal:4000/admin/restricted-word>
 
 ### AWS Test
 
