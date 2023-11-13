@@ -2,7 +2,10 @@
 
 ## Summary
 
-This web app is for users to administrate the restricted words by viewing, searching, adding and deleting them.
+This web app is for users to administrate restricted words by viewing, searching, adding and deleting them. 
+As part of ECCT economic crime bill, the web app has been enhanced to add support for categorisation of the words to enable. Each word must be assigned to one or more categories. Any updates to a word's categories will also require a justification/reason to be provided. This also applies to any requests to delete an existing word
+Restricted word matching can be filtered on the categories, which are `Restricted` (existing words that were added before this functionality was introduced will be classed as this), `International organisations and foreign government departments`,  `Names for criminal / fraudulent purposes` and `Names previously subjected to a direction to change them`.
+For more information regarding the architecture design and justifications of the enhancements, click [here](https://companieshouse.atlassian.net/wiki/spaces/PS/pages/4260626528/Enhancing+restricted+word+service)
 
 ## Description (for branch)
 
@@ -38,7 +41,22 @@ COOKIE_SECRET   |                       |
 3. npm install  (this installs the dependencies)
 4. make build
 
-## Running in Docker locally
+
+# Getting set up in Docker and Tilt
+ 1. If you have not done so already, clone [Docker CHS Development](https://github.com/compaiieshouse/docker-chs-development) and follow the steps in the README.
+2. `cd` into `docker-chs-development`, and run: `./bin/chs-dev services enable restricted-word-web` .You should also enable `restricted-word-api` , you can do this using the same command `./bin/chs-dev services enable restricted-word-api`
+
+Live update is also available for this service, this can be enabled by by running `./bin/chs-dev development enable restricted-word-web`
+
+3. Run docker using `tilt up` from the `docker-chs-development` directory.
+4. Use spacebar in the command line to open tilt window - wait for `restricted-word-web` and `restricted-word-api`  to turn green.
+5. Open your browser and go to page http://chs.local/admin/restricted-word.
+
+
+# Note
+You will also need to make sure your chosen 'user' has the 'restricted-word' role assigned to them. You should also ensure that you login as an administrator to be able to access http://chs.local/admin/restricted-word. or you will encounter Page Not Found error. 
+
+### Running Docker locally
 
 This project uses the node-base-image(https://github.com/companieshouse/node-base-image) to build docker images. If running locally and connecting to services on host machine use `host.docker.internal` in place of localhost for environment variables.
 
