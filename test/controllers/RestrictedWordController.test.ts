@@ -1072,6 +1072,30 @@ describe("RestrictedWordController", function () {
                     return true;
                 }));
         });
+
+        it("correctly processes the categories if the request body is a comma delimited categories string", async function () {
+
+            mockRequest.body.returns({
+                word: exampleWord1,
+                createdReason: exampleCreatedReason,
+                categories: "restricted,criminal-fraudulent-purposes,prev-subjected-to-direction-to-change",
+                postFromConflictPage: true
+            });
+
+            const expectedCategoriesArray = ["restricted", "criminal-fraudulent-purposes", "prev-subjected-to-direction-to-change"];
+
+            const expectedRedirectUrl = `/${mockConfig.urlPrefix}/?addedWord=${encodeURIComponent(exampleWord1)}`;
+
+            await restrictedWordController.postCreateNewWord(mockRequest, mockResponse);
+
+            mockApiClient
+                .received()
+                .createRestrictedWord(exampleWord1, exampleCreatedReason, expectedCategoriesArray, false, false);
+
+            mockResponse
+                .received()
+                .redirect(expectedRedirectUrl, Arg.any());
+        });
     });
 
     describe("#getDeleteWord", function () {
