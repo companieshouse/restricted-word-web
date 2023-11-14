@@ -281,7 +281,10 @@ class RestrictedWordController {
         const createdReason = request.body.createdReason;
         const superRestricted = request.body.superRestricted === "true";
         const deleteConflicting = request.body.deleteConflicting === "true";
-        if (typeof request.body.categories === "string") {
+        // If the POST request comes from the excluded word conflict page, the categories will be a comma delimited string
+        if (request.body.postFromConflictPage) {
+            request.body.categories = request.body.categories.split(",");
+        } else if (typeof request.body.categories === "string") {
             request.body.categories = [request.body.categories];
         }
         const categories = request.body.categories;
