@@ -42,6 +42,8 @@
           </ul>
 
           <input type="hidden" name="word" value="{{word}}" />
+          <input type="hidden" name="categories" value="{{categories}}" />
+          <input type="hidden" name="createdReason" value="{{createdReason}}" />
 
           {{ govukButton({
             text: "Add " + wordOrPhrase + " and delete excluded word" + pluralS,
