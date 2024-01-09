@@ -2,7 +2,7 @@
   class="js-dismissible govuk-notification
   {%- if params.classes %} {{ params.classes }}{% endif %}"
   aria-labelledby="notification-summary-title"
-  role="notification"
+  role="alert"
   tabindex="-1"
   {%- for attribute, value in params.attributes %}
     {{ attribute }}="{{ value }}"
