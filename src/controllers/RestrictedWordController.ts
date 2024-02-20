@@ -315,7 +315,7 @@ class RestrictedWordController {
 
             await restrictedWordApiClient.createRestrictedWord(newWord, createdReason, categories, superRestricted, deleteConflicting);
 
-        } catch (unknownError) {
+        } catch (unknownError: any) {
             if (unknownError.conflictingWords) {
                 return response.render("add-new-word", {
                     word: newWord.toUpperCase(),
