@@ -4,8 +4,8 @@ WORKDIR /opt
 COPY dist ./dist
 COPY ./package.json ./package-lock.json docker_start.sh routes.yaml ./
 COPY ./dist/views ./views
+COPY node_modules ./node_modules
 
-RUN npm i
 
 RUN dnf update -y && \
         dnf install -y \

@@ -1,7 +1,6 @@
 *
 !dist
 !docker_start.sh
-!routes.yaml
 !src
 !views
 !package.json
@@ -9,3 +8,4 @@
 !tsconfig.json
 !gulpfile.js
 !scss
+!node_modules
