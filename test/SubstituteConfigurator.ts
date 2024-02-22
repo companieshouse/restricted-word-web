@@ -1,7 +1,5 @@
 import { SubstituteOf } from "@fluffy-spoon/substitute";
 
-interface SubstituteConfigurator<T> {
-    (substitute: SubstituteOf<T>): void;
-}
+type SubstituteConfigurator<T extends object> = (substitute: SubstituteOf<T>) => void;
 
 export default SubstituteConfigurator;
