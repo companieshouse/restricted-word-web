@@ -1,7 +1,0 @@
-app_name: restricted-word-web
-group: web
-weight: 1000
-routes:
-  1: /admin/restricted-word
-  2: /admin/restricted-word/.*%
-  
