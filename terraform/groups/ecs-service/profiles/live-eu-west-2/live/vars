@@ -1,13 +1,8 @@
 environment = "live"
 aws_profile = "live-eu-west-2"
 
-# scaling configs
-desired_task_count = 2 # use multi instance in live
-
 # service configs
-chs_url = "https://find-and-update.company-information.service.gov.uk"
-cookie_domain = "company-information.service.gov.uk"
-cookie_name = "__SID"
-log_level = "info"
-node_env = "production"
-secure_cookie = "0"
+use_set_environment_files = true
+
+# Scaling configs
+desired_task_count = 2 # use multi instance in live
