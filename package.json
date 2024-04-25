@@ -32,6 +32,7 @@
   "dependencies": {
     "@companieshouse/node-session-handler": "^5.0.1",
     "@companieshouse/structured-logging-node": "^2.0.1",
+    "@companieshouse/web-security-node": "^3.1.0",
     "axios": "1.6.5",
     "chokidar": "^3.6.0",
     "cookie-parser": "~1.4.6",

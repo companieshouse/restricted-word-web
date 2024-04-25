@@ -24,6 +24,12 @@
 
       <h1 class="govuk-heading-xl">Add a restricted word</h1>
       <form method="POST" action="/{{urlPrefix}}/add-new-word">
+        {{
+          csrfTokenInput({
+            csrfToken: csrfToken
+          })
+        }}
+
         <input type="hidden" name="deleteConflicting" value="{{hasConflicting === true}}" />
 
         {% if hasConflicting %}

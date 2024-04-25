@@ -218,6 +218,12 @@
       }) }}
 
       <form action="/{{ urlPrefix }}/update" method="POST">
+        {{
+          csrfTokenInput({
+            csrfToken: csrfToken
+          })
+        }}
+        
         <input type="hidden" name="id" value="{{ word.id }}" />
         {{ govukTabs({
           items: [

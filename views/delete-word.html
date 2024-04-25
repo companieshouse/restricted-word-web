@@ -27,6 +27,12 @@
       <h1 class="govuk-heading-xl">Delete word</h1>
       <h2 class="govuk-body-l">You are about to delete <span>{{word}}</span></h2>
       <form method="POST" action="/{{urlPrefix}}/delete">
+        {{
+          csrfTokenInput({
+            csrfToken: csrfToken
+          })
+        }}
+
         <input type="hidden" name="id" value="{{ id }}" />
         <input type="hidden" name="word" value="{{ word }}" />
         {{ govukInput({

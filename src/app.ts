@@ -1,5 +1,6 @@
 import { SessionMiddleware, SessionStore, CookieConfig } from "@companieshouse/node-session-handler";
 import { createLogger, createLoggerMiddleware } from "@companieshouse/structured-logging-node";
+import {CsrfProtectionMiddleware} from "@companieshouse/web-security-node"
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
 import Redis from "ioredis";
@@ -16,6 +17,11 @@ const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
 const cookieConfig: CookieConfig = { cookieName: config.session.cookieName, cookieSecret: config.session.cookieSecret, cookieDomain: config.session.cookieDomain };
 const sessionMiddleware = SessionMiddleware(cookieConfig, sessionStore);
+const csrfProtectionMiddleware = CsrfProtectionMiddleware({
+    sessionStore,
+    enabled: true,
+    sessionCookieName: config.session.cookieName
+});
 
 const app = express();
 
@@ -35,7 +41,8 @@ nunjucks
     .configure([
         "dist/views",
         "node_modules/govuk-frontend/",
-        "node_modules/govuk-frontend/components/"
+        "node_modules/govuk-frontend/components/",
+        "node_modules/@companieshouse/"
     ], nunjucksConfig)
     .addGlobal("urlPrefix", config.urlPrefix);
 
@@ -43,10 +50,11 @@ app.set("view engine", "html");
 app.use(`/${config.urlPrefix}/public`, express.static(path.join(__dirname, "../dist")));
 
 app.use(createLoggerMiddleware(config.applicationNamespace));
-app.use(cookieParser());
-app.use(sessionMiddleware);
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(sessionMiddleware)
+app.use(csrfProtectionMiddleware);
 
 app.use(createAuthenticationMiddleware());
 

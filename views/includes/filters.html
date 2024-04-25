@@ -1,6 +1,11 @@
 <div class="govuk-grid-column-one-quarter column-filters">
   <section class="filters" id="filters">
     <form action="/{{urlPrefix}}" method="GET" id="filter-form">
+      {{
+        csrfTokenInput({
+          csrfToken: csrfToken
+        })
+      }}
 
       <div class="filter open">
         <div class="govuk-body filters-heading" role="button" aria-controls="filter-crn" aria-expanded="true" tabindex="0">
