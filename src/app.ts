@@ -1,6 +1,6 @@
 import { SessionMiddleware, SessionStore, CookieConfig } from "@companieshouse/node-session-handler";
 import { createLogger, createLoggerMiddleware } from "@companieshouse/structured-logging-node";
-import {CsrfProtectionMiddleware} from "@companieshouse/web-security-node"
+import { CsrfProtectionMiddleware } from "@companieshouse/web-security-node";
 import nunjucks, { ConfigureOptions } from "nunjucks";
 
 import Redis from "ioredis";
@@ -53,7 +53,7 @@ app.use(createLoggerMiddleware(config.applicationNamespace));
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(sessionMiddleware)
+app.use(sessionMiddleware);
 app.use(csrfProtectionMiddleware);
 
 app.use(createAuthenticationMiddleware());
