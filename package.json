@@ -30,10 +30,10 @@
   },
   "homepage": "https://github.com/companieshouse/restricted-word-web#readme",
   "dependencies": {
-    "@companieshouse/node-session-handler": "^5.0.1",
+    "@companieshouse/node-session-handler": "^5.0.2",
     "@companieshouse/structured-logging-node": "^2.0.1",
-    "@companieshouse/web-security-node": "^3.1.0",
-    "axios": "1.6.5",
+    "@companieshouse/web-security-node": "^4.1.1",
+    "axios": "^1.6.8",
     "chokidar": "^3.6.0",
     "cookie-parser": "~1.4.6",
     "express": "^4.19.2",
