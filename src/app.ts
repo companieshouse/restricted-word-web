@@ -12,6 +12,7 @@ import createNotFoundMiddleware from "./middleware/createNotFoundMiddleware";
 import express from "express";
 import helmet from "helmet";
 import path from "path";
+import csrfErrorHandler from "middleware/csrfErrorMiddleware";
 
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
@@ -59,6 +60,8 @@ app.use(csrfProtectionMiddleware);
 app.use(createAuthenticationMiddleware());
 
 app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
+
+app.use(csrfErrorHandler);
 
 app.use(createNotFoundMiddleware());
 
