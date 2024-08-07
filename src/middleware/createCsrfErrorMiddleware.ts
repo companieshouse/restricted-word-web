@@ -1,9 +1,8 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import {
     CsrfError
 } from '@companieshouse/web-security-node'
 
-// TODO: Enter the template name here instead of <TEMPLATE NAME>
 const csrfErrorTemplateName = "403";
 
 const csrfErrorHandler = (err: CsrfError | Error, _: Request,
