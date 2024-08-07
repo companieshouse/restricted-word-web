@@ -11,7 +11,7 @@ const csrfErrorHandler = (err: CsrfError | Error, _: Request,
   
   // handle non-CSRF Errors immediately
   if (!(err instanceof CsrfError)) {
-    next(err);
+    return next(err);
   }
 
   return res.status(403).render(
