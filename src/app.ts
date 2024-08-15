@@ -12,7 +12,7 @@ import createNotFoundMiddleware from "./middleware/createNotFoundMiddleware";
 import express from "express";
 import helmet from "helmet";
 import path from "path";
-import csrfErrorHandler from "middleware/createCsrfErrorMiddleware";
+import csrfErrorHandler from "./middleware/createCsrfErrorMiddleware";
 
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
