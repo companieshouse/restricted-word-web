@@ -33,7 +33,7 @@
     "@companieshouse/node-session-handler": "^5.0.1",
     "@companieshouse/structured-logging-node": "^2.0.1",
     "@companieshouse/web-security-node": "^4.1.1",
-    "axios": "1.6.5",
+    "axios": "^1.7.7",
     "chokidar": "^3.6.0",
     "cookie-parser": "~1.4.6",
     "express": "^4.19.2",
