@@ -1,8 +1,7 @@
-import sinon, { SinonStubbedInstance } from "sinon";
-import middleware from "../../src/middleware/createCsrfErrorMiddleware"
+import sinon from "sinon";
+import middleware from "../../src/middleware/createCsrfErrorMiddleware";
 import { expect } from "chai";
 import { CsrfError } from "@companieshouse/web-security-node";
-
 
 const createMockResponse = function () {
     return {
@@ -13,36 +12,35 @@ const createMockResponse = function () {
 };
 
 const createMockNext = function () {
-    return sinon.stub()
+    return sinon.stub();
 };
-
 
 describe("createCsrfErrorMiddleware", function () {
 
     it("not a csrf error", function () {
-        const error = new Error("Not a Csrf error")
-        const response = createMockResponse()
-        const mockNext = createMockNext()
+        const error = new Error("Not a Csrf error");
+        const response = createMockResponse();
+        const mockNext = createMockNext();
 
-       // @ts-expect-error
+        // @ts-expect-error
         middleware(error, null, response, mockNext);
 
-        expect(response.status).callCount(0)
+        expect(response.status).callCount(0);
         expect(mockNext)
             .to.have.been.calledOnceWithExactly(error);
     });
 
     it("csrf error", function () {
-        const error = new CsrfError("a Csrf error")
-        const response = createMockResponse()
-        const mockNext = createMockNext()
-        response.status.returns(response)
+        const error = new CsrfError("a Csrf error");
+        const response = createMockResponse();
+        const mockNext = createMockNext();
+        response.status.returns(response);
 
-       // @ts-expect-error
+        // @ts-expect-error
         middleware(error, null, response, mockNext);
 
-        expect(response.status).calledOnceWithExactly(403)
-        expect(mockNext).callCount(0)
+        expect(response.status).calledOnceWithExactly(403);
+        expect(mockNext).callCount(0);
         expect(response.render)
             .to.have.been.calledOnceWithExactly("403", {
                 csrfErrors: true
