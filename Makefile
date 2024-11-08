@@ -19,7 +19,7 @@ test-unit:
 	npm run test
 
 .PHONY: sonar
-sonar:
+sonar: test
 	npm run analyse-code
 
 .PHONY: lint
