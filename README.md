@@ -12,7 +12,7 @@ For more information regarding the architecture design and justifications of the
 
 This is an internal system to maintain a list of restricted words, used by a small number of business users.
 
-This application is part of the CHS Beta admin pages so the user needs to be given the CHS role that has permissions to access the page "/admin/restricted-word" (the role itself is names "restricted-word")
+This application is part of the CHS Beta admin pages so the user needs to be given the CHS role that has permissions to access the page "/admin/restricted-word" (the role itself is names "restricted-word"). For test environments this can be done as documented in [confluence](https://companieshouse.atlassian.net/wiki/spaces/IncVal/pages/1259143327/Restricted+Word+Web+-+High+Level+Design#For-test-environments-(when-you-have-access-to-DB)).
 
 ## Environment Variables
 
