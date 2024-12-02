@@ -1,7 +1,10 @@
 "use strict";
 
 const gulp = require("gulp");
-const sass = require("gulp-sass")(require("node-sass"));
+const dartSass = require("sass");
+const gulpSass = require("gulp-sass");
+
+const sass = gulpSass(dartSass);
 
 // Copies the fonts and images from the govuk-frontend package to the dist directory
 gulp.task("govuk-frontend-copy", function () {
