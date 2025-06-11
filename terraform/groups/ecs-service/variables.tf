@@ -127,11 +127,11 @@ variable "use_otel_collector" {
 variable "otel_cpus" {
   type = number
   description = "The required cpu resource for OTEL. 1024 here is 1 vCPU"
-  default = 512
+  default = 256
 }
 
 variable "otel_memory" {
   type = number
   description = "The required memory for OTEL"
-  default = 1024
+  default = 512
 }
