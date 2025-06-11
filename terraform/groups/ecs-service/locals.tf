@@ -65,6 +65,10 @@ locals {
 
   # TASK ENVIRONMENT: GLOBAL SECRET Version + SERVICE SECRET Version
   task_environment = concat(local.ssm_global_version_map,local.ssm_service_version_map,[
-    { "name" : "RESTRICTED_WORD_WEB_PORT", "value" : "${local.container_port}" }
+    { "name" : "RESTRICTED_WORD_WEB_PORT", "value" : "${local.container_port}" },
+    { "name" : "OTEL_LOG_ENABLED", "value" : true },
+    { "name" : "OTEL_SERVICE_NAME", "value" : "restricted-word-web" },
+    { "name" : "OTEL_LOGS_EXPORTER", "value" : "otlp" },
+    { "name" : "OTEL_RESOURCE_ATTRIBUTES", "value" : "aws.log.group.arns=arn:aws:logs:eu-west-2:169942020521:log-group:/ecs/search-service-cidev/eric/restricted-word-web-otel:*" }
   ])
 }
