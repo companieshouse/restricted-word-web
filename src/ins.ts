@@ -5,12 +5,12 @@ import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 const sdk = new NodeSDK({
   traceExporter: new OTLPTraceExporter({
-    url: 'http://host.docker.internal:4318/v1/traces',
+    url: 'http://localhost:4318',
     headers: {}
   }),
   metricReader: new PeriodicExportingMetricReader({
     exporter: new OTLPMetricExporter({
-      url: 'http://host.docker.internal:4318/v1/metrics',
+      url: 'http://localhost:4318',
       headers: {}
     }),
   }),
