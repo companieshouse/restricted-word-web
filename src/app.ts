@@ -14,6 +14,8 @@ import helmet from "helmet";
 import path from "path";
 import csrfErrorHandler from "./middleware/createCsrfErrorMiddleware";
 
+require('./ins');
+
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
 const cookieConfig: CookieConfig = { cookieName: config.session.cookieName, cookieSecret: config.session.cookieSecret, cookieDomain: config.session.cookieDomain };
@@ -68,3 +70,5 @@ app.use(createNotFoundMiddleware());
 app.listen(config.port, function () {
     logger.info(`Server started on port ${config.port}`);
 });
+
+export default app;
