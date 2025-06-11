@@ -1,0 +1,50 @@
+extensions:
+  health_check:
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  awsxray:
+    endpoint: 0.0.0.0:2000
+    transport: udp
+  statsd:
+    endpoint: 0.0.0.0:8125
+    aggregation_interval: 60s
+
+processors:
+  batch/traces:
+    timeout: 1s
+    send_batch_size: 50
+  batch/metrics:
+    timeout: 60s
+
+exporters:
+  awscloudwatchlogs:
+    log_group_name: "/ecs/search-service-cidev/eric/restricted-word-web-otel"
+    log_stream_name: "testing-integrations-stream"
+  awsxray:
+  awsemf:
+    namespace: ECS/AWSOTel/Application
+    log_group_name: '/aws/ecs/application/metrics'
+
+  debug:
+    verbosity: detailed
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp,awsxray]
+      processors: [batch/traces]
+      exporters: [debug,awsxray]
+    logs:
+      receivers: [otlp]
+      exporters: [awscloudwatchlogs]
+    metrics:
+      receivers: [otlp, statsd]
+      processors: [batch/metrics]
+      exporters: [awsemf]
+
+  extensions: [health_check]
