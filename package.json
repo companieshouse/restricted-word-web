@@ -16,7 +16,8 @@
     "test:coverage": "nyc npm test",
     "lint": "eslint 'src/**/*' 'test/**/*'",
     "lint:fix": "eslint 'src/**/*' 'test/**/*' --fix",
-    "analyse-code": "sonar-scanner"
+    "analyse-code": "sonar-scanner",
+    "chs-dev": "nodemon --legacy-watch"
   },
   "repository": {
     "type": "git",
@@ -31,17 +32,13 @@
   "homepage": "https://github.com/companieshouse/restricted-word-web#readme",
   "dependencies": {
     "@companieshouse/node-session-handler": "^5.0.1",
-    "@companieshouse/structured-logging-node": "^2.0.1",
+    "@companieshouse/structured-logging-node": "^2.0.2",
     "@companieshouse/web-security-node": "^4.1.1",
-    "@opentelemetry/api": "^1.9.0",
-    "@opentelemetry/auto-instrumentations-node": "^0.56.1",
-    "@opentelemetry/exporter-metrics-otlp-http": "^0.200.0",
-    "@opentelemetry/exporter-metrics-otlp-proto": "^0.200.0",
-    "@opentelemetry/exporter-trace-otlp-http": "^0.200.0",
-    "@opentelemetry/exporter-trace-otlp-proto": "^0.200.0",
-    "@opentelemetry/sdk-metrics": "^2.0.0",
-    "@opentelemetry/sdk-node": "^0.200.0",
-    "@opentelemetry/sdk-trace-node": "^2.0.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.60.0",
+    "@opentelemetry/exporter-metrics-otlp-proto": "^0.202.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.202.0",
+    "@opentelemetry/sdk-metrics": "^2.0.1",
+    "@opentelemetry/sdk-node": "^0.202.0",
     "axios": "^1.7.7",
     "chokidar": "^3.6.0",
     "cookie-parser": "~1.4.6",
