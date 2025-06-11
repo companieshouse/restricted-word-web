@@ -29,6 +29,10 @@ data "aws_ecs_cluster" "ecs_cluster" {
   cluster_name = "${local.name_prefix}-cluster"
 }
 
+data "aws_iam_role" "ecs_task_role" {
+  name = "AWSOTelRole"
+}
+
 data "aws_iam_role" "ecs_cluster_iam_role" {
   name = "${local.name_prefix}-ecs-task-execution-role"
 }
