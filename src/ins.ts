@@ -18,7 +18,7 @@ const sdk = new NodeSDK({
     }),
     instrumentations: [getNodeAutoInstrumentations()]
 });
-console.log("TraceExporterUrl : " + config.traceExporterUrl);
-console.log("MetricsExporterUrl : " + config.metricsExporterUrl);
-console.log("BaseUrl : " + config.baseUrl);
+console.log("Default TraceExporterUrl :: " + config.traceExporterUrl);
+console.log("Default MetricsExporterUrl :: " + config.metricsExporterUrl);
+console.log("Default BaseUrl :: " + config.baseUrl);
 sdk.start();
