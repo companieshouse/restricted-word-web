@@ -24,7 +24,7 @@ processors:
     error_mode: ignore
     traces:
       span:
-        - IsMatch(resource.attributes["http.request.url"], "*/healthcheck")
+        - 'resource.attributes["http.request.url"] == "*/healthcheck"'
 exporters:
   awscloudwatchlogs:
     log_group_name: "/ecs/search-service-cidev/otel/restricted-word-web-log"
