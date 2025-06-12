@@ -36,7 +36,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch/traces,filter/drop_healthcheck]
-      exporters: [awsxray]
+      exporters: [debug,awsxray]
     logs:
       receivers: [otlp]
       exporters: [debug,awscloudwatchlogs]
