@@ -20,4 +20,5 @@ const sdk = new NodeSDK({
 });
 console.log("TraceExporterUrl : " + config.traceExporterUrl);
 console.log("MetricsExporterUrl : " + config.metricsExporterUrl);
+console.log("BaseUrl : " + config.baseUrl);
 sdk.start();
