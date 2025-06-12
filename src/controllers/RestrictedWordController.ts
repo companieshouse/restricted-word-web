@@ -45,8 +45,8 @@ class RestrictedWordController {
 
     public static async getAllWords(request: Request, response: Response) {
 
-        logger.infoRequest(request, `Retrieving all words.`);
-        
+        logger.infoRequest(request, "Retrieving all words.");
+
         const filterWord = request.query.filterWord as string;
 
         const queryOptions: RestrictedWordQueryOptions = {
