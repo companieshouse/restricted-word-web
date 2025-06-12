@@ -135,3 +135,9 @@ variable "otel_memory" {
   description = "The required memory for OTEL"
   default = 512
 }
+
+variable "otel_log_group_retention_in_days" {
+  type        = number
+  default     = 365
+  description = "Time in days to retain logs for, defaults to 365"
+}
