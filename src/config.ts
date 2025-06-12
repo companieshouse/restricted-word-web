@@ -13,7 +13,9 @@ const config: ApplicationConfiguration = {
         cacheServer: process.env.CACHE_SERVER as string
     },
     applicationNamespace: "restricted-word-web",
-    baseUrl: process.env.CHS_URL ?? "http://chs.local"
+    baseUrl: process.env.CHS_URL ?? "http://chs.local",
+    traceExporterUrl: process.env.OTEL_TRACE_EXPORTER_URL,
+    metricsExporterUrl: process.env.OTEL_METRICS_EXPORTER_URL
 };
 
 const httpsProxy = process.env.HTTPS_PROXY;

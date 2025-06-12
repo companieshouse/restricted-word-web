@@ -14,7 +14,7 @@ import helmet from "helmet";
 import path from "path";
 import csrfErrorHandler from "./middleware/createCsrfErrorMiddleware";
 
-require('./ins');
+require("./ins");
 
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
