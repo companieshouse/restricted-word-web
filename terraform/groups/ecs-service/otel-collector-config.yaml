@@ -20,10 +20,14 @@ processors:
     send_batch_size: 50
   batch/metrics:
     timeout: 60s
-
+  filter/drop_healthcheck:
+    error_mode: ignore
+    traces:
+      span:
+        - IsMatch(resource.attributes["http.request.url"], "*/healthcheck")
 exporters:
   awscloudwatchlogs:
-    log_group_name: "/ecs/search-service-cidev/restricted-word-web-otel"
+    log_group_name: "/ecs/search-service-cidev/otel/restricted-word-web-log"
     log_stream_name: "testing-integrations-stream"
   awsxray:
   awsemf:
@@ -37,11 +41,11 @@ service:
   pipelines:
     traces:
       receivers: [otlp,awsxray]
-      processors: [batch/traces]
-      exporters: [debug,awsxray]
+      processors: [batch/traces,filter/drop_healthcheck]
+      exporters: [awsxray]
     logs:
       receivers: [otlp]
-      exporters: [awscloudwatchlogs]
+      exporters: [debug,awscloudwatchlogs]
     metrics:
       receivers: [otlp, statsd]
       processors: [batch/metrics]
