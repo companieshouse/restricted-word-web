@@ -38,10 +38,10 @@ service:
     traces:
       receivers: [otlp,awsxray]
       processors: [batch/traces]
-      exporters: [debug,awsxray]
+      exporters: [awsxray]
     logs:
       receivers: [otlp]
-      exporters: [awscloudwatchlogs]
+      exporters: [debug,awscloudwatchlogs]
     metrics:
       receivers: [otlp, statsd]
       processors: [batch/metrics]
