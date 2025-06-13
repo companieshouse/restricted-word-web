@@ -69,6 +69,6 @@ locals {
     { "name" : "OTEL_LOG_ENABLED", "value" : true },
     { "name" : "OTEL_SERVICE_NAME", "value" : "restricted-word-web" },
     { "name" : "OTEL_LOGS_EXPORTER", "value" : "otlp" },
-    { "name" : "OTEL_RESOURCE_ATTRIBUTES", "value" : "${aws_cloudwatch_log_group.otel_logs.arn}:*" }
+    { "name" : "OTEL_RESOURCE_ATTRIBUTES", "value" : "aws.log.group.arns=${aws_cloudwatch_log_group.otel_logs.arn}:*" }
   ])
 }
