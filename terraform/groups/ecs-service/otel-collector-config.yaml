@@ -19,6 +19,13 @@ processors:
         attributes:
           - key: http.target
             value: "/admin/restricted-word/healthcheck"
+  filter/drop_healthcheck_v2:
+    spans:
+      exclude:
+        match_type: strict
+        attributes:
+          - key: http.route
+            value: "/admin/restricted-word/healthcheck"
 exporters:
   awscloudwatchlogs:
     log_group_name: "/ecs/search-service-cidev/otel/restricted-word-web-log"
@@ -33,7 +40,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch/traces,filter/drop_healthcheck]
+      processors: [batch/traces,filter/drop_healthcheck,filter/drop_healthcheck_v2]
       exporters: [debug,awsxray]
     logs:
       receivers: [otlp]
