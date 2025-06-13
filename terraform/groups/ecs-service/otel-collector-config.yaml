@@ -17,8 +17,10 @@ processors:
       exclude:
         match_type: strict
         attributes:
-          - key: url.path
-            value: "/admin/restricted-word/healthcheck"
+          - key: http.user_agent
+            value: "ELB-HealthChecker/2.0"
+          - key: user_agent.original
+            value: "ELB-HealthChecker/2.0"
 exporters:
   awscloudwatchlogs:
     log_group_name: "/ecs/search-service-cidev/otel/restricted-word-web-log"
