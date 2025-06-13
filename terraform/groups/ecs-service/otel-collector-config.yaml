@@ -27,16 +27,17 @@ exporters:
   awsemf:
     namespace: ECS/AWSOTel/Application
     log_group_name: '/aws/ecs/application/metrics'
-
+  debug:
+    verbosity: detailed
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch/traces,filter/drop_healthcheck]
-      exporters: [awsxray]
+      exporters: [debug,awsxray]
     logs:
       receivers: [otlp]
-      exporters: [awscloudwatchlogs]
+      exporters: [debug,awscloudwatchlogs]
     metrics:
       receivers: [otlp]
       processors: [batch/metrics]
