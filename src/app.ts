@@ -1,3 +1,5 @@
+require("./ins");
+
 import { SessionMiddleware, SessionStore, CookieConfig } from "@companieshouse/node-session-handler";
 import { createLogger, createLoggerMiddleware } from "@companieshouse/structured-logging-node";
 import { CsrfProtectionMiddleware } from "@companieshouse/web-security-node";
@@ -14,7 +16,6 @@ import helmet from "helmet";
 import path from "path";
 import csrfErrorHandler from "./middleware/createCsrfErrorMiddleware";
 
-require("./ins");
 
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
