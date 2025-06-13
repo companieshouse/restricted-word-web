@@ -94,7 +94,7 @@ module "ecs-service" {
 
 resource "aws_ssm_parameter" "otel_collector_config" {
   name        = "/${local.service_name}-${var.environment}/otel-collector-config"
-  description = "OpenTelemetry Collector Configuration"
+  description = "OpenTelemetry Collector Configuration in SSM"
   type        = "String"
   tier        = "Standard"
   data_type   = "text"
