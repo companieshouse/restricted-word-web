@@ -27,6 +27,16 @@ processors:
           - key: http.route
             value: "/admin/restricted-word/healthcheck"
 
+  filter/drop_healthcheck_v3:
+    spans:
+      exclude:
+        match_type: strict
+        attributes:
+          - key: http.target
+            value: "/admin/restricted-word/healthcheck"
+          - key: http.route
+            value: "/admin/restricted-word/healthcheck"
+
   filter/drop_ELB_HealthChecker:
     spans:
       exclude:
@@ -57,7 +67,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch/traces,filter/drop_healthcheck,filter/drop_healthcheck_v2]
+      processors: [batch/traces,filter/drop_healthcheck_v3]
       exporters: [debug,awsxray]
     logs:
       receivers: [otlp]
