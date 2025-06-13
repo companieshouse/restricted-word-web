@@ -21,6 +21,10 @@ processors:
             value: "ELB-HealthChecker/2.0"
           - key: user_agent.original
             value: "ELB-HealthChecker/2.0"
+          - key: http.target
+            value: "/admin/restricted-word/healthcheck"
+          - key: http.route
+            value: "/admin/restricted-word/healthcheck"
 exporters:
   awscloudwatchlogs:
     log_group_name: "/ecs/search-service-cidev/otel/restricted-word-web-log"
