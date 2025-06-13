@@ -57,7 +57,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch/traces,filter/drop_regex]
+      processors: [batch/traces,filter/drop_healthcheck_v2]
       exporters: [debug,awsxray]
     logs:
       receivers: [otlp]
