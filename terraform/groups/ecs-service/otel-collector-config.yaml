@@ -35,6 +35,14 @@ processors:
           - key: http.user_agent
             value: "ELB-HealthChecker/2.0"
 
+  filter/drop_regex:
+    spans:
+      exclude:
+        match_type: regex
+        attributes:
+          - key: http.route
+            value: "healthcheck"
+
 exporters:
   awscloudwatchlogs:
     log_group_name: "/ecs/search-service-cidev/otel/restricted-word-web-log"
@@ -49,7 +57,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch/traces,filter/drop_ELB_HealthChecker]
+      processors: [batch/traces,filter/drop_regex]
       exporters: [debug,awsxray]
     logs:
       receivers: [otlp]
