@@ -17,13 +17,7 @@ processors:
       exclude:
         match_type: strict
         attributes:
-          - key: http.user_agent
-            value: "ELB-HealthChecker/2.0"
-          - key: user_agent.original
-            value: "ELB-HealthChecker/2.0"
           - key: http.target
-            value: "/admin/restricted-word/healthcheck"
-          - key: http.route
             value: "/admin/restricted-word/healthcheck"
 exporters:
   awscloudwatchlogs:
