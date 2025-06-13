@@ -53,7 +53,7 @@ service:
       exporters: [debug,awsxray]
     logs:
       receivers: [otlp]
-      exporters: [debug,awscloudwatchlogs]
+      exporters: [awscloudwatchlogs]
     metrics:
       receivers: [otlp]
       processors: [batch/metrics]
