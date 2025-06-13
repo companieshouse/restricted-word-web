@@ -31,13 +31,13 @@ exporters:
 service:
   pipelines:
     traces:
-      receivers: [otlp,awsxray]
+      receivers: [otlp]
       processors: [batch/traces,filter/drop_healthcheck]
       exporters: [awsxray]
     logs:
       receivers: [otlp]
       exporters: [awscloudwatchlogs]
     metrics:
-      receivers: [otlp, statsd]
+      receivers: [otlp]
       processors: [batch/metrics]
       exporters: [awsemf]
