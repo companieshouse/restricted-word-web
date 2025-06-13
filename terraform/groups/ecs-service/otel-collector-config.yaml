@@ -1,5 +1,3 @@
-extensions:
-  health_check:
 receivers:
   otlp:
     protocols:
@@ -15,10 +13,12 @@ processors:
   batch/metrics:
     timeout: 60s
   filter/drop_healthcheck:
-    error_mode: ignore
-    traces:
-      span:
-        - 'resource.attributes["http.request.url"] == "*/healthcheck"'
+    spans:
+      exclude:
+        match_type: strict
+        attributes:
+          - key: url.path
+            value: "/admin/restricted-word/healthcheck"
 exporters:
   awscloudwatchlogs:
     log_group_name: "/ecs/search-service-cidev/otel/restricted-word-web-log"
@@ -28,21 +28,16 @@ exporters:
     namespace: ECS/AWSOTel/Application
     log_group_name: '/aws/ecs/application/metrics'
 
-  debug:
-    verbosity: detailed
-
 service:
   pipelines:
     traces:
-      receivers: [otlp]
+      receivers: [otlp,awsxray]
       processors: [batch/traces,filter/drop_healthcheck]
-      exporters: [debug,awsxray]
+      exporters: [awsxray]
     logs:
       receivers: [otlp]
-      exporters: [debug,awscloudwatchlogs]
+      exporters: [awscloudwatchlogs]
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, statsd]
       processors: [batch/metrics]
       exporters: [awsemf]
-
-  extensions: [health_check]
