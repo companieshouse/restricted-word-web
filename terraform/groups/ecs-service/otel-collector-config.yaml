@@ -12,46 +12,13 @@ processors:
     send_batch_size: 50
   batch/metrics:
     timeout: 60s
-  filter/drop_healthcheck:
-    spans:
-      exclude:
-        match_type: strict
-        attributes:
-          - key: http.target
-            value: "/admin/restricted-word/healthcheck"
-  filter/drop_healthcheck_v2:
-    spans:
-      exclude:
-        match_type: strict
-        attributes:
-          - key: http.route
-            value: "/admin/restricted-word/healthcheck"
 
-  filter/drop_healthcheck_v3:
-    spans:
-      exclude:
-        match_type: strict
-        attributes:
-          - key: http.target
-            value: "/admin/restricted-word/healthcheck"
-          - key: http.route
-            value: "/admin/restricted-word/healthcheck"
-
-  filter/drop_ELB_HealthChecker:
-    spans:
-      exclude:
-        match_type: strict
-        attributes:
-          - key: http.user_agent
-            value: "ELB-HealthChecker/2.0"
-
-  filter/drop_regex:
-    spans:
-      exclude:
-        match_type: regex
-        attributes:
-          - key: http.route
-            value: "healthcheck"
+  filter/drop_healthcheck_attributes:
+    traces:
+      span:
+        - 'IsMatch(attributes["url.path"], ".*healthcheck.*")'
+        - 'IsMatch(attributes["http.target"], ".*healthcheck.*")'
+        - 'IsMatch(attributes["http.route"], ".*healthcheck.*")'
 
 exporters:
   awscloudwatchlogs:
@@ -67,7 +34,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch/traces,filter/drop_healthcheck_v3]
+      processors: [batch/traces,filter/drop_healthcheck_attributes]
       exporters: [debug,awsxray]
     logs:
       receivers: [otlp]
