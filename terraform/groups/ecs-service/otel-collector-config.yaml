@@ -22,7 +22,7 @@ processors:
 
 exporters:
   awscloudwatchlogs:
-    log_group_name: "/ecs/search-service-cidev/restricted-word-web-log"
+    log_group_name: "/ecs/search-service-cidev/restricted-word-web-otel-log"
     log_stream_name: "otel-integrations-stream"
   awsxray:
   awsemf:
