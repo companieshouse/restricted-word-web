@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "otel_logs" {
-  name              = "/ecs/search-service-cidev/restricted-word-web-log"
+  name              = "/ecs/search-service-cidev/restricted-word-web-otel-log"
   retention_in_days = var.otel_log_group_retention_in_days
 }
 
