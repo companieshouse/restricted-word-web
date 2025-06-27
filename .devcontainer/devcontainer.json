@@ -1,0 +1,34 @@
+{
+    "image": "ch-dev-containers-node-22",
+    "name": "dev:restricted-word-web",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "github.copilot",
+                "github.copilot-chat",
+                "orta.vscode-jest"
+            ]
+        }
+    },
+    "forwardPorts": [3000],
+    "runArgs": [
+        "--network=docker-chs-development_chs",
+        "--label",
+        "traefik.http.services.restricted-word-web.loadbalancer.server.port=3000",
+        "--label",
+        "traefik.http.routers.restricted-word-web.rule=Host(`chs.local`) && PathPrefix(`/admin/restricted-word`)",
+        "--expose",
+        "3000"
+    ],
+    "containerEnv": {
+        "CACHE_SERVER": "redis",
+        "CHS_INTERNAL_API_KEY": "g9yZIA81Zo9J46Kzp3JPbfld6kOqxR47EAYqXbRV",
+        "COOKIE_DOMAIN": "chs.local",
+        "COOKIE_NAME": "__SID",
+        "COOKIE_SECRET": "ChGovUk-XQrbf3sLj2abFxIY2TlapsJ",
+        "SECURE_COOKIE": "0",
+        "INTERNAL_API_URL": "http://api.chs.local:4001",
+        "RESTRICTED_WORD_WEB_PORT": "3000",
+        "LOG_LEVEL": "DEBUG"
+    }
+}
