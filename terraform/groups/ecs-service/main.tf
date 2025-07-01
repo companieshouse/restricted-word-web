@@ -85,6 +85,8 @@ module "ecs-service" {
 
   # OTEL Collector configurations
   use_otel_collector  = var.use_otel_collector
+  otel_cpus           = var.otel_cpus
+  otel_memory         = var.otel_memory
 
   depends_on = [module.secrets]
 }
