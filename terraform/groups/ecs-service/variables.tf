@@ -121,23 +121,6 @@ variable "restricted_word_web_version" {
 variable "use_otel_collector" {
   type        = bool
   description = "Whether to include the optional OTEL collector side car"
-  default     = true
+  default     = false
 }
 
-variable "otel_cpus" {
-  type = number
-  description = "The required cpu resource for OTEL. 1024 here is 1 vCPU"
-  default = 256
-}
-
-variable "otel_memory" {
-  type = number
-  description = "The required memory for OTEL"
-  default = 512
-}
-
-variable "otel_log_group_retention_in_days" {
-  type        = number
-  default     = 365
-  description = "Time in days to retain logs for, defaults to 365"
-}

@@ -38,7 +38,7 @@ module "ecs-service" {
   aws_profile             = var.aws_profile
   vpc_id                  = data.aws_vpc.vpc.id
   ecs_cluster_id          = data.aws_ecs_cluster.ecs_cluster.id
-  task_role_arn           = data.aws_iam_role.ecs_task_role.arn
+#  task_role_arn           = data.aws_iam_role.ecs_task_role.arn
   task_execution_role_arn = data.aws_iam_role.ecs_cluster_iam_role.arn
 
   # Load balancer configuration
@@ -85,18 +85,7 @@ module "ecs-service" {
 
   # OTEL Collector configurations
   use_otel_collector  = var.use_otel_collector
-  otel_cpus           = var.otel_cpus
-  otel_memory         = var.otel_memory
-  otel_collector_config_ssm_arn = aws_ssm_parameter.otel_collector_config.arn
 
   depends_on = [module.secrets]
 }
 
-resource "aws_ssm_parameter" "otel_collector_config" {
-  name        = "/${local.service_name}-${var.environment}/otel-collector-config"
-  description = "OpenTelemetry Collector Configuration in SSM"
-  type        = "String"
-  tier        = "Standard"
-  data_type   = "text"
-  value       = file("${path.module}/otel-collector-config.yaml") # or use inline value
-}
