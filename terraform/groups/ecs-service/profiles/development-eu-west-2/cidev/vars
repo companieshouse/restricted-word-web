@@ -5,7 +5,7 @@ aws_profile = "development-eu-west-2"
 use_set_environment_files = true
 
 # OTEL
-use_otel_collector  = false
+use_otel_collector  = true
 
 # Scheduled scaling of tasks
 service_autoscale_enabled  = true
