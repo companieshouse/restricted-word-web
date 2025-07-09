@@ -88,6 +88,11 @@ module "ecs-service" {
   otel_cpus           = var.otel_cpus
   otel_memory         = var.otel_memory
 
+  enable_execute_command = true # FIXME
+
+  use_otel_collector_gateway = false
+  otel_collector_gateway_url = "https://internalapi.cidev.aws.chdev.org"
+  otel_collector_gateway_log_group = "arn:aws:logs:eu-west-2:169942020521:log-group:/ecs/search-service-cidev/instrumentation-log:*"
   depends_on = [module.secrets]
 }
 
