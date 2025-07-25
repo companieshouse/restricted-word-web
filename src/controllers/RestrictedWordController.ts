@@ -79,11 +79,13 @@ class RestrictedWordController {
         }
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
-        let results: RestrictedWordViewModel[];
+        let results: RestrictedWordViewModel[] ;
 
         try {
 
             results = await restrictedWordApiClient.getAllRestrictedWords(queryOptions);
+
+            logger.infoRequest(request, "Finished retrieving all words .. WOOT.");
 
         } catch (unknownError) {
 
