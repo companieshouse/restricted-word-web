@@ -9,9 +9,7 @@ import config from "../config";
 import { createLogger } from "@companieshouse/structured-logging-node";
 import moment from "moment";
 import { UpdateFields } from "../enums";
-import { log } from "console";
-const otel = require('@opentelemetry/api');
-import { context, propagation, trace } from '@opentelemetry/api';
+
 
 class RestrictedWordApiClient {
 
@@ -19,9 +17,6 @@ class RestrictedWordApiClient {
     private _logger: ApplicationLogger = createLogger(config.applicationNamespace);
 
     private _username: string;
-
-    private tracer = trace.getTracer('my-restricted-word-web-app');
-
 
     public constructor(username: string) {
         this._username = username;
@@ -124,39 +119,6 @@ class RestrictedWordApiClient {
     }
 
     public async getAllRestrictedWords(options: RestrictedWordQueryOptions) {
-        const activeSpan = otel.trace.getActiveSpan();
-
-        const baggage = propagation.createBaggage({
-            'correlation_id': { value: 'abc12345667890' },
-            'feature.flag': { value: 'beta' }
-        });
-
-        // const baggage = propagation.getActiveBaggage() || propagation.createBaggage();
-        // baggage.setEntry('correlation_id', { value: 'abc12345667890' });
-
-        const ctxWithBaggage = propagation.setBaggage(context.active(), baggage);
-
-        // console.log('propagation.getBaggage()', propagation.getBaggage(ctxWithBaggage));
-
-        this._logger.info("Baggage set in the context ....");
-        // context.with(ctxWithBaggage, () => {
-
-
-        // const currentBaggage = propagation.getBaggage(context.active());
-        // const correlationId = currentBaggage?.getEntry('correlation_id')?.value;
-
-        // console.log(`correlation_id: ${correlationId}`);
-
-        // console.log('propagation.getActiveBaggage()', propagation.getActiveBaggage());
-
-        // });
-
-        if (activeSpan) {
-            activeSpan.setAttribute("correlation_id", "abc12345667890")
-        }
-        // console.log('Active span is : ', activeSpan);
-
-
         const queryString: RestrictedWordFilterDto = {};
 
         if (options.startsWith) {
@@ -178,32 +140,17 @@ class RestrictedWordApiClient {
         if (options.categories !== undefined) {
             queryString.categories = options.categories.join(",");
         }
+        try {
+            this._logger.info("Calling the API ....");
+            const response = await axiosInstance.get("/word", {
+                params: queryString
+            });
+            this._logger.info("API returned response ....");
+            return response.data.map(RestrictedWordApiClient.mapFromApi);
 
-        return context.with(ctxWithBaggage, async () => {
-            const span = this.tracer.startSpan('process-request');
-
-
-            // console.log("Inside the context with baggage", propagation.getActiveBaggage());
-
-            this._logger.info("Calling the API with the buggage....");
-
-            try {
-
-                const response = await axiosInstance.get("/word", {
-                    params: queryString
-                });
-
-                this._logger.info("API returned response ....");
-
-                return response.data.map(RestrictedWordApiClient.mapFromApi);
-
-            } catch (error) {
-                throw this.handleErrors(error);
-            }
-            span.end();
-
-        });
-
+        } catch (error) {
+            throw this.handleErrors(error);
+        }
     }
 
     public async createRestrictedWord(word: string, createdReason: string, categories: Array<string>, superRestricted: boolean, deleteConflicting: boolean) {
