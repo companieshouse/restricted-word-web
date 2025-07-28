@@ -15,6 +15,7 @@ import express from "express";
 import helmet from "helmet";
 import path from "path";
 import csrfErrorHandler from "./middleware/createCsrfErrorMiddleware";
+import createBaggageMiddleware from "./middleware/createBaggageMiddleware";
 
 
 const logger = createLogger(config.applicationNamespace);
@@ -61,6 +62,8 @@ app.use(sessionMiddleware);
 app.use(csrfProtectionMiddleware);
 
 app.use(createAuthenticationMiddleware());
+
+app.use(createBaggageMiddleware());
 
 app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
 
