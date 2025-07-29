@@ -15,7 +15,6 @@ const createBaggageMiddleware = function (): RequestHandler {
     return (request: Request, response: Response, next: NextFunction) => {
 
         const baggage = propagation.createBaggage({
-            'loggedin_user_id': { value: 'abc-12345667890'},
             'loggedin_user_email': { value: request.body.loggedInUserEmail }
         });
 
