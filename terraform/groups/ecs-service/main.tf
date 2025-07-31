@@ -92,7 +92,7 @@ module "ecs-service" {
 
   use_otel_collector_gateway = false
   otel_collector_gateway_url = "https://internalapi.cidev.aws.chdev.org"
-  otel_collector_gateway_log_group = "arn:aws:logs:eu-west-2:169942020521:log-group:/ecs/search-service-cidev/instrumentation-log:*"
+  otel_collector_gateway_log_group = "arn:aws:logs:eu-west-2:169942020521:log-group:/ecs/search-service-cidev/restricted-word-web:*"
   depends_on = [module.secrets]
 }
 
