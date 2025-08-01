@@ -85,7 +85,7 @@ class RestrictedWordController {
 
             results = await restrictedWordApiClient.getAllRestrictedWords(queryOptions);
 
-            logger.infoRequest(request, "Finished retrieving all words .. WOOT.");
+            logger.infoRequest(request, "Finished retrieving all words..");
 
         } catch (unknownError) {
 
