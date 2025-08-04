@@ -13,7 +13,6 @@ import { UpdateFields } from "../enums";
 
 class RestrictedWordApiClient {
 
-
     private _logger: ApplicationLogger = createLogger(config.applicationNamespace);
 
     private _username: string;
@@ -141,11 +140,11 @@ class RestrictedWordApiClient {
             queryString.categories = options.categories.join(",");
         }
         try {
-            this._logger.info("Calling the API ....");
+            this._logger.info("Calling the API ...");
             const response = await axiosInstance.get("/word", {
                 params: queryString
             });
-            this._logger.info("API returned response ....");
+            this._logger.info("API returned response ...");
             return response.data.map(RestrictedWordApiClient.mapFromApi);
 
         } catch (error) {
