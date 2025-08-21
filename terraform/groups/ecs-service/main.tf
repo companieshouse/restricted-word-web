@@ -84,7 +84,7 @@ module "ecs-service" {
   use_set_environment_files   = local.use_set_environment_files
 
   # OTEL Collector configurations
-  use_otel_collector  = var.use_otel_collector
+  #use_otel_collector  = var.use_otel_collector
   otel_cpus           = var.otel_cpus
   otel_memory         = var.otel_memory
 
