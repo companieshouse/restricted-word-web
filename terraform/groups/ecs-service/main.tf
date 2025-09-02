@@ -83,7 +83,6 @@ module "ecs-service" {
   app_environment_filename    = local.app_environment_filename
   use_set_environment_files   = local.use_set_environment_files
 
-  enable_execute_command = true # FIXME
   # OTEL Collector configurations
   use_otel_collector_gateway = true
 
