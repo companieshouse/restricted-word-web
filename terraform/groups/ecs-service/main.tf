@@ -83,16 +83,10 @@ module "ecs-service" {
   app_environment_filename    = local.app_environment_filename
   use_set_environment_files   = local.use_set_environment_files
 
-  # OTEL Collector configurations
-  #use_otel_collector  = var.use_otel_collector
-  otel_cpus           = var.otel_cpus
-  otel_memory         = var.otel_memory
-
   enable_execute_command = true # FIXME
-
+  # OTEL Collector configurations
   use_otel_collector_gateway = true
-  otel_collector_gateway_url = "https://internalapi.cidev.aws.chdev.org"
-  otel_collector_gateway_log_group = "arn:aws:logs:eu-west-2:169942020521:log-group:/ecs/search-service-cidev/restricted-word-web:*"
+
   depends_on = [module.secrets]
 }
 
