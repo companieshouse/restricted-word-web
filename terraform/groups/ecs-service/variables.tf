@@ -114,24 +114,3 @@ variable "restricted_word_web_version" {
   type        = string
   description = "The version of the restricted word web container to run."
 }
-
-# ------------------------------------------------------------------------------
-# Optional OTEL configuration
-# ------------------------------------------------------------------------------
-variable "use_otel_collector" {
-  type        = bool
-  description = "Whether to include the optional OTEL collector side car"
-  default     = false
-}
-
-variable "otel_cpus" {
-  type = number
-  description = "The required cpu resource for OTEL. 1024 here is 1 vCPU"
-  default = 256
-}
-
-variable "otel_memory" {
-  type = number
-  description = "The required memory for OTEL"
-  default = 512
-}
