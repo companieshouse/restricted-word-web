@@ -10,6 +10,7 @@ import { createLogger } from "@companieshouse/structured-logging-node";
 import moment from "moment";
 import { UpdateFields } from "../enums";
 
+
 class RestrictedWordApiClient {
 
     private _logger: ApplicationLogger = createLogger(config.applicationNamespace);
@@ -106,7 +107,6 @@ class RestrictedWordApiClient {
     }
 
     public async getSingleRestrictedWord(id: string) {
-
         try {
             const response = await axiosInstance.get(`/word/${id}`);
 
@@ -118,7 +118,6 @@ class RestrictedWordApiClient {
     }
 
     public async getAllRestrictedWords(options: RestrictedWordQueryOptions) {
-
         const queryString: RestrictedWordFilterDto = {};
 
         if (options.startsWith) {
@@ -140,13 +139,12 @@ class RestrictedWordApiClient {
         if (options.categories !== undefined) {
             queryString.categories = options.categories.join(",");
         }
-
         try {
-
+            this._logger.info("Calling the API ...");
             const response = await axiosInstance.get("/word", {
                 params: queryString
             });
-
+            this._logger.info("API returned response ...");
             return response.data.map(RestrictedWordApiClient.mapFromApi);
 
         } catch (error) {

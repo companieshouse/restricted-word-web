@@ -1,3 +1,5 @@
+require("./ins");
+
 import { SessionMiddleware, SessionStore, CookieConfig } from "@companieshouse/node-session-handler";
 import { createLogger, createLoggerMiddleware } from "@companieshouse/structured-logging-node";
 import { CsrfProtectionMiddleware } from "@companieshouse/web-security-node";
@@ -13,6 +15,8 @@ import express from "express";
 import helmet from "helmet";
 import path from "path";
 import csrfErrorHandler from "./middleware/createCsrfErrorMiddleware";
+import createBaggageMiddleware from "./middleware/createBaggageMiddleware";
+
 
 const logger = createLogger(config.applicationNamespace);
 const sessionStore = new SessionStore(new Redis(`redis://${config.session.cacheServer}`));
@@ -59,6 +63,8 @@ app.use(csrfProtectionMiddleware);
 
 app.use(createAuthenticationMiddleware());
 
+app.use(createBaggageMiddleware());
+
 app.use(`/${config.urlPrefix}/`, RestrictedWordRouter.create());
 
 app.use(csrfErrorHandler);
@@ -68,3 +74,5 @@ app.use(createNotFoundMiddleware());
 app.listen(config.port, function () {
     logger.info(`Server started on port ${config.port}`);
 });
+
+export default app;
