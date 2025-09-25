@@ -71,3 +71,4 @@ Run `npm run test` or `npm run test:coverage` (to get a coverage report)
 ### AWS Test
 
 The application is installed via the `restricted-word-web` Concourse pipeline.
+
