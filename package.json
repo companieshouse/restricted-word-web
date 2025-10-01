@@ -16,7 +16,8 @@
     "test:coverage": "nyc npm test",
     "lint": "eslint 'src/**/*' 'test/**/*'",
     "lint:fix": "eslint 'src/**/*' 'test/**/*' --fix",
-    "analyse-code": "sonar-scanner"
+    "analyse-code": "sonar-scanner",
+    "chs-dev": "nodemon --legacy-watch"
   },
   "repository": {
     "type": "git",

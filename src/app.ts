@@ -68,3 +68,5 @@ app.use(createNotFoundMiddleware());
 app.listen(config.port, function () {
     logger.info(`Server started on port ${config.port}`);
 });
+
+export default app;
