@@ -1,6 +1,7 @@
 import app from "../app";
 
-const PORT = process.env.NODE_PORT;
+// eslint-disable-next-line
+const PORT = process.env.PORT;
 
 app.set("port", PORT);
 
