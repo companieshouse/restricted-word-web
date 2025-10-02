@@ -34,10 +34,10 @@
     "@companieshouse/node-session-handler": "^5.0.1",
     "@companieshouse/structured-logging-node": "^2.0.1",
     "@companieshouse/web-security-node": "^4.1.1",
-    "axios": "^1.7.7",
+    "axios": "^1.12.2",
     "chokidar": "^3.6.0",
     "cookie-parser": "~1.4.6",
-    "express": "^4.19.2",
+    "express": "^4.21.2",
     "govuk-frontend": "^4.7.0",
     "helmet": "~3.21.2",
     "http-status-codes": "^2.2.0",
@@ -48,8 +48,8 @@
     "winston": "~3.2.1"
   },
   "devDependencies": {
-    "@babel/core": "~7.22.20",
-    "@babel/preset-env": "~7.22.20",
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
     "@fluffy-spoon/substitute": "~1.116.0",
     "@types/chai": "~4.2.22",
     "@types/chai-as-promised": "~7.1.8",
@@ -98,6 +98,7 @@
     ]
   },
   "overrides": {
-    "glob-parent": "^6.0.2"
+    "glob-parent": "^6.0.2",
+    "msgpack5": "^6.0.2"
   }
 }
