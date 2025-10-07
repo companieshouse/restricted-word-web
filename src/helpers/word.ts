@@ -5,20 +5,33 @@ const mapIdToCategory: any = {
     "prev-subjected-to-direction-to-change": ["Names previously subjected to a direction to change them", "Dir. to change", "govuk-tag govuk-tag--yellow"]
 };
 
+const htmlEscapeMap: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+};
+
 function getCategoriesListHtml(categories: string[]): string {
+    const escapeHtml = (str: string): string => str.replace(/[&<>"']/g, tag => htmlEscapeMap[tag] ?? tag);
+
     let categoriesListHtml: string = "";
     if (categories.length > 0) {
         for (const category of categories) {
             const categoryDetails: string[] = mapIdToCategory[category];
-            categoriesListHtml += `
+            if (categoryDetails && categoryDetails.length === 3) {
+                const [tooltipText, label, cssClass] = categoryDetails.map(escapeHtml);
+                categoriesListHtml += `
                 <div class="tooltip">
-                    <strong class="${categoryDetails[2]}">
-                        ${categoryDetails[1]}
+                    <strong class="${cssClass}">
+                        ${label}
                     </strong>
-                    <span class="tooltip-text">${categoryDetails[0]}</span>
+                    <span class="tooltip-text">${tooltipText}</span>
                 </div>
                 <br>
             `;
+            }
         }
     }
     return categoriesListHtml;
