@@ -55,6 +55,14 @@ describe("RestrictedWordHelper", function () {
                 <br>
             `);
         });
+        it('should escape special characters in category details', () => {
+            const customMap = {
+                'test': ['<script>', '"quoted"', "govuk-tag govuk-tag--red"]
+            };
+            const result = getCategoriesListHtml(['test'], customMap);
+            expect(result).to.include('&lt;script&gt;');
+            expect(result).to.include('&quot;quoted&quot;');
+        });
     });
 
     describe("#getCategoriesList", function () {
@@ -82,3 +90,4 @@ describe("RestrictedWordHelper", function () {
         });
     });
 });
+
