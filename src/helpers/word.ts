@@ -6,11 +6,11 @@ const mapIdToCategory: Record<string, string[]> = {
 };
 
 const htmlEscapeMap: Record<string, string> = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;',
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
 };
 
 function getCategoriesListHtml(categories: string[], mappedCategoryOverride?: Record<string, string[]>): string {
