@@ -23,7 +23,8 @@ The following is a list of mandatory environment variables for the service to ru
 | RESTRICTED_WORD_ADMIN_WEB_PORT | Application Port           | 3000                                     |
 | INTERNAL_API_URL               | URL to Restricted Word Api | http://internalapi.chs-dev.internal:4001 |
 | CHS_INTERNAL_API_KEY           | Internal API Key           |                                          |
-|  RESTRICTED_WORD_WEB_PORT      | Application Port           | 3000                                     |
+| RESTRICTED_WORD_WEB_PORT       | Application Port           | 3000                                     |
+| CHS_URL                        | URL to Restricted Word web | http://chs.local                         |
 
 ## Config variables
 
