@@ -1,3 +1,5 @@
+require("./otel");
+
 import { SessionMiddleware, SessionStore, CookieConfig } from "@companieshouse/node-session-handler";
 import { createLogger, createLoggerMiddleware } from "@companieshouse/structured-logging-node";
 import { CsrfProtectionMiddleware } from "@companieshouse/web-security-node";
