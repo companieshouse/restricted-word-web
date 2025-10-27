@@ -1,4 +1,11 @@
 {
-    "reporter": ["lcov", "text-summary"],
-    "report-dir": "coverage"
+    "reporter": [
+        "lcov",
+        "text-summary"
+    ],
+    "report-dir": "coverage",
+    "coveragePathIgnorePatterns": [
+        "src/otel.ts",
+        "src/bin/"
+    ]
 }
