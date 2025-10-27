@@ -6,7 +6,9 @@ import { PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
 import config from "./config";
 import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
 import { ALLOW_ALL_BAGGAGE_KEYS, BaggageSpanProcessor } from "@opentelemetry/baggage-span-processor";
+import { createLogger } from "@companieshouse/structured-logging-node";
 
+const logger = createLogger(config.applicationNamespace);
 const traceExporter = new OTLPTraceExporter({
     url: config.traceExporterUrl,
     headers: {}
@@ -25,9 +27,5 @@ const sdk = new NodeSDK({
     }),
     instrumentations: [getNodeAutoInstrumentations()]
 });
-console.log("TraceExporterUrl :: " + config.traceExporterUrl);
-console.log("MetricsExporterUrl :: " + config.metricsExporterUrl);
-console.log("BaseUrl :: " + config.baseUrl);
-console.log("ApplicationNamespace :: " + config.applicationNamespace);
-console.log(sdk);
+logger.info("Starting OpenTelemetry SDK...");
 sdk.start();

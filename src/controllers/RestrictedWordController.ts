@@ -239,10 +239,9 @@ class RestrictedWordController {
             });
     }
 
-    public static async getWord(request: Request, response: Response) {  
-        
+    public static async getWord(request: Request, response: Response) {
         logger.infoRequest(request, `Retrieving word for word id "${request.params.wordId}".`);
-        
+
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
