@@ -1,3 +1,4 @@
+import "../otel";
 import app from "../app";
 
 // eslint-disable-next-line
