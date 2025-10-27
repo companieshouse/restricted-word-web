@@ -3,9 +3,5 @@
         "lcov",
         "text-summary"
     ],
-    "report-dir": "coverage",
-    "coveragePathIgnorePatterns": [
-        "src/otel.ts",
-        "src/bin/"
-    ]
+    "report-dir": "coverage"
 }
