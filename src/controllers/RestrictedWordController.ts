@@ -45,6 +45,8 @@ class RestrictedWordController {
 
     public static async getAllWords(request: Request, response: Response) {
 
+        logger.infoRequest(request, "Retrieving all words.");
+
         const filterWord = request.query.filterWord as string;
 
         const queryOptions: RestrictedWordQueryOptions = {
@@ -82,6 +84,8 @@ class RestrictedWordController {
         try {
 
             results = await restrictedWordApiClient.getAllRestrictedWords(queryOptions);
+
+            logger.infoRequest(request, "Finished retrieving all words..");
 
         } catch (unknownError) {
 
@@ -236,6 +240,8 @@ class RestrictedWordController {
     }
 
     public static async getWord(request: Request, response: Response) {
+        logger.infoRequest(request, `Retrieving word for word id "${request.params.wordId}".`);
+
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
