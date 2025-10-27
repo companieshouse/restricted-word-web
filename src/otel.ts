@@ -28,4 +28,6 @@ const sdk = new NodeSDK({
     instrumentations: [getNodeAutoInstrumentations()]
 });
 logger.info("Starting OpenTelemetry SDK...");
+logger.info(`Trace Exporter Url: ${config.traceExporterUrl}`);
+logger.info(`Metrics Exporter Url: ${config.metricsExporterUrl}`);
 sdk.start();

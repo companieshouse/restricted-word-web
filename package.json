@@ -9,7 +9,7 @@
     "build:copy-views": "cp -r views dist/",
     "build-scss": "gulp build",
     "build-js": "webpack --mode production",
-    "start": "node ./dist/app",
+    "start": "node -r ./dist/otel ./dist/app",
     "start:dev": "nodemon",
     "test": "mocha -r ts-node/register --recursive test --extension ts",
     "test:watch": "mocha -r ts-node/register --recursive test --extension ts --watch",
