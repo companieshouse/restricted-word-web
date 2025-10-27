@@ -1,5 +1,7 @@
 import ApplicationConfiguration from "./ApplicationConfiguration";
 
+const otlpEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
+
 const config: ApplicationConfiguration = {
     port: parseInt(process.env.RESTRICTED_WORD_WEB_PORT as string),
     apiAddress: process.env.INTERNAL_API_URL as string,
@@ -14,8 +16,8 @@ const config: ApplicationConfiguration = {
     },
     applicationNamespace: "restricted-word-web",
     baseUrl: process.env.CHS_URL ?? "",
-    traceExporterUrl: (process.env.OTEL_EXPORTER_OTLP_ENDPOINT ?? "http://localhost:4318") + "/v1/traces",
-    metricsExporterUrl: (process.env.OTEL_EXPORTER_OTLP_ENDPOINT ?? "http://localhost:4318") + "/v1/metrics"
+    traceExporterUrl: `${otlpEndpoint}/v1/traces`,
+    metricsExporterUrl: `${otlpEndpoint}/v1/metrics`
 };
 
 const httpsProxy = process.env.HTTPS_PROXY;
