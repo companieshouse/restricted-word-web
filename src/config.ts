@@ -16,8 +16,11 @@ const config: ApplicationConfiguration = {
     },
     applicationNamespace: "restricted-word-web",
     baseUrl: process.env.CHS_URL ?? "",
-    traceExporterUrl: `${otlpEndpoint}/v1/traces`,
-    metricsExporterUrl: `${otlpEndpoint}/v1/metrics`
+    otel: {
+        traceExporterUrl: `${otlpEndpoint}/v1/traces`,
+        metricsExporterUrl: `${otlpEndpoint}/v1/metrics`,
+        otelLogEnabled: process.env.OTEL_LOG_ENABLED === "true"
+    }
 };
 
 const httpsProxy = process.env.HTTPS_PROXY;
