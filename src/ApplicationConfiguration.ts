@@ -16,8 +16,11 @@ interface ApplicationConfiguration {
         port: number;
     };
     baseUrl: string;
-    traceExporterUrl?: string;
-    metricsExporterUrl?: string;
+    otel?: {
+        otelLogEnabled: boolean;
+        traceExporterUrl: string;
+        metricsExporterUrl: string;
+    };
 }
 
 export default ApplicationConfiguration;

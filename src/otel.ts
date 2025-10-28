@@ -10,7 +10,7 @@ import { createLogger } from "@companieshouse/structured-logging-node";
 
 const logger = createLogger(config.applicationNamespace);
 const traceExporter = new OTLPTraceExporter({
-    url: config.traceExporterUrl,
+    url: config.otel?.traceExporterUrl,
     headers: {}
 });
 const sdk = new NodeSDK({
@@ -21,13 +21,18 @@ const sdk = new NodeSDK({
 
     metricReader: new PeriodicExportingMetricReader({
         exporter: new OTLPMetricExporter({
-            url: config.metricsExporterUrl,
+            url: config.otel?.metricsExporterUrl,
             headers: {}
         })
     }),
     instrumentations: [getNodeAutoInstrumentations()]
 });
-logger.info("Starting OpenTelemetry SDK...");
-logger.info(`Trace Exporter Url: ${config.traceExporterUrl}`);
-logger.info(`Metrics Exporter Url: ${config.metricsExporterUrl}`);
-sdk.start();
+
+logger.info(`Otel log enabled: ${config.otel?.otelLogEnabled}`);
+
+if (config.otel?.otelLogEnabled) {
+    logger.info("Starting OpenTelemetry SDK...");
+    logger.info(`Trace Exporter Url: ${config.otel?.traceExporterUrl}`);
+    logger.info(`Metrics Exporter Url: ${config.otel?.metricsExporterUrl}`);
+    sdk.start();
+}
