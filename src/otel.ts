@@ -4,11 +4,9 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-proto";
 import { PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
 import config from "./config";
-import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
 import { ALLOW_ALL_BAGGAGE_KEYS, BaggageSpanProcessor } from "@opentelemetry/baggage-span-processor";
-import { createLogger } from "@companieshouse/structured-logging-node";
+import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
 
-const logger = createLogger(config.applicationNamespace);
 const traceExporter = new OTLPTraceExporter({
     url: config.otel?.traceExporterUrl,
     headers: {}
@@ -28,11 +26,7 @@ const sdk = new NodeSDK({
     instrumentations: [getNodeAutoInstrumentations()]
 });
 
-logger.info(`Otel log enabled: ${config.otel?.otelLogEnabled}`);
-
 if (config.otel?.otelLogEnabled) {
-    logger.info("Starting OpenTelemetry SDK...");
-    logger.info(`Trace Exporter Url: ${config.otel?.traceExporterUrl}`);
-    logger.info(`Metrics Exporter Url: ${config.otel?.metricsExporterUrl}`);
+    console.log("Staring OpenTelemetry SDK...");
     sdk.start();
 }
