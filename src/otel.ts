@@ -7,6 +7,10 @@ import config from "./config";
 import { ALLOW_ALL_BAGGAGE_KEYS, BaggageSpanProcessor } from "@opentelemetry/baggage-span-processor";
 import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
 
+/**
+ * Initializing the structured logger before the OpenTelemetry SDK can break the instrumentation.
+ * Avoid setting up structured logging before the OpenTelemetry SDK is initialized.
+ */
 const traceExporter = new OTLPTraceExporter({
     url: config.otel?.traceExporterUrl,
     headers: {}
