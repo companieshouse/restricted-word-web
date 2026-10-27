@@ -15,7 +15,6 @@
     "build-js": "webpack --mode production",
     "start": "node -r ./dist/otel ./dist/app",
     "start:dev": "nodemon",
-    "chs-dev": "nodemon --legacy-watch",
     "test": "mocha -r ts-node/register --recursive test --extension ts",
     "test:watch": "mocha -r ts-node/register --recursive test --extension ts --watch",
     "test:coverage": "nyc npm test",
@@ -24,7 +23,7 @@
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "analyse-code": "sonar-scanner",
-    "chs-dev": "nodemon --legacy-watch --polling-interval 1000",
+    "chs-dev": "nodemon --legacy-watch",
     "prepare": "husky"
   },
   "lint-staged": {
