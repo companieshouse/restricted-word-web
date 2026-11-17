@@ -238,13 +238,14 @@ class RestrictedWordController {
         );
     }
 
-    public static async getWord(request: Request, response: Response) {
-        logger.infoRequest(request, `Retrieving word for word id "${request.params.wordId}".`);
+    public static async getWord(request: Request<{ wordId: string }>, response: Response) {
+        const wordId = request.params.wordId;
+        logger.infoRequest(request, `Retrieving word for word id "${wordId}".`);
 
         const restrictedWordApiClient = new RestrictedWordApiClient(request.body.loggedInUserEmail);
 
         try {
-            const word = await restrictedWordApiClient.getSingleRestrictedWord(request.params.wordId);
+            const word = await restrictedWordApiClient.getSingleRestrictedWord(wordId);
 
             return response.render("word", {
                 word: word,

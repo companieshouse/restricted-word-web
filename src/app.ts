@@ -72,7 +72,12 @@ app.use(csrfErrorHandler);
 
 app.use(createNotFoundMiddleware());
 
-app.listen(config.port, function () {
+app.listen(config.port, function (err) {
+    if (err) {
+        logger.error(err.message);
+        process.exit(1);
+    }
+
     logger.info(`Server started on port ${config.port}`);
 });
 
