@@ -39,3 +39,30 @@ No application code, dependencies, or lockfile were changed during Discovery.
 - HTTP-level route and async error-propagation tests are absent.
 - Session and CSRF middleware compatibility with Express 5 is unverified.
 - Query parsing for repeated category filters needs a regression test.
+
+## Migration Phase - 2026-11-16
+
+### Changes
+
+- Upgraded only `express` to `^5.3.0` and `@types/express` to `^5.0.6`.
+- Set the query parser to `extended` to preserve Express 4 query parsing behaviour.
+- Narrowed `request.params.wordId` to a string for the fixed `/word/:wordId` route, as Express 5 types permit string arrays for route parameters.
+- No deprecated APIs, route pattern rewrites, or other middleware changes were needed. Existing async handlers rely on Express 5 promise rejection forwarding.
+- No test source changes were needed; existing tests cover word rendering and single/repeated category filters.
+
+### Commands and results
+
+- `npm install express@^5.3.0 --save && npm install @types/express@^5.0.6 --save-dev` — upgraded the runtime and types. npm reported 19 audit findings (1 low, 16 moderate, 2 high); those findings are outside this migration phase.
+- `npm run build:compile` — first run identified the `request.params.wordId` type mismatch; passed after narrowing the route parameter.
+- `npm test -- --grep 'getWord|handles selecting a single category correctly|handles selecting multiple cateogories correctly'` — passed, 7 tests.
+- `npm ls express @types/express --depth=0` — passed with Express 5.3.0 and types 5.0.6.
+- `git diff -- package.json` — confirmed only the Express runtime and type versions changed in the manifest.
+
+### Files changed
+
+- `package.json` and `package-lock.json` — upgraded Express and its types; the lockfile had pre-existing changes and was preserved.
+- `src/app.ts` — preserved the extended query parser.
+- `src/controllers/RestrictedWordController.ts` — narrowed the `wordId` route parameter type.
+- `migration-plan.md`, `migration-report.md`, and `migration-decisions.md` — recorded migration progress without replacing Discovery notes.
+
+Migration is complete. Validation remains outstanding.

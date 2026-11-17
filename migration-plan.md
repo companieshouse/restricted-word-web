@@ -26,13 +26,13 @@ Upgrade this application from Express 4 to Express 5 and document all findings.
 9. [x] Document findings in pre-migration.md
 
 **Migration**
-1. [] Upgrade Express dependency
-2. [] Update deprecated APIs
-3. [] Update route matching syntax
-4. [] Update middleware
-5. [] Update async error handling
-6. [] Preserve response behaviour
-7. [] Review and run the relevant existing tests; no test changes were needed
+1. [x] Upgrade Express dependency
+2. [x] Update deprecated APIs (none found)
+3. [x] Update route matching syntax (no changes required)
+4. [x] Update middleware (no changes required)
+5. [x] Update async error handling (Express 5 forwards rejected handler promises)
+6. [x] Preserve response behaviour
+7. [x] Review and run the relevant existing tests; no test changes were needed
 
 **Validation**
 1. [ ] Run linting
