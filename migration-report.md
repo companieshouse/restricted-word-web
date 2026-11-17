@@ -66,3 +66,43 @@ No application code, dependencies, or lockfile were changed during Discovery.
 - `migration-plan.md`, `migration-report.md`, and `migration-decisions.md` — recorded migration progress without replacing Discovery notes.
 
 Migration is complete. Validation remains outstanding.
+
+## Validation Phase - 2026-11-17
+
+### Results
+
+- `npm run lint` — passed.
+- `npm test` — 95 passed, 2 pending. The pending tests are the API error case and router placeholder.
+- `npm run build` — passed. Sass and GOV.UK Frontend emitted deprecation warnings.
+- `npm run test:integration` — unavailable; npm reports that the script is not defined.
+- The app started on a local validation port after supplying required environment variables and a cookie secret of at least 24 characters.
+- `GET /admin/restricted-word/healthcheck` returned `200 OK` with Helmet response headers.
+- Unauthenticated `GET /admin/restricted-word/` returned `302` to the sign-in URL.
+- `POST /admin/restricted-word/update` without a session/CSRF token returned `403`. Valid-session behaviour was not tested.
+- Express 5's default query parser returned repeated `categorySelection` values as an array. Bracketed keys were exposed under the literal `categorySelection[]` key. The app generates repeated unbracketed keys; nested query compatibility remains unverified.
+- An isolated Express 5 HTTP probe confirmed a rejected async route promise reached error middleware and returned `500`. This did not exercise an application controller route.
+- Redis on port 6379 and a local API port on 4001 were reachable, but authenticated upstream API contracts were not exercised.
+
+### Remaining checks and blockers
+
+- No integration-test script or application-level HTTP test suite is available.
+- A valid session and CSRF token flow, authenticated upstream API contracts, and application-route async rejection handling remain unverified.
+- The app has no upload route identified in Discovery; upload verification is not applicable to its current routes.
+- Performance under a representative workload was not measured.
+
+### Commands run
+
+- `npm run lint`
+- `npm test`
+- `npm run build`
+- `npm run test:integration` — unavailable script.
+- `npm start` with local validation environment variables; first attempt used a too-short test cookie secret and failed, then succeeded with a 24+ character value.
+- `curl` requests for health check, unauthenticated page access, and a POST without a CSRF token.
+- `node -e` HTTP probes for Express 5 query parsing and rejected async handler forwarding.
+
+### Files changed during Validation
+
+- `migration-plan.md` — marked lint, unit tests, build, and the isolated async forwarding probe complete; recorded integration and application-level checks still open.
+- `migration-report.md` — appended validation results, commands, and blockers.
+
+The temporary application server was stopped. Full Validation is not complete.

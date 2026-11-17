@@ -35,13 +35,14 @@ Upgrade this application from Express 4 to Express 5 and document all findings.
 7. [x] Review and run the relevant existing tests; no test changes were needed
 
 **Validation**
-1. [ ] Run linting
-2. [ ] Run unit tests
-3. [ ] Run integration tests
-4. [ ] Run build
+1. [x] Run linting
+2. [x] Run unit tests
+3. [ ] Run integration tests (no integration test script is defined)
+4. [x] Run build
 5. [ ] Verify application startup, API contracts, authentication, errors, uploads, security, and performance
 6. [ ] Verify session and CSRF middleware and query parsing under Express 5
-7. [ ] Verify rejected async handlers through HTTP-level tests
+7. [x] Verify Express 5 rejected async promise forwarding with an HTTP smoke probe
+8. [ ] Verify rejected async handlers through an application-level HTTP test
 
 **Documentation**
 1. Create migration-report.md
